@@ -228,6 +228,29 @@ class PlainScreensScreenshotTest {
         shot("w23p-05-settings-font13")
     }
 
+    /** Ширината на мострата „Шевица“ спрямо екрана. */
+    private fun paletteChipShare(): Float {
+        val chip = compose.onAllNodes(hasText("Шевица") and isSelectable()).onFirst().performScrollTo().fetchSemanticsNode()
+        val root = compose.onRoot().fetchSemanticsNode()
+        return chip.boundsInRoot.width / root.boundsInRoot.width
+    }
+
+    /** Мострите на палитрите: при обичаен шрифт — три в ред (и редовете в картата — от една линия). */
+    @Test fun settingsPaletteRow() {
+        openSettings()
+        assertTrue(paletteChipShare() < 0.4f, "мострите трябва да са три в ред")
+        shot("w24-settings-palette")
+    }
+
+    /** Шрифт 2.0: мострите — една под друга, без разкъсани думи („слонов/а кост“). */
+    @Test fun settingsFont2() {
+        openSettings(fontScale = 2f)
+        assertTrue(paletteChipShare() > 0.7f, "при шрифт 2.0 мострите трябва да са една под друга")
+        shot("w24-settings-font2-palette")
+        compose.onAllNodes(hasText("Сезонни украси")).onFirst().performScrollTo()
+        shot("w24-settings-font2-switches")
+    }
+
     @Config(qualifiers = "bg-w1280dp-h800dp-land-hdpi")
     @Test fun settingsTablet() {
         openSettings()

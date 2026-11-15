@@ -22,6 +22,14 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.BugReport
+import androidx.compose.material.icons.outlined.Wifi
+import androidx.compose.material.icons.outlined.Wallpaper
+import androidx.compose.material.icons.outlined.Vibration
+import androidx.compose.material.icons.outlined.Update
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Image
+import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.Celebration
 import androidx.compose.material.icons.outlined.BrightnessMedium
 import androidx.compose.material.icons.outlined.DeleteSweep
 import androidx.compose.material.icons.outlined.Description
@@ -86,6 +94,8 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
@@ -94,6 +104,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.text.style.TextAlign
 import org.chyavorec.app.ui.theme.LocalExtendedColors
 import org.chyavorec.app.ui.theme.ThemePalette
@@ -132,10 +145,17 @@ private fun NavItem(icon: ImageVector, title: String, subtitle: String? = null, 
     colors = settingsItemColors(),
 )
 
+/**
+ * Ред с превключвател. В картите на „Настройки“ — с [icon], както редовете с „›“: всички заглавия
+ * в една карта започват от една линия (без иконата текстът би отскочил с 40 dp наляво).
+ */
 @Composable
-internal fun SwitchItem(title: String, subtitle: String?, checked: Boolean, enabled: Boolean = true, onChange: (Boolean) -> Unit) = ListItem(
+internal fun SwitchItem(
+    title: String, subtitle: String?, checked: Boolean, enabled: Boolean = true, icon: ImageVector? = null, onChange: (Boolean) -> Unit,
+) = ListItem(
     headlineContent = { Text(title) },
     supportingContent = subtitle?.let { { Text(it) } },
+    leadingContent = icon?.let { { Icon(it, null) } },
     trailingContent = { Switch(checked, onCheckedChange = null, enabled = enabled) },
     modifier = Modifier.selectable(checked, enabled = enabled, role = Role.Switch, onClick = { onChange(!checked) }),
     colors = settingsItemColors(),
@@ -172,18 +192,18 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                     scope.launch { c.settings.setThemeStyle(s.themeStyle.copy(palette = palette)) }
                 }
                 if (s.themeMode != ThemeMode.LIGHT) {
-                    SwitchItem(stringResource(R.string.settings_oled), stringResource(R.string.settings_oled_desc), s.themeStyle.oledBlack) {
+                    SwitchItem(stringResource(R.string.settings_oled), stringResource(R.string.settings_oled_desc), s.themeStyle.oledBlack, icon = Icons.Outlined.DarkMode) {
                         scope.launch { c.settings.setThemeStyle(s.themeStyle.copy(oledBlack = it)) }
                     }
                 }
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-                    SwitchItem(stringResource(R.string.settings_dynamic), stringResource(R.string.settings_dynamic_desc), s.dynamicColor) {
+                    SwitchItem(stringResource(R.string.settings_dynamic), stringResource(R.string.settings_dynamic_desc), s.dynamicColor, icon = Icons.Outlined.Wallpaper) {
                         // Уиджетът следва настройката — опреснява се веднага.
                         scope.launch { c.settings.setDynamicColor(it); WidgetUpdater.refresh(context) }
                     }
                 }
                 NavItem(Icons.Outlined.Language, stringResource(R.string.settings_language), currentLanguageLabel()) { langDialog = true }
-                SwitchItem(stringResource(R.string.settings_seasonal), stringResource(R.string.settings_seasonal_desc), s.seasonal) {
+                SwitchItem(stringResource(R.string.settings_seasonal), stringResource(R.string.settings_seasonal_desc), s.seasonal, icon = Icons.Outlined.Celebration) {
                     scope.launch { c.settings.setSeasonal(it) }
                 }
                 // Още неизбрано — както при първото ползване: изкл., ако е включен TalkBack.
@@ -191,6 +211,7 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                 SwitchItem(
                     stringResource(R.string.settings_shake_surprise), stringResource(R.string.settings_shake_surprise_desc),
                     s.shakeSurprise ?: shakeToSurpriseDefault(touchExploration),
+                    icon = Icons.Outlined.Vibration,
                 ) {
                     scope.launch { c.settings.setShakeSurprise(it) }
                 }
@@ -233,7 +254,7 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
                 // Готовата версия — своя карта над групата (не карта в картата).
                 UpdateReadyCard(updateState, updater, Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp))
                 AppCard(Modifier.fillMaxWidth().padding(horizontal = ScreenGutter)) {
-                    SwitchItem(stringResource(R.string.update_auto), stringResource(R.string.update_auto_desc), s.autoUpdate) { on ->
+                    SwitchItem(stringResource(R.string.update_auto), stringResource(R.string.update_auto_desc), s.autoUpdate, icon = Icons.Outlined.Update) { on ->
                         scope.launch { c.settings.setAutoUpdate(on) }
                     }
                     NavItem(Icons.Outlined.SystemUpdate, stringResource(R.string.update_check_now), updateStatusText(updateState, updater)) {
@@ -255,10 +276,10 @@ fun SettingsScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
             }
 
             SettingsGroup(stringResource(R.string.settings_data)) {
-                SwitchItem(stringResource(R.string.settings_covers_online), stringResource(R.string.settings_covers_online_desc), s.coversOnline) {
+                SwitchItem(stringResource(R.string.settings_covers_online), stringResource(R.string.settings_covers_online_desc), s.coversOnline, icon = Icons.Outlined.Image) {
                     scope.launch { c.settings.setCoversOnline(it) }
                 }
-                SwitchItem(stringResource(R.string.settings_covers_wifi_only), stringResource(R.string.settings_covers_wifi_only_desc), s.coversWifiOnly) {
+                SwitchItem(stringResource(R.string.settings_covers_wifi_only), stringResource(R.string.settings_covers_wifi_only_desc), s.coversWifiOnly, icon = Icons.Outlined.Wifi) {
                     scope.launch { c.settings.setCoversWifiOnly(it) }
                 }
                 NavItem(Icons.Outlined.DeleteSweep, stringResource(R.string.settings_clear_cache), stringResource(R.string.settings_clear_cache_desc)) { clearDialog = true }
@@ -356,6 +377,7 @@ private fun RequireUnlockItem(on: Boolean) {
         stringResource(if (available || on) R.string.settings_require_unlock_desc else R.string.settings_require_unlock_unavailable),
         checked = on,
         enabled = available || on,
+        icon = Icons.Outlined.Lock,
     ) { want ->
         scope.launch {
             // Без заключване на телефона няма с какво да се провери — изключва се направо.
@@ -419,57 +441,111 @@ private fun paletteDescription(palette: ThemePalette): String = stringResource(
 /**
  * Избор на палитра: по една „мостра“ за всяка — фонът, основният, вторичният и
  * акцентният цвят на палитрата в текущия режим (светъл/тъмен). Радио група.
+ *
+ * Три мостри в ред, докато всяка дума на имената и описанията се побира в мострата. При едър
+ * шрифт или тесен екран — една под друга, в цяла ширина: думите не се разкъсват по средата
+ * („слонов/а кост“). Проверката е измерване на най-дългата дума, не праг на шрифта.
  */
 @Composable
 private fun PalettePicker(selected: ThemePalette, enabled: Boolean, onSelect: (ThemePalette) -> Unit) {
     val dark = LocalExtendedColors.current.isDark
+    val labels = ThemePalette.entries.map { paletteLabel(it) to paletteDescription(it) }
+    val nameStyle = MaterialTheme.typography.labelLarge
+    val descStyle = MaterialTheme.typography.bodySmall
+    val measurer = rememberTextMeasurer()
+    val density = LocalDensity.current
+    BoxWithConstraints(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp)) {
+        // Вътрешната ширина на една от трите мостри (без отстъпите им).
+        val inner = (maxWidth - PALETTE_GAP * 2) / 3 - PALETTE_PAD * 2
+        val stacked = remember(labels, inner, nameStyle, descStyle, density) {
+            val room = with(density) { inner.toPx() }
+            fun widest(text: String, style: TextStyle) =
+                text.split(' ').maxOf { measurer.measure(it, style, maxLines = 1, softWrap = false).size.width }
+            inner < SWATCHES_WIDTH || labels.any { (name, desc) -> widest(name, nameStyle) > room || widest(desc, descStyle) > room }
+        }
+        val group = Modifier.fillMaxWidth().selectableGroup()
+        if (stacked) {
+            Column(group, verticalArrangement = Arrangement.spacedBy(PALETTE_GAP)) {
+                ThemePalette.entries.forEach { PaletteSwatch(it, it == selected, enabled, dark, stacked = true, onSelect, Modifier.fillMaxWidth()) }
+            }
+        } else {
+            // Еднаква височина на мострите — описанието се пренася на редове при едър шрифт.
+            Row(group.height(IntrinsicSize.Min), horizontalArrangement = Arrangement.spacedBy(PALETTE_GAP)) {
+                ThemePalette.entries.forEach { PaletteSwatch(it, it == selected, enabled, dark, stacked = false, onSelect, Modifier.weight(1f).fillMaxHeight()) }
+            }
+        }
+    }
+}
+
+private val PALETTE_GAP = 10.dp
+private val PALETTE_PAD = 10.dp
+
+/** Четирите кръгчета на мострата: 4 × 18 dp и 3 × 4 dp между тях. */
+private val SWATCHES_WIDTH = 84.dp
+
+/** Една мостра: в ред — кръгчетата, името и описанието едно под друго; [stacked] — в цяла ширина, отметката вдясно. */
+@Composable
+private fun PaletteSwatch(
+    palette: ThemePalette, isSelected: Boolean, enabled: Boolean, dark: Boolean, stacked: Boolean,
+    onSelect: (ThemePalette) -> Unit, modifier: Modifier,
+) {
     val shape = MaterialTheme.shapes.medium
-    // Еднаква височина на мострите — описанието се пренася на редове при едър шрифт.
-    Row(
-        Modifier.fillMaxWidth().height(IntrinsicSize.Min).padding(horizontal = 16.dp, vertical = 4.dp).selectableGroup(),
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
+    val scheme = paletteScheme(palette, dark)
+    Surface(
+        shape = shape,
+        color = scheme.background,
+        contentColor = scheme.onBackground,
+        border = BorderStroke(
+            if (isSelected) 2.dp else 1.dp,
+            if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
+        ),
+        modifier = modifier.clip(shape)
+            .selectable(selected = isSelected, enabled = enabled, role = Role.RadioButton) { onSelect(palette) }
+            .alpha(if (enabled) 1f else 0.5f),
     ) {
-        ThemePalette.entries.forEach { palette ->
-            val scheme = paletteScheme(palette, dark)
-            val isSelected = palette == selected
-            Surface(
-                shape = shape,
-                color = scheme.background,
-                contentColor = scheme.onBackground,
-                border = BorderStroke(
-                    if (isSelected) 2.dp else 1.dp,
-                    if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.outlineVariant,
-                ),
-                modifier = Modifier.weight(1f).fillMaxHeight().clip(shape)
-                    .selectable(selected = isSelected, enabled = enabled, role = Role.RadioButton) { onSelect(palette) }
-                    .alpha(if (enabled) 1f else 0.5f),
-            ) {
-                Column(Modifier.padding(10.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-                    Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
-                        listOf(scheme.primary, scheme.secondary, paletteAccent(palette, dark), scheme.primaryContainer).forEach { color ->
-                            Box(
-                                Modifier.size(18.dp).clip(CircleShape).background(color)
-                                    .border(1.dp, scheme.onBackground.copy(alpha = 0.18f), CircleShape),
-                            )
-                        }
-                    }
-                    Spacer(Modifier.height(8.dp))
-                    Text(paletteLabel(palette), style = MaterialTheme.typography.labelLarge, maxLines = 1)
-                    Text(
-                        paletteDescription(palette),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = scheme.onSurfaceVariant,
-                        textAlign = TextAlign.Center,
-                    )
-                    Spacer(Modifier.weight(1f))
-                    Spacer(Modifier.height(4.dp))
-                    Icon(
-                        Icons.Filled.CheckCircle,
-                        contentDescription = null,
-                        tint = if (isSelected) scheme.primary else Color.Transparent,
-                        modifier = Modifier.size(18.dp),
+        val swatches = @Composable {
+            Row(horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                listOf(scheme.primary, scheme.secondary, paletteAccent(palette, dark), scheme.primaryContainer).forEach { color ->
+                    Box(
+                        Modifier.size(18.dp).clip(CircleShape).background(color)
+                            .border(1.dp, scheme.onBackground.copy(alpha = 0.18f), CircleShape),
                     )
                 }
+            }
+        }
+        val check = @Composable {
+            Icon(
+                Icons.Filled.CheckCircle,
+                contentDescription = null,
+                tint = if (isSelected) scheme.primary else Color.Transparent,
+                modifier = Modifier.size(18.dp),
+            )
+        }
+        if (stacked) {
+            Row(Modifier.padding(horizontal = 14.dp, vertical = 12.dp), verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f)) {
+                    swatches()
+                    Spacer(Modifier.height(8.dp))
+                    Text(paletteLabel(palette), style = MaterialTheme.typography.labelLarge)
+                    Text(paletteDescription(palette), style = MaterialTheme.typography.bodySmall, color = scheme.onSurfaceVariant)
+                }
+                Spacer(Modifier.width(12.dp))
+                check()
+            }
+        } else {
+            Column(Modifier.padding(PALETTE_PAD), horizontalAlignment = Alignment.CenterHorizontally) {
+                swatches()
+                Spacer(Modifier.height(8.dp))
+                Text(paletteLabel(palette), style = MaterialTheme.typography.labelLarge, textAlign = TextAlign.Center)
+                Text(
+                    paletteDescription(palette),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = scheme.onSurfaceVariant,
+                    textAlign = TextAlign.Center,
+                )
+                Spacer(Modifier.weight(1f))
+                Spacer(Modifier.height(4.dp))
+                check()
             }
         }
     }

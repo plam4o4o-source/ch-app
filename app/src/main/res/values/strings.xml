@@ -384,6 +384,7 @@
     <string name="home_search_hint">Търси книга, новина, събитие…</string>
     <string name="home_upcoming">Предстоящи събития</string>
     <string name="hub_pane_hint">Избери раздел вляво — той ще се отвори тук.</string>
+    <string name="hub_pane_hint_my">Избери раздел вляво — картата и книгите ти ще се отворят тук.</string>
     <string name="ics_copy_link">Копирай връзката</string>
     <string name="ics_google_hint">Google Календар на Android не може да се абонира направо. Копирай връзката и я добави от calendar.google.com в „Други календари › От URL адрес“ — после календарът се вижда и на телефона.</string>
     <string name="ics_link_label">Календар на читалището</string>

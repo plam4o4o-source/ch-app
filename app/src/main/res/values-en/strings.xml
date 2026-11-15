@@ -384,6 +384,7 @@
     <string name="home_search_hint">Search books, news, events…</string>
     <string name="home_upcoming">Upcoming events</string>
     <string name="hub_pane_hint">Pick a section on the left — it opens here.</string>
+    <string name="hub_pane_hint_my">Pick a section on the left — your card and books open here.</string>
     <string name="ics_copy_link">Copy link</string>
     <string name="ics_google_hint">Google Calendar on Android can’t subscribe directly. Copy the link and add it at calendar.google.com under “Other calendars › From URL” — the calendar then shows on your phone too.</string>
     <string name="ics_link_label">Community centre calendar</string>

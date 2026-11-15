@@ -155,6 +155,7 @@ import org.chyavorec.app.ui.navigation.LinkTarget
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.navigation.TopTab
 import org.chyavorec.app.ui.navigation.navigateTab
+import org.chyavorec.app.ui.navigation.openDetail
 import org.chyavorec.app.ui.navigation.openLinkTarget
 import org.chyavorec.app.ui.navigation.openSiteLink
 import org.chyavorec.app.ui.screens.catalog.BookScreen
@@ -345,11 +346,14 @@ private fun MainScaffold(
     LaunchedEffect(Unit) { MessagesOnLaunch.run(context, container) }
     UpdateDialog(container.updater)
 
-    /** Таблет: [target] (книга, статия) отдясно на текущия списък, ако той го показва до себе си. */
+    /**
+     * Таблет: [target] (книга, статия, раздел) отдясно на текущия списък, ако той го показва до себе
+     * си. Връзка от самия детайл — над него в панела („Назад“ се връща към него, виж openDetail).
+     */
     fun showInPane(target: String): Boolean {
         val top = nav.currentBackStackEntry ?: return false
         if (!twoPane || !ListDetail.accepts(top.destination.route, target)) return false
-        top.savedStateHandle[DETAIL_KEY] = target
+        top.savedStateHandle.openDetail(target)
         return true
     }
 
@@ -704,7 +708,7 @@ private fun AppNavHost(
         }
         // Таблет: разделите на „Моето“ и „Още“ — отдясно на плочките (виж HubPanes.kt).
         screen(Routes.MY) {
-            ListDetailPane(it.savedStateHandle, navigate, detail = { r, close -> HubPaneDetail(r, close, hubActions) }, placeholder = { HubPanePlaceholder() }) {
+            ListDetailPane(it.savedStateHandle, navigate, detail = { r, close -> HubPaneDetail(r, close, hubActions) }, placeholder = { HubPanePlaceholder(Routes.MY) }) {
                 MyHubScreen(navigate)
             }
         }
@@ -714,7 +718,7 @@ private fun AppNavHost(
             }
         }
         screen(Routes.MORE) {
-            ListDetailPane(it.savedStateHandle, navigate, detail = { r, close -> HubPaneDetail(r, close, hubActions) }, placeholder = { HubPanePlaceholder() }) {
+            ListDetailPane(it.savedStateHandle, navigate, detail = { r, close -> HubPaneDetail(r, close, hubActions) }, placeholder = { HubPanePlaceholder(Routes.MORE) }) {
                 MoreScreen(navigate)
             }
         }

@@ -1,5 +1,6 @@
 package org.chyavorec.app.ui.navigation
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.NavController
 import androidx.navigation.NavGraph.Companion.findStartDestination
 
@@ -86,5 +87,51 @@ object ListDetail {
 
 /** Списъкът [host] да покаже [route] отдясно (`null` — без детайл). Списъкът трябва да е в стека. */
 fun NavController.requestDetail(host: String, route: String?) {
-    runCatching { getBackStackEntry(host).savedStateHandle[DETAIL_KEY] = route }
+    runCatching { getBackStackEntry(host).savedStateHandle.showDetail(route) }
+}
+
+/**
+ * Ключът в SavedStateHandle на списъка: екраните под показания детайл (отворени с връзка от
+ * самия детайл, напр. „Настройки“ › „Поверителност“) — „Назад“ се връща към тях, не затваря панела.
+ */
+const val DETAIL_STACK_KEY = "detailStack"
+
+/** Временен знак (по време на едно извикване): навигацията идва от детайла, не от списъка (виж [openDetail]). */
+const val FROM_DETAIL_KEY = "fromDetail"
+
+/** Най-много толкова екрана под детайла — по-старите отпадат. */
+private const val DETAIL_STACK_MAX = 8
+
+/** Екраните под показания детайл (най-долният — първи). */
+fun SavedStateHandle.detailStack(): List<String> = get<List<String>>(DETAIL_STACK_KEY).orEmpty()
+
+/** Детайлът отдясно — [route] наново (избор от списъка, връзка отвън): без екраните под стария. */
+fun SavedStateHandle.showDetail(route: String?) {
+    this[DETAIL_STACK_KEY] = ArrayList<String>()
+    this[DETAIL_KEY] = route
+}
+
+/**
+ * Връзка от показания детайл към друг екран на панела: над него — „Назад“ се връща. Екран,
+ * който вече е отдолу, не се повтаря: връзката се връща до него.
+ */
+fun SavedStateHandle.pushDetail(route: String) {
+    val current = get<String>(DETAIL_KEY) ?: return showDetail(route)
+    if (current == route) return
+    val stack = detailStack()
+    val at = stack.indexOf(route)
+    this[DETAIL_STACK_KEY] = ArrayList(if (at >= 0) stack.take(at) else (stack + current).takeLast(DETAIL_STACK_MAX))
+    this[DETAIL_KEY] = route
+}
+
+/** „Назад“ в панела: предишният екран, а без такъв — панелът се затваря. */
+fun SavedStateHandle.popDetail() {
+    val stack = detailStack()
+    this[DETAIL_STACK_KEY] = ArrayList(stack.dropLast(1))
+    this[DETAIL_KEY] = stack.lastOrNull()
+}
+
+/** Отдясно на списъка: от детайла ([FROM_DETAIL_KEY]) — над него ([pushDetail]), иначе — наново ([showDetail]). */
+fun SavedStateHandle.openDetail(route: String) {
+    if (get<Boolean>(FROM_DETAIL_KEY) == true) pushDetail(route) else showDetail(route)
 }

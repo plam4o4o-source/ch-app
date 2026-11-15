@@ -21,6 +21,7 @@ import androidx.compose.ui.test.isSelectable
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onFirst
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
@@ -45,6 +46,7 @@ import org.chyavorec.app.ui.navigation.DeepLinks
 import org.chyavorec.app.ui.navigation.KeyCommand
 import org.chyavorec.app.ui.navigation.KeyboardShortcuts
 import org.chyavorec.app.ui.theme.ChitalishteTheme
+import org.chyavorec.app.ui.theme.ThemeMode
 import org.chyavorec.core.FixedClock
 import org.junit.After
 import org.junit.Before
@@ -109,11 +111,11 @@ class TabletLayoutTest {
         )
     }
 
-    private fun launch(deepLink: String? = null, wantToRead: Boolean = false) {
+    private fun launch(deepLink: String? = null, wantToRead: Boolean = false, mode: ThemeMode = ThemeMode.SYSTEM) {
         val container = container()
         if (wantToRead) seedWantToRead(container)
         compose.setContent {
-            ChitalishteTheme {
+            ChitalishteTheme(mode = mode) {
                 ChitalishteRoot(container, AppSettings(onboardingDone = true, introShown = true), MutableStateFlow(deepLink), showIntro = false, keyCommands = keys)
             }
         }
@@ -370,6 +372,48 @@ class TabletLayoutTest {
         gone("Сезонни украси")
         onTab("Още")
         shown("Избери раздел вляво")
+    }
+
+    /** Празният десен панел — тихият знак на хъба: розетка за „Още“, ромб за „Моето“ (и в тъмна тема). */
+    @Test fun emptyPaneSignPerHub() {
+        launch(mode = ThemeMode.DARK)
+        tab("Още").performClick()
+        waitFor("Познай Яворец")
+        shown("Избери раздел вляво — той ще се отвори тук.")
+        shot("w24-tablet-more-empty-dark")
+        tab("Моето").performClick()
+        waitFor("Известия")
+        shown("картата и книгите ти")
+        shot("w24-tablet-my-empty-dark")
+    }
+
+    /**
+     * Връзка вътре в панела („Настройки“ › „Политика за поверителност“) — над раздела в панела:
+     * плочките остават, а „Назад“ се връща първо към „Настройки“, после затваря панела.
+     */
+    @Test fun linkInsideThePaneGoesBackToTheSection() {
+        launch()
+        tab("Още").performClick()
+        waitFor("Познай Яворец")
+        compose.onAllNodes(hasText("Настройки") and hasClickAction()).onFirst().performScrollTo().performClick()
+        waitFor("Сезонни украси")
+        // Редът в „Настройки“ (отдясно) — последният с този текст; плочката вляво е първата.
+        compose.onAllNodes(hasText("Политика за поверителност") and hasClickAction()).onLast().performScrollTo().performClick()
+        waitFor("Кой обработва данните")
+        onTab("Още")
+        shown("Познай Яворец")
+        gone("Сезонни украси")
+        shot("w24-tablet-more-pane-link")
+        back()
+        gone("Кой обработва данните")
+        // Отново „Настройки“ — и на същото място на превъртането (редът, от който е тръгнала връзката, се вижда).
+        compose.waitUntil(5_000) { compose.onAllNodes(hasText("Сезонни украси")).fetchSemanticsNodes().isNotEmpty() }
+        compose.onAllNodes(hasText("Политика за поверителност") and hasClickAction()).onLast().assertIsDisplayed()
+        onTab("Още")
+        back()
+        gone("Сезонни украси")
+        shown("Избери раздел вляво")
+        onTab("Още")
     }
 
     /** „Моето“ на таблет: същото — „Известия“ отдясно на плочките. */
