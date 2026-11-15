@@ -39,6 +39,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.systemGestureExclusion
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.automirrored.outlined.KeyboardArrowRight
@@ -598,7 +599,8 @@ private fun DecadeScrubber(
             Modifier.offset { IntOffset(0, thumbY()) }.size(ThumbTouch)
                 .graphicsLayer { alpha = thumbAlpha.value }
                 .then(
-                    if (!shown) Modifier else Modifier.pointerInput(listState, track) {
+                    // Видимата дръжка е до ръба: системният жест „назад“ не я прихваща (само 48 dp).
+                    if (!shown) Modifier else Modifier.systemGestureExclusion().pointerInput(listState, track) {
                         detectVerticalDragGestures(
                             onDragStart = { drag.floatValue = listState.scrollFraction(); dragging = true },
                             onDragEnd = { dragging = false },
