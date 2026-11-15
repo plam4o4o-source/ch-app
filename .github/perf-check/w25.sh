@@ -12,7 +12,7 @@
 #   mem33a/b   — памет: 30 цикъла, meminfo след trim + GC на всеки 5
 #   wd33/wd36x — уиджетите от „Настройки“ след тъмна тема (на приложението и на системата)
 #   fs33       — шрифт 2.0: викторина, лента на времето, настройки, вход
-W25_PARTS=" wdb33 wdb36x leaf33 at33m at33q fr28 fr36x cf33 cf28 cf36x dev33 fr33a fr33b at33t at33h mem33a mem33b wd33 wd36x fs33 "
+W25_PARTS=" at33f wdc33 wdc36x wdb33 wdb36x leaf33 at33m at33q fr28 fr36x cf33 cf28 cf36x dev33 fr33a fr33b at33t at33h mem33a mem33b wd33 wd36x fs33 "
 W20_PARTS="$W20_PARTS $W25_PARTS"
 W25=$H_/w25.py
 RX_QUESTION='Въпрос [0-9]+ от|Question [0-9]+ of'
@@ -481,7 +481,12 @@ trace_tl() {  # $1 — етикет, $2 — издание, $3 — флагов�
   leave; a am force-stop $PKG
 }
 part_at() {
-  if [ $PART = at33m ]; then
+  if [ $PART = at33f ]; then
+    sec "AF0. Timeline, round 3: a candidate fix — the medallion in its own offscreen layer (hook flag „medallayer“), against 1.2.38, 1.2.37 and the plain circle"
+    fr_setup new base hook
+    at_round "timeline" 6 new:new: base:base: hk:hook: layer:hook:medallayer medal:hook:plainmedal
+    AT_REF=hk
+  elif [ $PART = at33m ]; then
     sec "AM0. Timeline, round 2: which part of the medallion costs (hook build flags), with 1.2.38 and 1.2.37 as references"
     fr_setup new base hook
     at_round "timeline" 5 new:new: base:base: hk:hook: medal:hook:plainmedal noring:hook:noring solidring:hook:solidring flat:hook:flatmedal flatnoring:hook:flatmedal,noring
@@ -565,8 +570,16 @@ wd_theme() {  # $1 — етикетът на темата: Настройки �
   log "THEME → $1: Settings now shows: $(grep -oE 'text="(Тъмна|Светла|Както системата|Dark|Light)[^"]*"' $OUT/ui.xml | head -3 | tr '\n' ' '); app night mode: $(a dumpsys activity activities 2>/dev/null | tr -d '\r' | grep -m1 -oE 'mCurrentConfig=.*' | grep -oE '(not)?night' | head -1)"
   shot widget/theme-set-$(echo "$1" | tr -dc 'a-zA-Z' | cut -c1-8) >/dev/null
 }
-wd_state() {  # $1 — етикет
-  go_home 3; shot widget/$1 >/dev/null
+wd_state() {  # $1 — етикет. Уиджетите от „Настройки“ отиват на ВТОРАТА страница на началния екран, а „Начало“
+  # (натиснат на самия начален екран) връща на първата — затова се търсят и на следващите страници (кръг 3).
+  local i=0
+  go_home 3
+  for i in 0 1 2; do
+    dump; grep -q "resource-id=\"$PKG:id/" $OUT/ui.xml && break
+    [ $i -lt 2 ] && { a input swipe $((W*88/100)) $((H*55/100)) $((W*12/100)) $((H*55/100)) 220; sleep 2; }
+  done
+  shot widget/$1 >/dev/null
+  log "WIDGET $1: found after $i page swipe(s) from the first home page; night: $(a cmd uimode night 2>/dev/null | tr -d '\r' | tail -1)"
   log "WIDGET $1: $(wstate | cut -c1-420)"
   log "WIDGET $1: bound ids [$(wcount $1 >/dev/null; wids)]; providers: $(grep -oE 'ComponentInfo\{org\.chyavorec[^}]*' $OUT/appwidget-$1.txt | sort | uniq -c | tr -s ' ' | tr '\n' ' ' | cut -c1-260)"
 }
@@ -596,7 +609,7 @@ part_wd() {
   a cmd uimode night no; sleep 12; wd_state 60-sys-light
   wd_theme '=Както системата|=Same as the system|=System'; sleep 3; wd_state 61-app-system
   sec "WD5. Does a widget tap still open the app (if the widgets are there)"
-  go_home 3; dump; p=$(xy resource-id "$PKG:id/widget_catalog"); [ -n "$p" ] && { a input tap $p; sleep 4; dump; log "widget 'Каталог' tap → fg $(fg); $(texts 6 | cut -c1-160)"; go_home 2; }
+  wd_state 70-before-tap; dump; p=$(xy resource-id "$PKG:id/widget_catalog"); [ -n "$p" ] && { a input tap $p; sleep 4; dump; log "widget 'Каталог' tap → fg $(fg); $(texts 6 | cut -c1-160)"; go_home 2; }
   a dumpsys appwidget 2>/dev/null | tr -d '\r' | grep -E 'provider=.*org\.chyavorec|^ *\[[0-9]+\] id=|host=' | head -12 | cut -c1-200 | tee -a $SUM
   log "WD part: $(since_fatal wd)"
   all_sheets
@@ -666,9 +679,9 @@ part_w25() {
     dev33) part_dev;;
     leaf33) part_leaf;;
     fr33a|fr33b|fr28|fr36x) part_fr;;
-    at33t|at33h|at33m|at33q) part_at;;
+    at33t|at33h|at33m|at33q|at33f) part_at;;
     mem33a|mem33b) part_memx;;
-    wd33|wd36x|wdb33|wdb36x) part_wd;;
+    wd33|wd36x|wdb33|wdb36x|wdc33|wdc36x) part_wd;;
     fs33) part_fs;;
   esac
   return 0

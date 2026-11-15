@@ -303,7 +303,9 @@ private fun TimelineItem(key: String, e: TimelineEntry, last: Boolean, staticFra
 private fun Modifier.rosettePlate(): Modifier {
     val container = MaterialTheme.colorScheme.primaryContainer
     val ring = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.5f)
-    return this.then(
+    // ВРЕМЕННО (debug/w25-check, кръг 3): „medallayer“ — плочката в собствен слой (растеризира се веднъж, после само се мести).
+    val base = if (W25.on("medallayer")) this.graphicsLayer { compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.Offscreen } else this
+    return base.then(
         remember(container, ring) {
             Modifier.drawWithCache {
                 val r = size.minDimension / 2f

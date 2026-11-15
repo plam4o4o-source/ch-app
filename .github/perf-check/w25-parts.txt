@@ -1,2 +1,2 @@
 # Parts of the next run (one emulator job each); empty = publish the notes only.
-leaf33 at33m at33q wdb33 wdb36x fr28 fr36x
+wdc33 wdc36x at33f
