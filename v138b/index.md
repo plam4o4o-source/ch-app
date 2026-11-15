@@ -1,6 +1,71 @@
 # Targeted emulator check of the released v1.2.38 (f57962b) against v1.2.37 (ebf1720)
 
-Status: run 1 in progress — the findings will be written here when the runs are done. Raw summaries of the parts are below.
+## Findings (written after the three runs)
+
+Three workflow runs on `debug/w25-check` (1dd4ccb, 17f0e40, 00d20db; see runs.txt), 23 emulator parts, all COMPLETE. 0 crashes or ANRs of the app in any part (the FATAL/ANR blocks in some `crashes.txt` are the uiautomator dump tool's own NPE and a launcher ANR at boot). Software GPU (swangle) throughout: absolute frame times are far above a real phone; only A/B differences on the same boot mean anything.
+
+Builds installed side by side: `new` = 1.2.38 as released (org.chyavorec.app), `base` = 1.2.37 (org.chyavorec.app.b37), `hk` = the debug branch (same code + `Log.w("W25")` lines + test flags read from `am start --es w25 …`), devDebug of the debug branch for the signed-in parts. **Measured** = from logs/frames/dumps; **inferred** = reasoning on top.
+
+### 1. Quiz 5/5 confetti: requested AND drawn; the old "no confetti" was a recording-window artefact
+
+- **Measured (log, 15 quiz passes on API 28/33/36):** `QB burst called=true` every time; `ConfettiHost` started (`CH effect bursts=1 reduced=false`), drew the layer 4–18 frames until `progress=1.0`; never cancelled. Burst time after the 5th tap: +1.5…+1.9 s without recording, +1.8…+2.9 s while recording (stitch 900 ms + close 260 ms, stretched by the slow GPU), then ~1.2–2.0 s of drawing. Files: `cf33/summary.txt`, `cf28/summary.txt`, `cf36x/summary.txt`, `*/w25-log.txt`.
+- The v138 window (0.6–3.0 s after the tap, `../v138/ui38b`) ended about when the burst began, so it could not see it.
+- **Measured (frames):** confetti is visible in the released build too: `cf33/shots/cf/q5-new-e2-peak-2.jpg` (particles around the band and „Виж резултата“), `cf28/shots/cf/q5-new-e*-peak-*.jpg`, sheets `cf*/sheets/q5-*`. Control „Искам да прочета“ the same in both builds: `cf*/shots/cf/want-*-peak-*.jpg`.
+- **Measured (origin):** centre of the band, `Offset(540.5, 2022.5)` px on API 33/36 (band 1919…2126 of 2400 px) = 144 dp above the bottom edge; API 28 (540.5, 1959.5) = 168 dp.
+- **Inferred (physics of `Confetti.kt`, simulated):** particles rise at most ~104 dp, so with a 144 dp origin ~22% are already below the screen edge when fading starts and many pass behind „Виж резултата“; the burst is small and low compared with „Искам да прочета“ (origin at the tap, mid-screen). If more visibility is wanted: burst from the band's top edge / „Шевицата е цяла!“ label, or with the closing stitch instead of after it.
+
+### 2. Signed-in features (devDebug, sign-in with the BUTTON): `dev33/`, `leaf33/`
+
+- **Sign-in:** the button found by class/bounds (two `Вход` nodes: top-bar title y≈212, button y≈1776). `dev33/summary.txt` (LOGIN lines).
+- **„Картата е издадена“ (lift + sheen + fly): not seen.** 66 host frames at 10/s (`dev33/sheets/login-fly/`): login screen static with the button greyed (submitting) ~2.5 s, then a cut to Моето within 1–2 frames, no lift/sheen/flight. Inferred: `LoginScreen.kt:105-111` calls `onLoggedIn()` in the same effect that sets `issued`, so the 520 ms lift/sweep of `CardPreview.kt:108-135` only lives during the exit transition, 1–2 frames on this GPU. Undecidable on the emulator; needs a phone recording.
+- **„Твоята шевица“ band on the card:** 14 Nov absent; 15 Dec 2026 `content-desc="Твоята шевица за 2026"` on the card and fullscreen; 15 Jan 2027 present („за 2026“). `dev33/shots/eshot/dv/card-{nov,dec,jan}.jpg`, `card-full-*.jpg`.
+- **Year story, favourite-book slide:** no taps, 9 slides; #4 = „Най-харесана книга: Немили-недраги, Иван Вазов — 5 от 5 розетки в дневника.“ `dev33/sheets/eshot/dv/sheet-03.jpg`, `dev33/shots/eshot/dv/y-04-a.jpg`.
+- **Tablet landscape 2560×1600, signed in (uiautomator):** two panes, tiles left (~27% width), detail right for „Моите книги“, „Читателска карта“ (card, barcode, „Покажи картата“), „Моето членство“; tabs stay. „Искам да прочета“ opens full screen (by design, `HubPanes.kt`). „Прочетени книги“ not opened (label missed). `dev33/summary.txt` (TABLET/PANES), `dev33/shots/eshot/dv/t-my-*.jpg`.
+- **„Нов лист“ (debug-only demo: demo-1 renewal accepted, +14 days):** leaf flips 22.11 → 06.12.2026, snackbar „Удължено до 06.12.2026.“, small confetti from the tap; `content-desc="Нов срок: 06.12.2026 (беше 22.11.2026)"`; no second flip on reopening. `leaf33/sheets/renew-leaf/sheet-02.jpg`, `leaf33/summary.txt`. Polish: the „остават N дни“ chip shows the new count before the leaf turns (~0.3–0.5 s).
+
+### 3. Frame time 1.2.38 vs 1.2.37 (framestats, identical scripted gestures, alternating order, fresh process, 6 counted reps per app per boot)
+
+Median of per-rep median frame time, ms (min..max), new vs base; Mann–Whitney on per-rep medians.
+
+| screen | API 33 a (`fr33a`) | API 33 b (`fr33b`) | API 36 (`fr36x`) | API 28 (`fr28`) | verdict |
+|---|---|---|---|---|---|
+| quiz answering | 600 (592..649) vs 421 (411..433), p=0.002 | 462 (441..485) vs 337 (325..345), p=0.002 | 475 (473..484) vs 330 (325..340), p=0.002 | 162 vs 158, p=0.18 | real on 33/36 (no overlap), none on 28 |
+| timeline scroll | 486 (459..527) vs 424 (359..445), p=0.004 | 390 (346..447) vs 328 (293..373), p=0.004 | 401 (367..414) vs 319 (245..342), p=0.002 | 151 vs 153 | real on 33/36, none on 28 |
+| Home scroll | 567 vs 562, p=0.70 | 473 vs 440, p=0.24 | 439 vs 434, p=0.49 | 179 vs 175 | no difference |
+| „Още“ scroll | 496 vs 532, p=0.39 | 429 vs 449, p=0.24 | 443 vs 461, p=0.07 | 167 vs 166 | no difference |
+
+UI thread ≤1 ms everywhere; the difference is all RenderThread (issue + swap). Split per part: `fr33a/frames.md`, `fr33b/frames.md`, `fr36x/frames.md`, `fr28/frames.md`.
+
+**Attribution (hook build, one flag at a time, rotated order):**
+- **Quiz → the two dashed hem lines of the band** (`QuizBand.kt`, `StitchSpec.Running` dash effect). `noband` ≈ 1.2.37; `nohem` / `solidhem` remove most of it (sum RT +4% / +0% vs base); `nostitch` changes nothing; `bandlayer` (offscreen graphicsLayer) sum RT = 1.2.37. `at33q/frames.md`, `at33t/frames.md`.
+- **Timeline → the rosette medallion** (`TimelineScreens.kt` `rosettePlate`). `plainmedal` and `medallayer` (offscreen layer) both bring it to 1.2.37 or below (−51…−54 ms vs hk, p=0.002, no overlap; `at33f/frames.md`, `at33m/frames.md`); `noring`/`solidring`/`flatmedal` partial; scrubber off, card border off, entry animation off, solid thread: no effect (`at33t`). atrace of one scroll (`at33m/summary.txt` TRACE): `PathStencilCoverOp` 188 ops / 4.0 s on the hook build vs 50 / 1.3 s on 1.2.37 and 0 with the plain circle.
+- Home/„Още“: nothing to attribute (`at33h/frames.md`).
+- **Inferred:** cheapest fixes are an offscreen `graphicsLayer` (or cached bitmap) on the medallion and on the band, or plain hem lines. Real-GPU impact unmeasured.
+
+### 4. Memory, 30 cycles (timeline + 2 scrolls, quiz, „Още“ + scroll, book details), meminfo after RUNNING_CRITICAL trim + 2× GC every 5 cycles: `mem33a/`, `mem33b/`
+
+| | 1.2.38 c0 → c5 → c30 PSS KB | 1.2.37 c0 → c5 → c30 | last-third slope |
+|---|---|---|---|
+| mem33a (new first) | 77,650 → 93,658 → 92,979 | 80,083 → 97,574 → 96,969 | new −41 KB/cycle, base −143 |
+| mem33b (base first) | 77,150 → 95,861 → 97,421 | 80,922 → 101,604 → 96,486 | new −45, base −205 |
+
+Both plateau after cycle 5 (Native +9 MB, Private Other +5 MB in the first 5 cycles, then flat). Java heap +12…+18 KB/cycle in both versions. Views 11, Activities 1. 1.2.38 is not growing at cycle 30; no 1.2.38-specific bucket. Graphics = 0 (no memtrack on the emulator).
+
+### 5. Widgets after dark theme: `wdc33/`, `wdc36x/`
+
+Both widgets pinned from Settings stay bound (`dumpsys appwidget` ids 2, 3) and render in light, app „Тъмна“, system dark (10/40/90 s), after a launcher restart and back, correct dark colours (`wdc33/shots/widget/40-sys-dark-40s.jpg`); a tap on „Каталог“ opens the catalogue. The earlier "vanished" observation (v136, v138, and my `wd*`/`wdb*` parts) was a test artefact: the pin dialog places them on home page 2 and the script looked at page 1 (`wdc*/summary.txt`, "found after 1 page swipe(s)").
+
+### 6. Font scale 2.0: `fs33/`
+
+Quiz answers and „Напред“/„Виж резултата“ reachable; Login fields, „Запомни ме“, button reachable; Settings fine. Timeline: the decade pill still covers card body text while scrolling (`fs33/sheets/tour/font200/sheet-03.jpg`, known). New polish: Settings palette chips break words mid-word („слонов/а кост“) (`fs33/sheets/tour/font200/sheet-02.jpg`).
+
+### Temporary app-code changes on `debug/w25-check` only
+
+`W25.kt` (new), `MainActivity.kt` (`W25.read(intent)`), `QuizBand.kt` (log + flags nohem/solidhem/nostitch/bandlayer), `QuizScreens.kt` (noband), `Confetti.kt` (log + draw counter), `TimelineScreens.kt` (noscrub/plainmedal/flatmedal/noring/solidring/medallayer/nothread/solidthread/plaincard/noenter), `FolkShapes.kt` (plainplate/noicon), `app/src/dev/.../DemoInvLibServices.kt` (demo-1 renews at once, +14 days).
+
+### Not verified
+
+Card fly on a real device; frame time on a real GPU; „Прочетени книги“ in the tablet pane; TalkBack; API 26.
 
 ## Runs and parts
 
