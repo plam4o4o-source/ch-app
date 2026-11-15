@@ -76,6 +76,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.text
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModel
@@ -362,7 +364,11 @@ private fun AddTile(onPick: () -> Unit) {
     ) {
         Icon(Icons.Outlined.AddPhotoAlternate, null, tint = MaterialTheme.colorScheme.primary)
         Spacer(Modifier.height(4.dp))
-        Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+        // При едър шрифт — на два реда, в средата, без да опира в ръба.
+        Text(
+            label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary,
+            textAlign = TextAlign.Center, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.padding(horizontal = 6.dp),
+        )
     }
 }
 
