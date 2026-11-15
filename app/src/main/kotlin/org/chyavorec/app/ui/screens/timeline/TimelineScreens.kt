@@ -403,7 +403,7 @@ private fun TimelineItem(key: String, e: TimelineEntry, last: Boolean, staticFra
 }
 
 /**
- * Медалията: само годината, едро (Cormorant ~21 sp), върху готовата осморъка. Украса — TalkBack не я
+ * Медалията: само годината, едро (Cormorant 18 sp), върху готовата осморъка. Украса — TalkBack не я
  * чете, а надписът не расте с шрифта (цялата дата е в картата и расте там): така не прелива никога.
  */
 @Composable
@@ -416,7 +416,7 @@ private fun Medallion(e: TimelineEntry, plates: RosettePlates, modifier: Modifie
     ) {
         CompositionLocalProvider(LocalDensity provides Density(d.density, 1f)) {
             val (fontSize, lineHeight) = when {
-                text.length <= 4 -> 21.sp to 23.sp
+                text.length <= 4 -> 18.sp to 20.sp  // вътре в пунктирания кръг (r·0,74), без да го докосва
                 text.length <= 6 -> 16.sp to 18.sp
                 else -> 12.sp to 14.sp
             }
@@ -434,8 +434,14 @@ private fun Medallion(e: TimelineEntry, plates: RosettePlates, modifier: Modifie
 private fun EntryCard(e: TimelineEntry, modifier: Modifier) {
     AppCard(modifier.fillMaxWidth(), accent = true) {
         Column(Modifier.padding(horizontal = 16.dp, vertical = 12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text(e.label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
-            Text(e.title, style = MaterialTheme.typography.titleLarge)
+            // Надредът е само ако казва повече от медалията („17 март 1958“, „1912–1918“); иначе
+            // годината се чете с заглавието (медалията е украса за TalkBack).
+            val onlyYear = e.label.trim() == TimelineScrub.medallionText(e)
+            if (!onlyYear) Text(e.label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.primary)
+            Text(
+                e.title, style = MaterialTheme.typography.titleLarge,
+                modifier = if (onlyYear) Modifier.semantics { contentDescription = "${e.label.trim()}. ${e.title}" } else Modifier,
+            )
             if (e.description.isNotBlank()) Text(e.description, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
     }
