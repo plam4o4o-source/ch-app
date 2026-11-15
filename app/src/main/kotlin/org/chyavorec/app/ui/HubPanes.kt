@@ -8,11 +8,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,9 +22,12 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import org.chyavorec.app.R
+import org.chyavorec.app.ui.components.DetailPane
 import org.chyavorec.app.ui.components.FolkIconPlate
 import org.chyavorec.app.ui.components.FolkIcons
 import org.chyavorec.app.ui.components.FolkMotif
+import org.chyavorec.app.ui.components.LocalDetailPane
+import org.chyavorec.app.ui.components.ShevitsaStrip
 import org.chyavorec.app.ui.components.UnlockGate
 import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.gallery.GalleryScreen
@@ -41,6 +46,8 @@ import org.chyavorec.app.ui.screens.site.ActivitiesScreen
 import org.chyavorec.app.ui.screens.site.ContactsScreen
 import org.chyavorec.app.ui.screens.site.DocumentsScreen
 import org.chyavorec.app.ui.screens.site.SitePageScreen
+import org.chyavorec.app.ui.theme.LocalExtendedColors
+import org.chyavorec.app.ui.theme.ShevitsaMotif
 
 /*
  * „Още“ и „Моето“ на таблет (хоризонтално): плочките вляво, избраният раздел — вдясно
@@ -56,14 +63,24 @@ internal class HubPaneActions(
     val onLogin: () -> Unit,
     val onCardFullscreen: () -> Unit,
     val signedIn: Boolean,
-)
+) {
+    /** Връзките от раздела в [pane]: друг раздел на панела — над този („Назад“ се връща), не вместо него. */
+    fun inPane(pane: DetailPane?): HubPaneActions = if (pane == null) this else HubPaneActions(
+        navigate = { r -> pane.fromDetail { this.navigate(r) } },
+        openLink = { u -> pane.fromDetail { this.openLink(u) } },
+        openExternal = openExternal, onLogin = onLogin, onCardFullscreen = onCardFullscreen, signedIn = signedIn,
+    )
+}
 
 /**
- * Разделът [route] отдясно на плочките; „Назад“ в лентата му го затваря ([close]). Личните
- * екрани — зад отключването, както на цял екран (отказът затваря детайла).
+ * Разделът [route] отдясно на плочките; „Назад“ в лентата му се връща към предишния раздел
+ * на панела или го затваря ([close]). Личните екрани — зад отключването, както на цял екран
+ * (отказът затваря детайла).
  */
 @Composable
-internal fun HubPaneDetail(route: String, close: () -> Unit, a: HubPaneActions) {
+internal fun HubPaneDetail(route: String, close: () -> Unit, actions: HubPaneActions) {
+    val pane = LocalDetailPane.current
+    val a = remember(actions, pane) { actions.inPane(pane) }
     when (route.substringBefore('?')) {
         Routes.MESSAGES -> UnlockGate(close, required = a.signedIn) { MessagesScreen(close, a.openLink) }
         Routes.ACTIVITIES -> ActivitiesScreen(close, a.navigate, a.openExternal)
@@ -93,9 +110,18 @@ internal fun HubPaneDetail(route: String, close: () -> Unit, a: HubPaneActions) 
     }
 }
 
-/** Отдясно, докато няма избран раздел: тиха розетка и подсказка (вместо широки празни плочки). */
+/**
+ * Отдясно, докато няма избран раздел — тих знак на хъба вместо широки празни плочки: плочката
+ * му (розетка за „Още“ — читалището, ромб за „Моето“ — библиотеката), един ред подсказка и
+ * къса бледа лента шевица със същия мотив. Неподвижно — в покой не струва нищо.
+ *
+ * Защо не първият раздел: „Моето“ започва с личната карта (зад отключване и вход), а „Още“ — със
+ * съобщенията (биха се отбелязали като видени); самото влизане в раздела би зареждало от мрежата,
+ * а „Назад“ би затваряло нещо, което читателят не е избирал.
+ */
 @Composable
-internal fun HubPanePlaceholder() {
+internal fun HubPanePlaceholder(hub: String) {
+    val mine = hub == Routes.MY
     Surface(color = MaterialTheme.colorScheme.surface, modifier = Modifier.fillMaxSize()) {
         Box(Modifier.fillMaxSize().padding(32.dp), contentAlignment = Alignment.Center) {
             Column(
@@ -104,15 +130,27 @@ internal fun HubPanePlaceholder() {
                 verticalArrangement = Arrangement.Center,
             ) {
                 FolkIconPlate(
-                    FolkIcons.Chitalishte, FolkMotif.ROSETTE, Modifier.clearAndSetSemantics { }, size = 72.dp,
+                    if (mine) FolkIcons.Books else FolkIcons.Chitalishte,
+                    if (mine) FolkMotif.RHOMBUS else FolkMotif.ROSETTE,
+                    Modifier.clearAndSetSemantics { }, size = 72.dp,
                     container = MaterialTheme.colorScheme.surfaceContainerHigh, content = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(Modifier.height(16.dp))
                 Text(
-                    stringResource(R.string.hub_pane_hint), style = MaterialTheme.typography.bodyLarge,
+                    stringResource(if (mine) R.string.hub_pane_hint_my else R.string.hub_pane_hint),
+                    style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onSurfaceVariant, textAlign = TextAlign.Center,
+                )
+                Spacer(Modifier.height(20.dp))
+                ShevitsaStrip(
+                    if (mine) ShevitsaMotif.RHOMBUS else ShevitsaMotif.ROSETTE,
+                    LocalExtendedColors.current.gold.copy(alpha = PLACEHOLDER_BAND_ALPHA),
+                    Modifier.width(96.dp).height(10.dp),
                 )
             }
         }
     }
 }
+
+/** Лентата под подсказката — по-бледа от знака в края на страница: само загатната. */
+private const val PLACEHOLDER_BAND_ALPHA = 0.35f

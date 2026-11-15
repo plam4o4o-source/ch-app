@@ -18,15 +18,24 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import org.chyavorec.app.ui.navigation.DETAIL_KEY
+import org.chyavorec.app.ui.navigation.detailStack
+import org.chyavorec.app.ui.navigation.openDetail
+import org.chyavorec.app.ui.navigation.popDetail
+import org.chyavorec.app.ui.navigation.pushDetail
+import org.chyavorec.app.ui.navigation.showDetail
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
+import kotlin.test.assertNotSame
 import kotlin.test.assertNull
+import kotlin.test.assertSame
 import kotlin.test.assertTrue
 
 /** Списък и детайл един до друг: „Назад“, тесен прозорец и редът за TalkBack. */
@@ -38,11 +47,31 @@ class ListDetailPaneTest {
     private val navigated = mutableListOf<String>()
     private var twoPane by mutableStateOf(true)
 
+    /** ViewModel на детайла: кой маршрут го е създал и дали е изчистен. */
+    class Probe(val route: String) : ViewModel() {
+        var cleared = false
+        override fun onCleared() { cleared = true }
+    }
+
+    /** Последният ViewModel на всеки маршрут (по реда на създаване). */
+    private val probes = mutableListOf<Probe>()
+
+    private fun probe(route: String) = probes.last { it.route == route }
+
     private fun start() {
         compose.setContent {
             ListDetailPane(
                 state, { navigated += it },
-                detail = { route, close -> Column { Text("DETAIL $route"); Button(onClick = close) { Text("CLOSE") } } },
+                detail = { route, close ->
+                    val vm = viewModel { Probe(route).also { probes += it } }
+                    val pane = LocalDetailPane.current
+                    Column {
+                        Text("DETAIL $route ${vm.route}")
+                        Button(onClick = close) { Text("CLOSE") }
+                        // Връзка от самия детайл към друг детайл на панела (като „Настройки“ › „Поверителност“).
+                        Button(onClick = { pane!!.fromDetail { state.openDetail("$route/next") } }) { Text("LINK") }
+                    }
+                },
                 twoPane = twoPane,
             ) {
                 Column { Text("LIST"); Button(onClick = { state[DETAIL_KEY] = "book/1" }) { Text("OPEN") } }
@@ -136,6 +165,97 @@ class ListDetailPaneTest {
         assertEquals(1f, detail.config.getOrNull(SemanticsProperties.TraversalIndex))
         assertTrue(list.boundsInRoot.right <= detail.boundsInRoot.left)
         compose.onNode(hasText("DETAIL", substring = true) and hasAnyAncestor(group)).assertExists()
+    }
+
+    /** Всеки показан детайл — със свои ViewModel-и: затворен или сменен, те се изчистват (B2). */
+    @Test fun eachShownDetailHasItsOwnViewModels() {
+        start()
+        compose.runOnIdle { state.showDetail("quiz") }
+        compose.waitForIdle()
+        val first = probe("quiz")
+        assertFalse(first.cleared)
+        // Затворен — изчистен; отворен наново — нов (не вчерашният резултат).
+        compose.runOnIdle { state.showDetail(null) }
+        compose.waitForIdle()
+        assertTrue(first.cleared)
+        compose.runOnIdle { state.showDetail("quiz") }
+        compose.waitForIdle()
+        val second = probe("quiz")
+        assertNotSame(first, second)
+        // Смяна на раздела — и старият се изчиства (след анимацията).
+        compose.runOnIdle { state.showDetail("timeline") }
+        compose.waitForIdle()
+        assertTrue(second.cleared)
+        assertFalse(probe("timeline").cleared)
+    }
+
+    /** Връзка от детайла — над него; „Назад“ се връща към него със същия ViewModel, после затваря (B3). */
+    @Test fun linkInsideThePaneStacksAndBackReturns() {
+        start()
+        compose.runOnIdle { state.showDetail("settings") }
+        compose.waitForIdle()
+        val settings = probe("settings")
+        compose.onNodeWithText("LINK").performClick()
+        compose.waitForIdle()
+        compose.onNodeWithText("DETAIL settings/next", substring = true).assertExists()
+        assertEquals(listOf("settings"), state.detailStack())
+        assertFalse(settings.cleared)
+        compose.runOnUiThread { compose.activity.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        compose.onNodeWithText("DETAIL settings settings").assertExists()
+        assertSame(settings, probe("settings"))
+        assertTrue(probe("settings/next").cleared)
+        compose.runOnUiThread { compose.activity.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        assertFalse(detailShown())
+        assertTrue(settings.cleared)
+    }
+
+    /** Избор от списъка, докато в панела има стек — наново, без екраните под стария. */
+    @Test fun choosingFromTheListReplacesTheStack() {
+        start()
+        compose.runOnIdle { state.showDetail("settings") }
+        compose.waitForIdle()
+        compose.onNodeWithText("LINK").performClick()
+        compose.waitForIdle()
+        compose.runOnIdle { state.openDetail("contacts") }
+        compose.waitForIdle()
+        assertEquals(emptyList(), state.detailStack())
+        compose.runOnUiThread { compose.activity.onBackPressedDispatcher.onBackPressed() }
+        compose.waitForIdle()
+        assertFalse(detailShown())
+    }
+
+    /** Стек в панела, а прозорецът стане тесен — на цял екран целият стек (Назад води по същия път). */
+    @Test fun narrowWindowOpensTheWholePaneStack() {
+        start()
+        compose.runOnIdle { state.showDetail("settings") }
+        compose.waitForIdle()
+        compose.onNodeWithText("LINK").performClick()
+        compose.waitForIdle()
+        twoPane = false
+        compose.waitForIdle()
+        assertEquals(listOf("settings", "settings/next"), navigated)
+        assertNull(state.get<String>(DETAIL_KEY))
+        assertEquals(emptyList(), state.detailStack())
+    }
+
+    /** Стекът в панела не повтаря екран: връзка към екран отдолу се връща до него. */
+    @Test fun paneStackNeverRepeatsAScreen() {
+        state.showDetail("a")
+        state.pushDetail("b")
+        state.pushDetail("c")
+        assertEquals(listOf("a", "b"), state.detailStack())
+        state.pushDetail("c")
+        assertEquals(listOf("a", "b"), state.detailStack())
+        state.pushDetail("a")
+        assertEquals(emptyList(), state.detailStack())
+        assertEquals("a", state.get<String>(DETAIL_KEY))
+        state.pushDetail("d")
+        state.popDetail()
+        assertEquals("a", state.get<String>(DETAIL_KEY))
+        state.popDetail()
+        assertNull(state.get<String>(DETAIL_KEY))
     }
 
     private fun hasAnyDescendantText(text: String) =

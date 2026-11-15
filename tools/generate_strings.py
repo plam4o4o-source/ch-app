@@ -375,6 +375,7 @@ S = {
 "more_group_chitalishte": ("Читалището", "The centre"),
 "more_group_app": ("Приложението", "The app"),
 "hub_pane_hint": ("Избери раздел вляво — той ще се отвори тук.", "Pick a section on the left — it opens here."),
+"hub_pane_hint_my": ("Избери раздел вляво — картата и книгите ти ще се отворят тук.", "Pick a section on the left — your card and books open here."),
 "more_group_pastimes": ("Занимания", "Pastimes"),
 "home_upcoming": ("Предстоящи събития", "Upcoming events"),
 "home_new_books": ("Нови постъпления", "New arrivals"),
