@@ -1,0 +1,277 @@
+name: Emulator check of the v1.2.39 candidate (temporary)
+# ВРЕМЕННО (клон debug/w26-check): проверка на кандидата v1.2.39 (claude/charming-rubin-3lzor2 @ 696e57db)
+# срещу издаденото v1.2.38 (main f57962bd). Резултатите — в клона emulator-results, папка v139/ (нов commit
+# върху върха; без force). Инструментите са от debug/w25-check; новите части са в .github/perf-check/w26.sh.
+# Без промени в кода на приложението. Пуска се САМО при push в debug/w26-check.
+#   app.apk          — prodRelease (minified) x86_64 от NEW_REF, org.chyavorec.app, временен ключ — кандидатът 1.2.39
+#   app-base.apk     — prodRelease x86_64 от BASE_REF, applicationId org.chyavorec.app.b38 (за да стоят едно до друго)
+#   app-base-upd.apk — prodRelease x86_64 от BASE_REF, org.chyavorec.app, същият ключ (обновяване 1.2.38 → 1.2.39)
+# Кои части се пускат: .github/perf-check/w26-parts.txt (празен — само публикуване на бележките).
+on:
+  push:
+    branches: [debug/w26-check]
+    paths: [.github/workflows/perf-check.yml, .github/perf-check/**]
+permissions:
+  contents: read
+env:
+  NEW_REF: 696e57dbc122e70537a7199139a5c9315f0238bb
+  BASE_REF: f57962bdeff4a2b3e5548a7e4c4c364165809a90
+  V: v139
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    outputs:
+      parts: ${{ steps.p.outputs.parts }}
+      any: ${{ steps.p.outputs.any }}
+    steps:
+      - uses: actions/checkout@v7
+      - id: p
+        name: Parts of this run (from w26-parts.txt)
+        run: |
+          P=$( (grep -v '^#' .github/perf-check/w26-parts.txt || true) | tr -s ' \n\t' ' ' | sed 's/^ //; s/ $//')
+          J=$(python3 -c "import json,sys; print(json.dumps(sys.argv[1].split()))" "$P")
+          echo "parts=$J" >> "$GITHUB_OUTPUT"
+          if [ -n "$P" ]; then echo "any=true" >> "$GITHUB_OUTPUT"; else echo "any=false" >> "$GITHUB_OUTPUT"; fi
+          echo "parts: $J"
+
+  key:
+    needs: plan
+    if: needs.plan.outputs.any == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    continue-on-error: true
+    steps:
+      - name: Throwaway signing keys (release + a shared debug keystore), used by all built test APKs
+        run: |
+          mkdir key; PASS=$(openssl rand -hex 16); echo "$PASS" > key/pass
+          keytool -genkeypair -noprompt -keystore key/t.jks -storepass "$PASS" -keypass "$PASS" \
+            -alias t -keyalg RSA -keysize 2048 -validity 3 -dname "CN=emulator test, O=not for release"
+          keytool -genkeypair -noprompt -keystore key/debug.keystore -storepass android -keypass android \
+            -alias androiddebugkey -keyalg RSA -keysize 2048 -validity 3 -dname "CN=Android Debug, O=Android, C=US"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: key
+          path: key/
+          retention-days: 1
+
+  helper:
+    needs: plan
+    if: needs.plan.outputs.any == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build the emulator helper APK (intent/share/calendar catcher, test accessibility service, device locale)
+        run: |
+          mkdir -p dist
+          bash .github/perf-check/helper/build.sh dist/helper.apk
+      - uses: actions/upload-artifact@v7
+        with:
+          name: apk-helper
+          path: dist/
+
+  build:
+    needs: [plan, key]
+    if: needs.plan.outputs.any == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 75
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { app: new, vname: "1.2.39", vc: "1990200", suffix: "" }
+          - { app: base, vname: "1.2.38", vc: "1990100", suffix: ".b38" }
+          - { app: baseupd, vname: "1.2.38", vc: "1990100", suffix: "" }
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ matrix.app == 'new' && env.NEW_REF || env.BASE_REF }}
+      - uses: actions/download-artifact@v8
+        with:
+          name: key
+          path: ${{ runner.temp }}/key
+      - name: versionName of the release (as release.yml does; not committed)
+        run: |
+          sed -i 's/versionName = ".*"/versionName = "${{ matrix.vname }}"/' app/build.gradle.kts
+          grep -nE '^val releaseAbis|versionName = ' app/build.gradle.kts
+          git log --oneline -1
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: "25"
+      - uses: gradle/actions/setup-gradle@v6
+      - name: prodRelease with x86_64 added, optional applicationId suffix (emulator only, not committed)
+        run: |
+          sed -i 's|^val releaseAbis = listOf("arm64-v8a", "armeabi-v7a")$|val releaseAbis = listOf("arm64-v8a", "armeabi-v7a", "x86_64") // ВРЕМЕННО|' app/build.gradle.kts
+          grep -nE '^val releaseAbis' app/build.gradle.kts
+          if [ -n "${{ matrix.suffix }}" ]; then
+            sed -i 's|create("prod") {|create("prod") {\n            applicationIdSuffix = "${{ matrix.suffix }}" // ВРЕМЕННО|' app/build.gradle.kts
+            grep -n -A2 'create("prod")' app/build.gradle.kts
+          fi
+          K="$RUNNER_TEMP/key"; P=$(cat "$K/pass")
+          export SIGNING_STORE_FILE="$K/t.jks" SIGNING_STORE_PASSWORD="$P" SIGNING_KEY_ALIAS=t SIGNING_KEY_PASSWORD="$P" VERSION_CODE=${{ matrix.vc }}
+          ./gradlew --no-daemon assembleProdRelease
+          mkdir -p dist
+          case ${{ matrix.app }} in new) O=app.apk; R=apk-ref.txt;; base) O=app-base.apk; R=apk-base-ref.txt;; baseupd) O=app-base-upd.apk; R=apk-base-upd-ref.txt;; esac
+          cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/$O
+          [ ${{ matrix.app }} = new ] && cp app/build/outputs/mapping/prodRelease/mapping.txt dist/app-mapping.txt || true
+          echo "${{ matrix.vname }} $(git rev-parse --short HEAD) prodRelease (minified), x86_64 added, applicationId org.chyavorec.app${{ matrix.suffix }}, throwaway key, versionCode ${{ matrix.vc }}" > dist/$R
+          cat dist/*.txt; ls -l dist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: apk-${{ matrix.app }}
+          path: dist/
+
+  emulator:
+    needs: [plan, build, helper]
+    if: ${{ !cancelled() && needs.plan.outputs.any == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 140
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        # API 33 google_apis x86_64, -gpu swangle_indirect; частите с име на 26 — API 26; на 36x — API 36.
+        part: ${{ fromJSON(needs.plan.outputs.parts) }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: apk-*
+          merge-multiple: true
+      - name: API level of the part
+        id: api
+        run: |
+          case "${{ matrix.part }}" in *28) A=28;; *26) A=26;; *36x) A=36;; *) A=33;; esac
+          echo "level=$A" >> "$GITHUB_OUTPUT"; echo "API $A"
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          ls -l *.apk; cat apk-*.txt
+          python3 -c "import PIL, numpy, cv2" 2>/dev/null && command -v ffmpeg || { sudo apt-get update -qq >/dev/null 2>&1; sudo apt-get install -y -qq python3-pil python3-numpy python3-opencv ffmpeg >/dev/null 2>&1; }
+          python3 -c "import PIL; print('PIL', PIL.__version__)"; command -v ffmpeg
+      - name: Run on emulator (${{ matrix.part }}, swangle_indirect)
+        id: run
+        continue-on-error: true
+        timeout-minutes: 125
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ steps.api.outputs.level }}
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          emulator-options: -no-window -gpu swangle_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
+          script: bash .github/perf-check/run.sh ${{ matrix.part }}
+      - name: Record the step outcome, shrink the output
+        if: always()
+        continue-on-error: true
+        run: |
+          O=out/${{ matrix.part }}; mkdir -p $O
+          echo "part=${{ matrix.part }} target=google_apis api=${{ steps.api.outputs.level }} gpu=swangle_indirect emulator-step=${{ steps.run.outcome }}" > $O/job-status.txt
+          cat $O/job-status.txt
+          rm -rf $O/rec $O/yr $O/fs
+          { echo "== free"; free -m; echo "== host kernel: oom / kvm / segfault"; sudo dmesg -T | grep -iE "oom|killed process|segfault" | tail -20; } > $O/host-after-run.txt 2>&1 || true
+          [ -f $O/logcat-all.txt ] || cat $O/logcat-live.txt $O/logcat-dump.txt 2>/dev/null | awk '!seen[$0]++' > $O/logcat-all.txt
+                    python3 .github/perf-check/a6.py crashes $O/logcat-all.txt $O/crashes.txt | tee -a $O/summary.txt || true
+          python3 .github/perf-check/a6post.py $O || true
+          du -sh $O; find $O -type f | wc -l
+      - uses: actions/upload-artifact@v7
+        if: always()
+        continue-on-error: true
+        with:
+          name: out-${{ matrix.part }}
+          path: out/
+
+  # Клонът emulator-results е голям: fetch без съдържанието на файловете (blob:none), индексът — от върха му;
+  # заменят се само папките на това изпълнение; нов commit ВЪРХУ върха (родител — прочетеният връх), push без
+  # force; ако клонът се е преместил — отново от новия връх.
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    continue-on-error: true
+    permissions:
+      contents: write
+      actions: read
+    needs: [plan, build, emulator]
+    if: always()
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v8
+        continue-on-error: true
+        with:
+          pattern: out-*
+          path: results
+          merge-multiple: true
+      - uses: actions/download-artifact@v8
+        continue-on-error: true
+        with:
+          pattern: apk-*
+          path: apks
+          merge-multiple: true
+      - name: Push results to emulator-results/v139 (a new commit on top; the rest of the branch is kept)
+        run: |
+          set -ex
+          SRC=$(git rev-parse --short HEAD)
+          W=$GITHUB_WORKSPACE
+          RUN=${{ github.run_id }}
+          mkdir -p "$W/results" "$W/apks"
+          ls "$W/results" | head -60; du -sh "$W/results" || true
+          P="$RUNNER_TEMP/pub"; mkdir -p "$P"; cd "$P"
+          git init -q -b scratch
+          git remote add origin "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          for try in 1 2 3 4 5; do
+            git fetch --filter=blob:none --depth 1 origin emulator-results
+            TIP=$(git rev-parse FETCH_HEAD)
+            git read-tree FETCH_HEAD
+            rm -rf "$V"
+            for p in $(ls "$W/results"); do git rm -r -q --cached --ignore-unmatch "$V/$p"; done
+            mkdir -p "$V"; cp -r "$W/results/." "$V/"
+            mkdir -p "$V/size"
+            git show "FETCH_HEAD:$V/size/apks.txt" > "$V/size/apks.txt" 2>/dev/null || : > "$V/size/apks.txt"
+            if ls "$W"/apks/apk-*ref.txt >/dev/null 2>&1; then
+              { cat "$W"/apks/apk-*ref.txt; for a in app.apk app-base.apk app-base-upd.apk; do [ -f "$W/apks/$a" ] && echo "$a $(stat -c %s "$W/apks/$a") bytes"; done; } > "$V/size/apks.txt" || true
+            fi
+            git show FETCH_HEAD:$V/runs.txt > "$V/runs.txt" 2>/dev/null || : > "$V/runs.txt"
+            echo "run $RUN @ $SRC (new ${NEW_REF:0:7}, base ${BASE_REF:0:7}): $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
+            # Частите от по-ранни изпълнения: summary.txt и job-status.txt обратно на диска — за индекса (не се добавят наново).
+            for p in $(git ls-tree --name-only "FETCH_HEAD:$V" 2>/dev/null); do
+              [ -d "$W/results/$p" ] && continue
+              git cat-file -e "FETCH_HEAD:$V/$p/summary.txt" 2>/dev/null || continue
+              mkdir -p "$V/$p"; git show "FETCH_HEAD:$V/$p/summary.txt" > "$V/$p/summary.txt" || true
+              git show "FETCH_HEAD:$V/$p/job-status.txt" > "$V/$p/job-status.txt" 2>/dev/null || true
+            done
+            (
+              cd "$V"
+              echo "# Emulator check of the v1.2.39 candidate (${NEW_REF:0:7}) against the released v1.2.38 (${BASE_REF:0:7})"
+              echo
+              cat "$W/.github/perf-check/w26-notes.md" 2>/dev/null || true
+              echo
+              echo "## Runs and parts"
+              echo
+              echo "debug/w26-check (runs in runs.txt, latest $RUN @ $SRC). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part name ends in 26 (API 26) or 36x (API 36). prodRelease (minified) x86_64 builds with a throwaway key: new = the 1.2.39 candidate (org.chyavorec.app), base = 1.2.38 as released (org.chyavorec.app.b38, side by side for the A/B), base-upd = 1.2.38 as org.chyavorec.app (the update test). No app-code changes on the debug branch. Screenshots are JPEG, scaled down (sheets/ = contact sheets). The earlier checks: [../v138b/index.md](../v138b/index.md), [../v138/index.md](../v138/index.md)."
+              echo; echo "| part | status |"; echo "|---|---|"
+              for p in $(ls -d */ | tr -d /); do [ -f "$p/job-status.txt" ] && echo "| $p | $(grep -c '## COMPLETE' $p/summary.txt 2>/dev/null | sed 's/^1$/COMPLETE/;s/^0$/incomplete/'); $(cat $p/job-status.txt) |"; done
+              echo; echo '```'; cat size/apks.txt 2>/dev/null; echo '```'
+              echo
+              for p in $(ls -d */ | tr -d /); do
+                [ -f "$p/summary.txt" ] || continue
+                echo "## $p"; echo; echo '```'; cut -c1-1500 "$p/summary.txt"; echo '```'; echo
+              done
+            ) > "$RUNNER_TEMP/v-index.md"
+            mv "$RUNNER_TEMP/v-index.md" "$V/index.md"
+            git show FETCH_HEAD:index.md > index.md
+            grep -q "$V/index.md" index.md || { { head -1 index.md; echo; echo "v1.2.39 candidate (696e57d) vs v1.2.38: crash smoke API 26/33/36, frame time A/B, update, screenshots: [$V/index.md]($V/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
+            for p in $(ls "$W/results"); do git add -A -- "$V/$p"; done
+            git add -A -- "$V/runs.txt" "$V/index.md" "$V/size/apks.txt" index.md
+            C=$(git commit-tree "$(git write-tree)" -p "$TIP" -m "Emulator results $V for $SRC (run $RUN)") || { echo "write-tree/commit failed (promisor fetch?); retrying"; sleep $((try * 7)); continue; }
+            git push origin "$C:refs/heads/emulator-results" && break
+            echo "emulator-results moved; retrying on the new tip"; sleep $((try * 7))
+          done
