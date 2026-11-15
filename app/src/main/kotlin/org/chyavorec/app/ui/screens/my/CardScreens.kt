@@ -300,6 +300,8 @@ internal fun LibraryCard(
                 Text(stringResource(R.string.org_short), color = Brand.Parchment, fontFamily = Cormorant, fontSize = if (large) 20.sp else 17.sp, maxLines = 1, overflow = TextOverflow.Ellipsis)
             }
         }
+        // С подгъва картата е по-висока от пропорциите — името пак не опира в заглавката.
+        if (large && band != null) Spacer(Modifier.height(10.dp))
         Spacer(Modifier.weight(1f))
         EmbossedText(data.holder.ifBlank { "—" }, Brand.Parchment, TextStyle(fontFamily = Cormorant, fontSize = if (large) 28.sp else 22.sp))
         // Номерът не се съкращава: ако до него няма място за статуса, той минава на нов ред.
@@ -314,13 +316,13 @@ internal fun LibraryCard(
             // „Твоята шевица“ — подгъв над баркода, с бод двойно по-едър от шевицата на фона; не опира
             // в белия фон на баркода (тихите му зони остават чисти). За екранния четец — с годината.
             val label = stringResource(R.string.card_band_cd, band.year)
-            Spacer(Modifier.height(12.dp))
+            Spacer(Modifier.height(10.dp))
             PersonalBandStrip(
                 band,
                 Modifier.align(Alignment.CenterHorizontally).widthIn(max = BAND_CELL * PersonalShevitsa.COLUMNS)
                     .semantics { contentDescription = label },
             )
-            Spacer(Modifier.height(10.dp))
+            Spacer(Modifier.height(8.dp))
         } else {
             Spacer(Modifier.height(8.dp))
         }
