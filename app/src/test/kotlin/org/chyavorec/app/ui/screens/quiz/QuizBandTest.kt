@@ -5,6 +5,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.geometry.isSpecified
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.test.junit4.StateRestorationTester
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -14,6 +16,8 @@ import org.chyavorec.app.ui.components.ConfettiState
 import org.chyavorec.app.ui.components.LocalConfetti
 import org.chyavorec.app.ui.components.LocalReducedMotion
 import org.chyavorec.app.ui.components.StitchCharts
+import org.chyavorec.app.ui.components.StitchSpec
+import org.chyavorec.app.ui.theme.AppMotion
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -58,13 +62,33 @@ class QuizBandTest {
         assertEquals(4, QuizBandCharts.stitched(listOf(true, true, false, true, true), 5))
     }
 
-    @Test fun theUnpickedMarkStopsBetweenStitches() {
-        val n = StitchCharts.rosette(5).size
-        val p = unpickedProgress(n)
-        assertTrue(p in 0.2f..0.5f)
-        // Цял брой бодове — без „игла“ насред бод.
-        assertEquals(p * n, (p * n).toInt().toFloat(), 1e-4f)
-        assertEquals(0f, unpickedProgress(0))
+    /** Подгъвът е тичащ бод от прости черти: стъпката и дължината са тези на [StitchSpec.Running]. */
+    @Test fun theHemIsRunningStitchAsPlainSegments() {
+        val d = 2.625f
+        val spec = StitchSpec.Running
+        val points = runningStitchSegments(10f, 300f, 5f, d)
+        assertEquals(0, points.size % 2, "двойки точки — начало и край на всяка черта")
+        val period = (spec.dashDp + spec.gapDp) * d
+        val on = spec.dashDp * d - spec.widthDp * d
+        assertEquals(kotlin.math.ceil((300f - 10f) / period).toInt(), points.size / 2)
+        for (k in 0 until points.size / 2) {
+            val a = points[2 * k]
+            val b = points[2 * k + 1]
+            assertEquals(10f + k * period, a.x, 1e-3f)
+            assertEquals(5f, a.y)
+            assertTrue(b.x - a.x <= on + 1e-3f && b.x <= 300f)
+        }
+        assertTrue(runningStitchSegments(10f, 10f, 0f, d).isEmpty())
+    }
+
+    /** Конфетито — над средата на лентата, с [ConfettiLift] над горния ѝ край (не от средата ѝ). */
+    @Test fun theConfettiStartsAboveTheBand() {
+        val band = Rect(40f, 1500f, 1040f, 1700f)
+        val o = QuizBandCharts.confettiOrigin(band, 189f)
+        assertEquals(band.center.x, o.x)
+        assertEquals(1500f - 189f, o.y)
+        assertEquals(0f, QuizBandCharts.confettiOrigin(Rect(0f, 50f, 100f, 90f), 189f).y, "не над екрана")
+        assertFalse(QuizBandCharts.confettiOrigin(null, 189f).isSpecified)
     }
 
     @Test fun theFifthRightAnswerClosesTheBandWithConfettiOnce() {
@@ -77,8 +101,15 @@ class QuizBandTest {
         }
         compose.waitForIdle()
         assertEquals(0, confetti.bursts, "вече отговорените не се бродират наново")
+        compose.mainClock.autoAdvance = false
         compose.runOnIdle { results.value = List(5) { true } }
-        // Часовникът върви сам: бродирането (~0.9 s) и затварящият бод свършват, после — конфети.
+        // Конфетито тръгва със затварящия бод — докато иглата довършва петия мотив, не след нея.
+        compose.mainClock.advanceTimeBy(CLOSE_LEAD_MS - 100)
+        assertEquals(0, confetti.bursts)
+        compose.mainClock.advanceTimeBy(200)
+        assertEquals(1, confetti.bursts)
+        assertTrue(CLOSE_LEAD_MS < AppMotion.StitchMs)
+        compose.mainClock.autoAdvance = true
         compose.mainClock.advanceTimeBy(2_000)
         compose.waitForIdle()
         assertEquals(1, confetti.bursts)
