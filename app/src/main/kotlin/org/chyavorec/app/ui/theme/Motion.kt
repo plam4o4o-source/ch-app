@@ -22,4 +22,16 @@ object AppMotion {
     fun <T> fastEffects(): SpringSpec<T> = spring(dampingRatio = 1f, stiffness = 3800f)
     fun <T> defaultEffects(): SpringSpec<T> = spring(dampingRatio = 1f, stiffness = 1600f)
     fun <T> slowEffects(): SpringSpec<T> = spring(dampingRatio = 1f, stiffness = 800f)
+
+    /**
+     * Единната скала на времетраенията (ms) за `tween`. Вместо число на място — една от тези:
+     * QuickMs — смяна на цвят/прозрачност на малък елемент; ShortMs — етикет, чип, малка карта;
+     * MediumMs — част от екрана; LongMs — голям или „церемониален“ момент; StitchMs — бродиране
+     * на един бод/мотив.
+     */
+    const val QuickMs = 120
+    const val ShortMs = 220
+    const val MediumMs = 320
+    const val LongMs = 520
+    const val StitchMs = 900
 }
