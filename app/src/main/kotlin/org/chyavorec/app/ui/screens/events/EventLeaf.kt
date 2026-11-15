@@ -217,7 +217,7 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
                     // Листът се „обръща надолу“ около горния ръб; при намалено движение — само проява.
                     val p = turn.value
                     transformOrigin = TransformOrigin(0.5f, 0f)
-                    cameraDistance = 12f * density
+                    cameraDistance = 16f * density
                     if (turnReduced) alpha = p.coerceIn(0f, 1f)
                     else {
                         rotationX = leafTurnDegrees(p)
@@ -283,10 +283,11 @@ internal fun EventLeaf(event: Event, date: LocalDate, today: LocalDate, modifier
                     layout(placeable.width, placeable.height + reserve) { placeable.place(0, 0) }
                 }
                 .graphicsLayer {
-                    // Откъснат: слиза с 4 dp и леко се накланя (−1,5°) около средата на горния ръб.
+                    // Откъснат: слиза с 6 dp и леко се накланя (−1,5°) около средата на горния ръб
+                    // (левият край слиза до ~10 dp — в запазените 12 dp).
                     val t = tear.value
                     transformOrigin = TransformOrigin(0.5f, 0f)
-                    translationY = 4.dp.toPx() * t
+                    translationY = 6.dp.toPx() * t
                     rotationZ = STUB_TILT_DEG * t
                 }
                 .shadow(4.dp, stubShape).background(paper)
@@ -337,8 +338,11 @@ private fun DrawScope.drawBasting(color: Color, y: Float, from: Float, to: Float
     }
 }
 
-/** Наклонът на листа (°) при напредък [p] на отварянето: −75° в началото (обърнат нагоре), 0° — на място. */
-internal const val LEAF_TURN_DEG = -75f
+/**
+ * Наклонът на листа (°) при напредък [p] на отварянето: 75° в началото — повдигнат към читателя
+ * (долният ръб е по-близо, по-широк), 0° — легнал на стената.
+ */
+internal const val LEAF_TURN_DEG = 75f
 
 internal fun leafTurnDegrees(p: Float): Float = LEAF_TURN_DEG * (1f - p)
 

@@ -214,7 +214,7 @@ class EventLeafScreenshotTest {
     @Composable
     private fun LeafAndTitle(torn: Boolean) = Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         EventLeaf(concert, LocalDate.parse("2026-12-25"), today, torn = torn)
-        Text(concert.title, style = MaterialTheme.typography.headlineLarge)
+        Text(concert.title, style = MaterialTheme.typography.headlineLarge, color = MaterialTheme.colorScheme.onBackground)
     }
 
     /**
@@ -263,7 +263,7 @@ class EventLeafScreenshotTest {
         }
     }
 
-    /** Отваряне: от −75° (обърнат нагоре) към 0° на пружина; „назад“ — обратно нагоре. */
+    /** Отваряне: от 75° (повдигнат към читателя) към 0° на пружина; „назад“ — обратно нагоре. */
     @Test fun leafTurnsDownWhenTheScreenOpensAndBackOnBack() {
         // Екранът влиза: преходът тръгва от PreEnter към Visible още при първата композиция.
         val visible = MutableTransitionState(false).apply { targetState = true }
@@ -273,7 +273,7 @@ class EventLeafScreenshotTest {
         compose.mainClock.advanceTimeBy(80)
         val mid = assertNotNull(turn).value
         assertTrue(mid > 0.05f && mid < 0.95f, "по средата на падането: $mid")
-        assertTrue(leafTurnDegrees(mid) < -3f && leafTurnDegrees(mid) > LEAF_TURN_DEG)
+        assertTrue(leafTurnDegrees(mid) > 3f && leafTurnDegrees(mid) < LEAF_TURN_DEG)
         shot("w24-event-leaf-turn-mid")
         compose.mainClock.advanceTimeBy(1500)
         assertEquals(1f, turn!!.value, 1e-3f)
