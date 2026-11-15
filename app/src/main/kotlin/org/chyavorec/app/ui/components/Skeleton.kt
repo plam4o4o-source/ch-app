@@ -27,11 +27,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ImageShader
 import androidx.compose.ui.graphics.ShaderBrush
-import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.TileMode
 import android.graphics.Matrix
 import org.chyavorec.app.ui.theme.LocalExtendedColors
@@ -106,10 +109,6 @@ fun Modifier.shimmer(stitch: Boolean = false): Modifier = composed {
     val goldColors = remember(gold) { listOf(gold.copy(alpha = 0f), gold.copy(alpha = 0.8f), gold.copy(alpha = 0f)) }
     drawWithCache {
         val canvas = SkeletonCanvas.brush(SkeletonCanvas.CELL_DP.dp.toPx(), ext.isDark)
-        // Бодът през средата — тропосване ([StitchSpec.Basting]), както подгъвът.
-        val bod = StitchSpec.Basting.stroke(density)
-        val thread = bod.width
-        val dash = bod.pathEffect
         onDrawBehind {
             drawRect(base)
             drawRect(canvas, alpha = SkeletonCanvas.ALPHA)
@@ -118,17 +117,38 @@ fun Modifier.shimmer(stitch: Boolean = false): Modifier = composed {
                 drawRect(Brush.linearGradient(colors, start = Offset(start, 0f), end = Offset(start + 500f, 300f)))
             }
             if (stitch) {
-                val y = size.height / 2f
-                val from = Offset(0f, y)
-                val to = Offset(size.width, y)
+                // Бодът през средата — тропосване ([StitchSpec.Basting]), както подгъвът.
                 if (x != null) {
                     val start = x.value
-                    drawLine(Brush.horizontalGradient(goldColors, startX = start, endX = start + 500f), from, to, thread, StrokeCap.Round, dash)
+                    drawBastingRow(Brush.horizontalGradient(goldColors, startX = start, endX = start + 500f), gold, alpha = 1f)
                 } else {
-                    drawLine(gold, from, to, thread, StrokeCap.Round, dash, alpha = 0.45f)
+                    drawBastingRow(null, gold, alpha = 0.45f)
                 }
             }
         }
+    }
+}
+
+/**
+ * Тропосването ([StitchSpec.Basting]) хоризонтално през средата — същите черти и празнини като
+ * пунктирния му ефект, но като отделни заоблени правоъгълници (без PathEffect на всеки кадър;
+ * като [org.chyavorec.app.ui.screens.timeline.drawStitchRun]). С [brush] — в нея, иначе в [color].
+ */
+private fun DrawScope.drawBastingRow(brush: Brush?, color: Color, alpha: Float) {
+    val spec = StitchSpec.Basting
+    val w = spec.widthDp * density
+    val dash = spec.dashDp * density
+    val period = (spec.dashDp + spec.gapDp) * density
+    val corner = CornerRadius(w / 2f)
+    val top = size.height / 2f - w / 2f
+    var x = 0f
+    while (x < size.width) {
+        val len = minOf(dash, size.width - x)
+        if (len >= w) {
+            if (brush != null) drawRoundRect(brush, Offset(x, top), Size(len, w), corner)
+            else drawRoundRect(color, Offset(x, top), Size(len, w), corner, alpha = alpha)
+        }
+        x += period
     }
 }
 
