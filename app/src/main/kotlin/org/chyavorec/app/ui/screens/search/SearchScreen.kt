@@ -76,7 +76,7 @@ import org.chyavorec.app.di.AppContainer
 import org.chyavorec.app.ui.appViewModelWithState
 import org.chyavorec.app.ui.components.ChLoadingIndicator
 import org.chyavorec.app.ui.components.EmptyView
-import org.chyavorec.app.ui.components.FolkIconPlate
+import org.chyavorec.app.ui.components.FolkListPlate
 import org.chyavorec.app.ui.components.FolkIcons
 import org.chyavorec.app.ui.components.FolkMotif
 import org.chyavorec.app.ui.components.SectionLabel
@@ -386,9 +386,9 @@ private fun Header(text: String, more: Pair<() -> Unit, Int>? = null) = Row(
     more?.let { (open, total) -> TextButton(onClick = open) { Text(stringResource(R.string.search_show_all, total)) } }
 }
 
-/** Малката плочка пред резултат (28 dp): ромб — библиотеката, розетка — читалището и сайтът. */
+/** Малката плочка пред резултат ([FolkListPlate], 36 dp): ромб — библиотеката, розетка — читалището и сайтът. */
 @Composable
-private fun ResultPlate(icon: ImageVector, motif: FolkMotif) = FolkIconPlate(icon, motif, size = 28.dp)
+private fun ResultPlate(icon: ImageVector, motif: FolkMotif) = FolkListPlate(icon, motif)
 
 private fun SiteSection.isLibrary() = this == SiteSection.LIBRARY || this == SiteSection.CATALOG
 

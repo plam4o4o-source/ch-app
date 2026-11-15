@@ -24,6 +24,26 @@ class HomeLayoutTest {
         assertTrue(h >= 150.dp, "$h")
     }
 
+    /**
+     * Надписът на въртележката е на плоскост под снимката 16:9 (изправен телефон, таблет), а
+     * хоризонтално — до нея: снимка + надпис един под друг биха заели целия екран.
+     */
+    @Test fun heroCaptionSitsUnderThePhotoInPortraitAndBesideItInLandscape() {
+        // Изправен телефон 411 × 891 (голямата карта ~310 dp), и при „Много голям“ шрифт; телефон 360 × 640.
+        assertFalse(heroSideBySide(310.dp, 891.dp))
+        assertFalse(heroSideBySide(310.dp, 891.dp, fontScale = 1.3f))
+        assertFalse(heroSideBySide(270.dp, 640.dp))
+        // Таблет изправен 800 × 1280.
+        assertFalse(heroSideBySide(640.dp, 1280.dp))
+        // Хоризонтално: телефон 891 × 411 и таблет 1280 × 800 (съдържанието до 840 dp).
+        assertTrue(heroSideBySide(640.dp, 411.dp))
+        assertTrue(heroSideBySide(660.dp, 800.dp))
+        // Мястото, докато се зарежда, е колкото картата: изправено — снимка 16:9 и надпис; хоризонтално — под половин прозорец.
+        val portrait = heroSkeletonHeight(379.dp, 891.dp)
+        assertTrue(portrait > 379.dp * 0.82f * 9f / 16f && portrait < 891.dp * 0.48f, "$portrait")
+        assertTrue(heroSkeletonHeight(808.dp, 411.dp) <= 411.dp * 0.5f)
+    }
+
     @Test fun quickActionsWrapToTwoColumnsBeforeWordsBreak() {
         // 411 dp без полетата (2 × 16): 4 в ред при обичаен и леко уголемен шрифт.
         assertEquals(4, quickActionsPerRow(379.dp, 1f))

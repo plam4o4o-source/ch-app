@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.layout.windowInsetsTopHeight
 import androidx.compose.runtime.derivedStateOf
 import org.chyavorec.app.ui.components.PersonalCovers
-import org.chyavorec.app.ui.components.LocalOnlineCovers
-import org.chyavorec.app.ui.components.mayHaveRealCover
 import org.chyavorec.app.ui.components.bookCoverShared
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.Spring
@@ -22,7 +20,6 @@ import androidx.compose.animation.core.tween
 import androidx.compose.material3.carousel.HorizontalCenteredHeroCarousel
 import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.CustomAccessibilityAction
 import androidx.compose.ui.semantics.customActions
@@ -71,6 +68,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -80,6 +79,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -115,13 +115,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.drawscope.clipRect
@@ -138,7 +139,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.style.LineBreak
 import androidx.compose.ui.text.style.TextOverflow
@@ -160,7 +160,6 @@ import org.chyavorec.app.ui.components.BrandedImageFallback
 import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.Emblem
 import org.chyavorec.app.ui.components.ErrorView
-import org.chyavorec.app.ui.components.PressableCard
 import org.chyavorec.app.ui.components.SiteImage
 import org.chyavorec.app.ui.components.SectionHeader
 import org.chyavorec.app.ui.components.SyncBanner
@@ -169,9 +168,11 @@ import org.chyavorec.app.ui.navigation.Routes
 import org.chyavorec.app.ui.screens.timeline.OnThisDayCard
 import org.chyavorec.domain.timeline.OnThisDay
 import org.chyavorec.app.ui.screens.events.EventCard
+import org.chyavorec.app.ui.screens.events.StitchedRhombus
 import org.chyavorec.app.ui.screens.news.NewsRow
 import org.chyavorec.app.ui.screens.my.LoanDueCard
 import org.chyavorec.app.ui.screens.my.rememberLoanSummary
+import org.chyavorec.app.ui.theme.AppMotion
 import org.chyavorec.app.ui.theme.Brand
 import org.chyavorec.app.util.Formatters
 import org.chyavorec.data.repository.AuthState
@@ -316,7 +317,7 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
                     state.news.showSkeleton -> {
                         val windowH = windowHeight()
                         BoxWithConstraints(Modifier.padding(16.dp).fillMaxWidth()) {
-                            Box(Modifier.fillMaxWidth().height(heroMinHeight(maxWidth, windowH)).clip(MaterialTheme.shapes.large).shimmer())
+                            Box(Modifier.fillMaxWidth().height(heroSkeletonHeight(maxWidth, windowH, LocalDensity.current.fontScale)).clip(MaterialTheme.shapes.large).shimmer())
                         }
                     }
                     state.news.error != null -> ErrorView(state.news.error!!, onRetry = { vm.refresh() }, subject = stringResource(R.string.subject_news))
@@ -484,12 +485,6 @@ internal fun prewarmHomeBand(density: Float, dark: Boolean) {
     org.chyavorec.app.ui.components.ShevitsaStill.prewarmRibbon(heightPx, HOME_BAND_PERIOD, ShevitsaPalettes.ribbon(dark))
 }
 
-/** Тъмен воал под текста на въртележката — еднакъв за всички страници, създава се веднъж. */
-private val HeroScrim = Brush.verticalGradient(
-    0f to Color.Transparent, 0.3f to Color.Transparent,
-    0.65f to Brand.Ink.copy(alpha = 0.6f), 1f to Brand.Ink.copy(alpha = 0.96f),
-)
-
 /**
  * Въртяща се лента с последните новини — Material 3 „hero“ въртележка: голямата карта в
  * средата, съседните „надничат“ отстрани (маскирани). Автоматично превъртане на 6 s и
@@ -523,7 +518,6 @@ private fun HeroCarousel(items: List<NewsArticle>, anchor: HeroAnchor, onOpen: (
         carousel.animateScrollToItem((carousel.currentItem + 1) % items.size, animationSpec = tween(700))
         advances++
     }
-    val context = LocalContext.current
     val windowH = windowHeight()
     val carouselLabel = stringResource(R.string.home_carousel)
     val current = carousel.currentItem
@@ -595,58 +589,71 @@ private fun HeroCarousel(items: List<NewsArticle>, anchor: HeroAnchor, onOpen: (
             BoxWithConstraints {
             // Ширината за снимката — същият адрес (ширина) като в статията: една заявка и един запис в кеша.
             val imageWidth = maxWidth.coerceAtMost(720.dp)
+            // Снимката 16:9 и надписът под нея — или един до друг, ако двете не се събират в
+            // ~половин прозорец (хоризонтално, таблет легнал): тогава картата е с височината отпреди.
+            val sideBySide = heroSideBySide(maxWidth, windowH, LocalDensity.current.fontScale)
+            // Хоризонтално: снимката 16:9 по височината на картата, но не по-широка от 60 % от нея.
+            val sidePhotoWidth = minOf(minHeight * 16f / 9f, maxWidth * 0.6f)
             Surface(
                 onClick = { onOpen(a) },
                 shape = shape,
-                modifier = Modifier.fillMaxWidth().heightIn(min = minHeight).maskClip(shape)
+                // Мастило; в тъмна тема — малко по-светло, за да не се слее с фона (и плоскостта с него).
+                color = if (LocalExtendedColors.current.isDark) Brand.InkRaised else Brand.Ink,
+                modifier = Modifier.fillMaxWidth().then(if (sideBySide) Modifier.height(minHeight) else Modifier).maskClip(shape)
                     .heroTrack(anchor, shift, parallax)
                     .darkTopHighlight(shape)
                     .semantics { if (page == current) customActions = pageActions(page) else hideFromAccessibility() },
             ) {
-                // Без снимка (или при грешка) — фирмен фон с воден знак, без тъмния воал.
+                // Без снимка (или при грешка) — фирмен фон с воден знак.
                 var imageFailed by remember(a.imageUrl) { mutableStateOf(false) }
                 val branded = a.imageUrl.isNullOrBlank() || imageFailed
-                Box {
-                    Box(Modifier.matchParentSize()) {
-                    if (branded) {
-                        BrandedImageFallback(Modifier.fillMaxSize())
-                    } else {
-                        SiteImage(
-                            url = a.imageUrl,
-                            width = imageWidth,
-                            contentDescription = null,
-                            containerColor = Brand.InkSoft,
-                            onFailure = { imageFailed = true },
-                            thumbnail = true,
-                            // Без shared element: същият ключ има и списъкът „Новини“, а при смяна на
-                            // таб двата източника биха се засекли.
-                            modifier = Modifier.fillMaxSize().heroPhotoLayer(shift, parallax),
-                        )
-                        Box(Modifier.fillMaxSize().background(HeroScrim))
-                    }
-                    }
-                    // Житните класове (горе, 10 dp + 22 dp) са над текста: при едър шрифт колоната расте нагоре —
-                    // резервира им място, за да не ги застъпва.
-                    Column(Modifier.align(Alignment.BottomStart).padding(start = 18.dp, end = 18.dp, bottom = 18.dp, top = if (season == Season.HARVEST) HeroWheatReserve else 18.dp).graphicsLayer { alpha = focal() }) {
-                        Text(
-                            (a.category ?: stringResource(R.string.label_news)).uppercase(),
-                            style = MaterialTheme.typography.labelSmall, color = Brand.GoldLight,
-                            maxLines = 1, overflow = TextOverflow.Ellipsis,
-                        )
-                        Spacer(Modifier.height(6.dp))
-                        // Най-едрото заглавие на екрана — над заглавките на разделите (sectionTitle).
-                        Text(a.title, style = MaterialTheme.typography.headlineMedium, color = Brand.Parchment, maxLines = titleLines, overflow = TextOverflow.Ellipsis)
-                        val date = remember(a.publishedAtMillis) { Formatters.millisDate(context, a.publishedAtMillis) }
-                        date?.let {
-                            Spacer(Modifier.height(6.dp))
-                            Text(it, style = MaterialTheme.typography.labelMedium, color = Brand.Parchment.copy(alpha = 0.78f))
+                // Снимката (плакатът) е цяла и чиста — заглавието не се пише върху нейния текст, а е
+                // на плътна мастилена плоскост под нея ([HeroCaption]).
+                val photo = @Composable { m: Modifier ->
+                    Box(m.clipToBounds()) {
+                        if (branded) {
+                            BrandedImageFallback(Modifier.fillMaxSize())
+                        } else {
+                            SiteImage(
+                                url = a.imageUrl,
+                                width = imageWidth,
+                                contentDescription = null,
+                                containerColor = Brand.InkSoft,
+                                onFailure = { imageFailed = true },
+                                thumbnail = true,
+                                // Без shared element: същият ключ има и списъкът „Новини“, а при смяна на
+                                // таб двата източника биха се засекли.
+                                modifier = Modifier.fillMaxSize().heroPhotoLayer(shift, parallax),
+                            )
                         }
                     }
-                    // Житни класове по горния ръб (септември, Кръстовден) — текстът е долу и
-                    // не се застъпва с тях; златна шевица по ъглите.
-                    Box(Modifier.matchParentSize().graphicsLayer { alpha = focal() }) {
-                        if (season == Season.HARVEST) WheatEdge(Modifier.align(Alignment.TopCenter).padding(top = 10.dp))
-                        OrnamentFrame(Modifier.matchParentSize(), progress = { frameReveal.value })
+                }
+                val caption = @Composable { m: Modifier ->
+                    HeroCaption(a, titleLines, harvest = season == Season.HARVEST, visible = focal, modifier = m)
+                }
+                Box {
+                    if (sideBySide) {
+                        Row(Modifier.fillMaxSize()) {
+                            photo(Modifier.fillMaxHeight().width(sidePhotoWidth))
+                            caption(Modifier.weight(1f).fillMaxHeight())
+                        }
+                    } else {
+                        Column {
+                            photo(Modifier.fillMaxWidth().aspectRatio(16f / 9f))
+                            caption(Modifier.fillMaxWidth())
+                        }
+                    }
+                    // Златна шевица по ъглите (рамката стои, снимката се движи зад нея); страничните
+                    // карти са притъмнени (45 % мастило) — голямата е в светлина. И двете — само при рисуване.
+                    Box(
+                        Modifier.matchParentSize().drawBehind {
+                            val dim = HERO_SIDE_DIM * (1f - focal())
+                            if (dim > 0f) drawRect(Brand.Ink, alpha = dim)
+                        },
+                    ) {
+                        Box(Modifier.matchParentSize().graphicsLayer { alpha = focal() }) {
+                            OrnamentFrame(Modifier.matchParentSize(), progress = { frameReveal.value })
+                        }
                     }
                 }
             }
@@ -670,6 +677,62 @@ private const val HERO_MAX_WINDOW_FRACTION = 0.48f
 /** Горният отстъп на текста в картата през жътвата: 10 dp до житото + 22 dp негова височина + въздух. */
 private val HeroWheatReserve = 38.dp
 
+/** Колко мастило покрива страничните карти на въртележката (голямата е без). */
+private const val HERO_SIDE_DIM = 0.45f
+
+/** Приблизителната височина на надписа под снимката (категория и дата, две реда заглавие, полета) при шрифт 1. */
+private val HeroCaptionHeight = 120.dp
+
+/**
+ * Дали снимката и надписът в картата на въртележката стоят един до друг: когато снимка 16:9 с
+ * ширина [cardWidth] и надписът под нея биха заели повече от ~половин прозорец ([windowHeight]).
+ */
+internal fun heroSideBySide(cardWidth: Dp, windowHeight: Dp, fontScale: Float = 1f): Boolean =
+    cardWidth * 9f / 16f + HeroCaptionHeight * fontScale.coerceAtLeast(1f) > windowHeight * HERO_MAX_WINDOW_FRACTION
+
+/** Делът на голямата карта от ширината на лентата (останалото — надничащите встрани). */
+private const val HERO_LARGE_SHARE = 0.82f
+
+/** Височината на мястото на въртележката, докато новините се зареждат — колкото ще е картата. */
+internal fun heroSkeletonHeight(width: Dp, windowHeight: Dp, fontScale: Float = 1f): Dp {
+    val card = width * HERO_LARGE_SHARE
+    return if (heroSideBySide(card, windowHeight, fontScale)) heroMinHeight(width, windowHeight)
+    else card * 9f / 16f + HeroCaptionHeight * fontScale.coerceAtLeast(1f)
+}
+
+/**
+ * Надписът на картата във въртележката — на плътна мастилена плоскост (под или до снимката, не
+ * върху нея): категория и дата, после заглавието (винаги [titleLines] реда — картите са еднакво
+ * високи). Избледнява, докато картата се смалява встрани ([visible], четено само при рисуване).
+ * През жътвата житните класове са в горния ѝ край — над текста, не върху снимката.
+ */
+@Composable
+private fun HeroCaption(a: NewsArticle, titleLines: Int, harvest: Boolean, visible: () -> Float, modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+    val date = remember(a.publishedAtMillis) { Formatters.millisDate(context, a.publishedAtMillis) }
+    val category = (a.category ?: stringResource(R.string.label_news)).uppercase()
+    Box(modifier.graphicsLayer { alpha = visible() }) {
+        if (harvest) WheatEdge(Modifier.align(Alignment.TopCenter).padding(top = 10.dp))
+        Column(Modifier.padding(start = 18.dp, end = 18.dp, top = if (harvest) HeroWheatReserve else 14.dp, bottom = 18.dp)) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(
+                    category, style = MaterialTheme.typography.labelSmall, color = Brand.GoldLight,
+                    maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = Modifier.weight(1f, fill = false),
+                )
+                date?.let {
+                    Text(" · $it", style = MaterialTheme.typography.labelMedium, color = Brand.Parchment.copy(alpha = 0.78f), maxLines = 1)
+                }
+            }
+            Spacer(Modifier.height(6.dp))
+            // Най-едрото заглавие на екрана — над заглавките на разделите (sectionTitle).
+            Text(
+                a.title, style = MaterialTheme.typography.headlineMedium, color = Brand.Parchment,
+                minLines = titleLines, maxLines = titleLines, overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }
+}
+
 /**
  * Православният празник за деня (имен ден) — един ред под търсенето (от /api/calendar на сайта);
  * само в ден без празничен поздрав ([HolidayGreeting]) — в празник над въртележката е тясно. Без [feast] (още се зарежда) —
@@ -684,7 +747,8 @@ private fun FeastLine(feast: DailyFeast?, modifier: Modifier = Modifier) {
         modifier.fillMaxWidth().padding(horizontal = ScreenGutter, vertical = 6.dp).animateEntrance(0),
         verticalAlignment = Alignment.Top,
     ) {
-        Icon(Icons.Outlined.AutoAwesome, null, tint = LocalExtendedColors.current.gold, modifier = Modifier.padding(top = 2.dp).size(16.dp))
+        // Бродираното ромбче (като деня с проява в календара) — не искрица.
+        StitchedRhombus(LocalExtendedColors.current.gold, Modifier.padding(top = 3.dp).size(14.dp))
         Spacer(Modifier.width(8.dp))
         Text(
             if (feast != null) boldMarkdown("$date · ${feast.line}") else AnnotatedString(date),
@@ -801,41 +865,41 @@ private fun RowScope.QuickActionCell(action: QuickAction, i: Int, navigate: (Str
     }
 }
 
+/**
+ * Ред с корици: самите корици, без рамка на карта около тях и без запазено място за надпис —
+ * генерираната корица носи заглавието и автора, а истинската (сканирана/Open Library) — своите;
+ * екранният четец казва заглавието ([BookCover]). Натискането леко „смачква“ корицата.
+ */
 @Composable
 fun BookRow(allBooks: List<CatalogBook>, modifier: Modifier = Modifier, onClick: (CatalogBook) -> Unit) {
-    // Един инвентарен номер = една карта (повторен ключ срива списъка).
+    // Един инвентарен номер = една корица (повторен ключ срива списъка).
     val books = remember(allBooks) { allBooks.distinctBy { it.inv } }
-    // Генерираната корица вече носи заглавието и автора — надписът под нея се вижда само при
-    // истинска (сканирана/Open Library) корица. Мястото му е запазено в целия ред, щом някоя
-    // книга може да има такава: заредената корица не „бута“ съдържанието отдолу.
-    val online = LocalOnlineCovers.current
-    val captions = remember(books, online) { books.any { mayHaveRealCover(it, online) } }
-    // Заредените корици се помнят за реда — при превъртане надписът не мига. По състояние за
-    // книга: заредена корица прекомпозира само своята карта, не всички в реда.
-    val real = remember(books) { HashMap<Long, MutableState<Boolean>>() }
-    LazyRow(modifier = modifier, contentPadding = PaddingValues(horizontal = ScreenGutter), horizontalArrangement = Arrangement.spacedBy(14.dp)) {
-        items(books, key = { it.inv }) { b ->
-            val realCover = remember(real, b.inv) { real.getOrPut(b.inv) { mutableStateOf(false) } }
-            PressableCard(onClick = { onClick(b) }, modifier = Modifier.width(128.dp)) {
-                Column(Modifier.padding(10.dp)) {
-                    BookCover(
-                        b, width = 108.dp, modifier = Modifier.bookCoverShared(b.inv),
-                        onRealCover = if (captions) { shown -> if (shown) realCover.value = true } else null,
-                    )
-                    if (captions) {
-                        val shown = realCover.value
-                        // Невидимият надпис само пази мястото (и не се чете от екранния четец).
-                        Column(
-                            Modifier.graphicsLayer { alpha = if (shown) 1f else 0f }
-                                .then(if (shown) Modifier else Modifier.clearAndSetSemantics { }),
-                        ) {
-                            Spacer(Modifier.height(8.dp))
-                            Text(b.title, style = MaterialTheme.typography.titleSmall, minLines = 2, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                            Text(b.author, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                        }
-                    }
-                }
-            }
-        }
+    // Отгоре и отдолу — място за сянката на корицата (иначе редът я реже).
+    LazyRow(
+        modifier = modifier,
+        contentPadding = PaddingValues(horizontal = ScreenGutter, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(14.dp),
+    ) {
+        items(books, key = { it.inv }) { b -> PressableCover(b, onClick = { onClick(b) }) }
     }
 }
+
+/** Корица-бутон в [BookRow]: при натискане се смалява леко (както картите); при намалено движение — не. */
+@Composable
+private fun PressableCover(book: CatalogBook, onClick: () -> Unit) {
+    val interaction = remember { MutableInteractionSource() }
+    val pressed by interaction.collectIsPressedAsState()
+    val reduced = rememberReducedMotion()
+    val pressSpec: AnimationSpec<Float> = if (reduced) snap() else AppMotion.fastSpatial()
+    val scale = animateFloatAsState(if (pressed && !reduced) 0.96f else 1f, pressSpec, label = "cover-press")
+    Box(
+        Modifier
+            .graphicsLayer { scaleX = scale.value; scaleY = scale.value }
+            .clickable(interactionSource = interaction, indication = null, role = Role.Button, onClick = onClick),
+    ) {
+        BookCover(book, width = BookRowCoverWidth, modifier = Modifier.bookCoverShared(book.inv))
+    }
+}
+
+/** Ширината на корицата в реда (досега 108 dp в рамка от 128 dp — сега малко по-едра, без рамката). */
+private val BookRowCoverWidth = 116.dp

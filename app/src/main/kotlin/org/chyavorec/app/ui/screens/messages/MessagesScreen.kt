@@ -1,6 +1,7 @@
 package org.chyavorec.app.ui.screens.messages
 
-import org.chyavorec.app.ui.components.FolkIconPlate
+import org.chyavorec.app.ui.components.FolkListPlate
+import org.chyavorec.app.ui.screens.events.StitchedRhombus
 import org.chyavorec.app.ui.components.FolkIcons
 import org.chyavorec.app.ui.components.FolkMotif
 import org.chyavorec.app.ui.components.PageEndMark
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -22,7 +24,6 @@ import androidx.compose.material.icons.outlined.Groups
 import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
-import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -37,6 +38,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -187,7 +189,7 @@ fun MessagesScreen(onBack: () -> Unit, openLink: (String) -> Unit, focusId: Stri
 }
 
 @Composable
-private fun MessageCard(m: AppMessage, isNew: Boolean, openLink: (String) -> Unit, modifier: Modifier = Modifier) {
+internal fun MessageCard(m: AppMessage, isNew: Boolean, openLink: (String) -> Unit, modifier: Modifier = Modifier) {
     val context = LocalContext.current
     val high = m.priority == MessagePriority.HIGH
     val personalFallback = stringResource(R.string.messages_personal_title)
@@ -197,12 +199,12 @@ private fun MessageCard(m: AppMessage, isNew: Boolean, openLink: (String) -> Uni
             Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 // Плочката като навсякъде: розетка — от читалището, ромб — лично от библиотеката; важното — в цвета на грешката.
                 when {
-                    high -> FolkIconPlate(
-                        FolkIcons.Messages, FolkMotif.ROSETTE, size = 28.dp,
+                    high -> FolkListPlate(
+                        FolkIcons.Messages, FolkMotif.ROSETTE,
                         container = MaterialTheme.colorScheme.errorContainer, content = MaterialTheme.colorScheme.onErrorContainer,
                     )
-                    m.personal -> FolkIconPlate(FolkIcons.Profile, FolkMotif.RHOMBUS, size = 28.dp)
-                    else -> FolkIconPlate(FolkIcons.Messages, FolkMotif.ROSETTE, size = 28.dp)
+                    m.personal -> FolkListPlate(FolkIcons.Profile, FolkMotif.RHOMBUS)
+                    else -> FolkListPlate(FolkIcons.Messages, FolkMotif.ROSETTE)
                 }
                 Text(
                     if (m.createdAt.isBlank()) "" else Formatters.dateTime(context, AppMessagesParser.createdAt(m)),
@@ -210,7 +212,8 @@ private fun MessageCard(m: AppMessage, isNew: Boolean, openLink: (String) -> Uni
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.weight(1f),
                 )
-                if (isNew) Badge { Text(stringResource(R.string.messages_new)) }
+                // „Ново“ — бродирано ромбче и златна дума (като деня с проява в календара), не значка на Material.
+                if (isNew) NewMark()
             }
             Text(title, style = MaterialTheme.typography.titleMedium, modifier = Modifier.semantics { heading() })
             if (m.body.isNotBlank()) SelectionContainer { Text(m.body, style = MaterialTheme.typography.bodyMedium) }
@@ -254,5 +257,15 @@ private fun MessageCard(m: AppMessage, isNew: Boolean, openLink: (String) -> Uni
                 }
             }
         }
+    }
+}
+
+/** Знакът „Ново“ до датата: малко бродирано ромбче и думата в златния цвят на текста. */
+@Composable
+private fun NewMark() {
+    val gold = MaterialTheme.colorScheme.primary
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+        StitchedRhombus(gold, Modifier.size(12.dp))
+        Text(stringResource(R.string.messages_new), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold, color = gold)
     }
 }
