@@ -66,7 +66,7 @@ class DonateMemoryTest {
         assertContains(body, "Изпраща: Мария Петрова, 0888 123 456")
         assertContains(body, "Съгласен/съгласна съм читалището да покаже снимките в архива и на сайта си.")
         // Снимките — като EXTRA_STREAM и в ClipData, с временно право за четене.
-        assertEquals(photos, IntentCompat.getParcelableArrayListExtra(send, Intent.EXTRA_STREAM, Uri::class.java))
+        assertEquals<List<Uri>?>(photos, IntentCompat.getParcelableArrayListExtra(send, Intent.EXTRA_STREAM, Uri::class.java))
         val clip = assertNotNull(send.clipData)
         assertEquals(photos, (0 until clip.itemCount).map { clip.getItemAt(it).uri })
         assertTrue(send.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION != 0)
@@ -132,7 +132,7 @@ class DonateMemoryTest {
         val share = Intent(Intent.ACTION_SEND).setType("image/jpeg").putExtra(Intent.EXTRA_STREAM, photo)
         assertEquals(DeepLinks.DONATE, DonateIntake.receive(context, share))
         assertEquals(listOf(photo), DonateIntake.take())
-        assertEquals(emptyList(), DonateIntake.take(), "веднъж")
+        assertEquals(emptyList<Uri>(), DonateIntake.take(), "веднъж")
         assertEquals(LinkTarget.Screen(Routes.MORE, listOf(Routes.DONATE)), DeepLinks.target(DeepLinks.DONATE, "https://chyavorec.org"))
     }
 
@@ -152,7 +152,7 @@ class DonateMemoryTest {
         assertEquals(foreign.take(DONATE_MAX_PHOTOS), taken, "без файлове, без собствените ни, без повторения, до 10")
         // Не снимки — нищо не чака; друго действие — не е за този екран.
         val text = Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_STREAM, foreign.first())
-        assertEquals(emptyList(), DonateIntake.sharedImages(own, text))
+        assertEquals(emptyList<Uri>(), DonateIntake.sharedImages(own, text))
         assertNull(DonateIntake.receive(context, Intent(Intent.ACTION_VIEW, Uri.parse("https://chyavorec.org/"))))
     }
 
