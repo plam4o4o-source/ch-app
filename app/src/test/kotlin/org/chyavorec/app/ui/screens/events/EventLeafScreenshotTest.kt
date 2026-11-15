@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.Snapshot
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asAndroidBitmap
@@ -264,10 +265,10 @@ class EventLeafScreenshotTest {
 
     /** Отваряне: от −75° (обърнат нагоре) към 0° на пружина; „назад“ — обратно нагоре. */
     @Test fun leafTurnsDownWhenTheScreenOpensAndBackOnBack() {
-        val visible = MutableTransitionState(false)
+        // Екранът влиза: преходът тръгва от PreEnter към Visible още при първата композиция.
+        val visible = MutableTransitionState(false).apply { targetState = true }
         var turn: State<Float>? = null
         turnPage(visible, reduced = false) { turn = it }
-        visible.targetState = true
         compose.mainClock.advanceTimeByFrame()
         compose.mainClock.advanceTimeBy(80)
         val mid = assertNotNull(turn).value
@@ -280,6 +281,7 @@ class EventLeafScreenshotTest {
         shot("w24-event-leaf-turn-end")
         // „Назад“: листът се обръща обратно нагоре, докато екранът излиза.
         visible.targetState = false
+        Snapshot.sendApplyNotifications()
         compose.mainClock.advanceTimeByFrame()
         compose.mainClock.advanceTimeBy(100)
         val back = turn!!.value
@@ -288,10 +290,9 @@ class EventLeafScreenshotTest {
 
     /** Намалено движение: без завъртане — само кратка проява при отваряне. */
     @Test fun reducedMotionOnlyFadesTheLeafIn() {
-        val visible = MutableTransitionState(false)
+        val visible = MutableTransitionState(false).apply { targetState = true }
         var turn: State<Float>? = null
         turnPage(visible, reduced = true) { turn = it }
-        visible.targetState = true
         compose.mainClock.advanceTimeByFrame()
         assertTrue(assertNotNull(turn).value < 1f, "в началото листът е прозрачен")
         compose.mainClock.advanceTimeBy(1000)
