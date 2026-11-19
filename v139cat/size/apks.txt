@@ -1,0 +1,4 @@
+1.2.39 ab175e4 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200 + w27-hook.patch (DEBUG ONLY: looper message trace sections, profileable shell, runtime-tracing)
+1.2.39 ab175e4 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200
+app.apk 4680470 bytes
+app-hook.apk 4753430 bytes

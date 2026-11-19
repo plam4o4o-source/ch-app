@@ -1,5 +1,7 @@
 # Emulator results
 
+v1.2.39 released (ab175e49): catalogue tab slow frames, framestats + Perfetto per interaction: [v139cat/index.md](v139cat/index.md)
+
 v1.2.39 candidate (696e57d) vs v1.2.38: crash smoke API 26/33/36, frame time A/B, update, screenshots: [v139/index.md](v139/index.md)
 
 v1.2.38 released (f57962b), targeted: confetti, signed-in features, frame time and memory vs v1.2.37: [v138b/index.md](v138b/index.md)

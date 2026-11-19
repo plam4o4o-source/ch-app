@@ -1,0 +1,112 @@
+app pids seen: ['5317', '6103', '6203', '6358', '6497']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 4
+   skipped-frames events=4 max=40 total=142
+   11-19 16:10:35.245  6103  6103 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-19 16:10:47.689  6203  6203 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-19 16:11:22.031  6358  6358 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+   11-19 16:11:52.967  6497  6497 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 0
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-19 16:09:31.669  5304  5304 I PERFCHECK: section: C0. First launch after install: Home → „Каталог“ the catalogue is fetched and indexed; not representative, then speed-profile
+   11-19 16:09:54.653  5972  5972 I PERFCHECK: w27 first-install-open
+   11-19 16:10:28.304  1604  2377 I ActivityManager: Killing 5317:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-19 16:10:45.671  6188  6188 I PERFCHECK: section: C1. Cold process: Home, then tap „Каталог“ first composition of the tab, the view models, the index ×3
+   11-19 16:10:45.698  1604  1618 I ActivityManager: Killing 6103:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-19 16:11:05.366  6287  6287 I PERFCHECK: w27 cold-open-1
+   11-19 16:11:19.937  1604  1797 I ActivityManager: Killing 6203:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-19 16:11:39.245  6439  6439 I PERFCHECK: w27 cold-open-2
+   11-19 16:11:50.876  1604  2390 I ActivityManager: Killing 6358:org.chyavorec.app/u0a77 (adj 0): stop org.chyavorec.app
+   11-19 16:12:10.448  6581  6581 I PERFCHECK: w27 cold-open-3
+   11-19 16:12:23.047  6639  6639 I PERFCHECK: section: C2. Warm: leave the tab and come back ×3; to News / More and back
+   11-19 16:12:25.843  6655  6655 I PERFCHECK: w27 leave-home-1
+   11-19 16:12:37.966  6689  6689 I PERFCHECK: w27 warm-open-1
+   11-19 16:12:47.634  6722  6722 I PERFCHECK: w27 leave-home-2
+   11-19 16:12:59.647  6760  6760 I PERFCHECK: w27 warm-open-2
+   11-19 16:13:09.282  6790  6790 I PERFCHECK: w27 leave-home-3
+   11-19 16:13:21.810  6827  6827 I PERFCHECK: w27 warm-open-3
+   11-19 16:13:31.413  6864  6864 I PERFCHECK: w27 leave-news
+   11-19 16:13:39.837  6907  6907 I PERFCHECK: w27 back-from-news
+   11-19 16:13:48.594  6939  6939 I PERFCHECK: w27 leave-more
+   11-19 16:13:56.188  6979  6979 I PERFCHECK: w27 back-from-more
+   11-19 16:14:02.201  7007  7007 I PERFCHECK: section: C3. Fling the list 6 up, 4 down ×3; tab reselect → top ×2
+   11-19 16:14:04.998  7020  7020 I PERFCHECK: w27 fling-list-1
+   11-19 16:14:32.128  7175  7175 I PERFCHECK: w27 fling-list-2
+   11-19 16:14:49.507  7301  7301 I PERFCHECK: w27 fling-list-3
+   11-19 16:15:10.890  7457  7457 I PERFCHECK: w27 reselect-top-1
+   11-19 16:15:21.347  7519  7519 I PERFCHECK: w27 reselect-top-2
+   11-19 16:15:25.075  7542  7542 I PERFCHECK: section: C4. „Покажи още“ load more ×2
+   11-19 16:16:30.972  8248  8248 I PERFCHECK: section: C5. Typing with a test IME Cyrillic, one letter every 350 ms, field chips, clear ×, erasing letter by letter
+   11-19 16:16:51.502  8436  8436 I PERFCHECK: w27 type-1
+   11-19 16:17:03.823  8484  8484 I PERFCHECK: w27 chip-author
+   11-19 16:17:19.435  8517  8517 I PERFCHECK: w27 chip-title
+   11-19 16:17:35.485  8549  8549 I PERFCHECK: w27 chip-all
+   11-19 16:17:43.617  8582  8582 I PERFCHECK: w27 clear-1
+   11-19 16:17:51.381  8614  8614 I PERFCHECK: w27 type-2
+   11-19 16:18:02.462  8658  8658 I PERFCHECK: w27 clear-2
+   11-19 16:18:10.411  8689  8689 I PERFCHECK: w27 type-3
+   11-19 16:18:21.466  8740  8740 I PERFCHECK: w27 erase-3
+   11-19 16:18:30.868  8815  8815 I PERFCHECK: section: C6. The system keyboard com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME: show by tapping the field / hide with Back ×3, digits with it
+   11-19 16:18:45.192  8930  8930 I PERFCHECK: w27 ime-show-1
+   11-19 16:18:52.380  8969  8969 I PERFCHECK: w27 ime-hide-1
+   11-19 16:18:59.549  9007  9007 I PERFCHECK: w27 ime-show-2
+   11-19 16:19:06.864  9045  9045 I PERFCHECK: w27 ime-hide-2
+   11-19 16:19:13.943  9083  9083 I PERFCHECK: w27 ime-show-3
+   11-19 16:19:21.212  9119  9119 I PERFCHECK: w27 ime-hide-3
+   11-19 16:19:28.224  9152  9152 I PERFCHECK: w27 ime-show-4
+   11-19 16:19:35.276  9188  9188 I PERFCHECK: w27 type-digits
+   11-19 16:19:44.785  9248  9248 I PERFCHECK: w27 clear-digits
+   11-19 16:19:52.791  9285  9285 I PERFCHECK: w27 ime-hide-4
+   11-19 16:20:06.207  9398  9398 I PERFCHECK: section: C7. Sort menu ×3: open, „Година нови първо“ / „Най-подходящи“
+   11-19 16:20:09.036  9411  9411 I PERFCHECK: w27 sort-open-1
+   11-19 16:20:17.750  9464  9464 I PERFCHECK: w27 sort-year-1
+   11-19 16:20:26.414  9505  9505 I PERFCHECK: w27 sort-open-2
+   11-19 16:20:34.993  9550  9550 I PERFCHECK: w27 sort-relevance-2
+   11-19 16:20:43.546  9583  9583 I PERFCHECK: w27 sort-open-3
+   11-19 16:20:52.163  9628  9628 I PERFCHECK: w27 sort-year-3
+   11-19 16:21:07.710  9719  9719 I PERFCHECK: section: C8. Filters sheet ×3: open, a filter „Само налични“ / „книга“, close with Back; then „Без филтри“
+   11-19 16:21:10.542  9733  9733 I PERFCHECK: w27 filters-open-1
+   11-19 16:21:19.514  9779  9779 I PERFCHECK: w27 filters-close-1
+   11-19 16:21:26.487  9811  9811 I PERFCHECK: w27 filters-open-2
+   11-19 16:21:35.557  9856  9856 I PERFCHECK: w27 filters-close-2
+   11-19 16:21:42.652  9888  9888 I PERFCHECK: w27 filters-open-3
+   11-19 16:21:51.721  9934  9934 I PERFCHECK: w27 filters-close-3
+   11-19 16:21:58.644  9965  9965 I PERFCHECK: w27 filters-open-4
+   11-19 16:22:07.726 10011 10011 I PERFCHECK: w27 filters-close-4
+   11-19 16:22:15.399 10060 10060 I PERFCHECK: section: C9. Shelf view ×3: list → shelf, fling, shelf → list
+   11-19 16:22:18.213 10073 10073 I PERFCHECK: w27 shelf-on-1
+   11-19 16:22:26.593 10104 10104 I PERFCHECK: w27 fling-shelf-1
+   11-19 16:22:56.797 10237 10237 I PERFCHECK: w27 shelf-off-1
+   11-19 16:23:07.467 10280 10280 I PERFCHECK: w27 shelf-on-2
+   11-19 16:23:15.872 10313 10313 I PERFCHECK: w27 fling-shelf-2
+   11-19 16:23:45.239 10439 10439 I PERFCHECK: w27 shelf-off-2
+   11-19 16:23:55.756 10481 10481 I PERFCHECK: w27 shelf-on-3
+   11-19 16:24:04.179 10512 10512 I PERFCHECK: w27 fling-shelf-3
+   11-19 16:24:33.333 10637 10637 I PERFCHECK: w27 shelf-off-3
+   11-19 16:24:41.133 10670 10670 I PERFCHECK: section: C10. „Изненадай ме“ top-bar button ×3: open shuffle, „Още една“, close
+   11-19 16:24:43.925 10683 10683 I PERFCHECK: w27 surprise-open-1
+   11-19 16:24:58.111 10730 10730 I PERFCHECK: w27 surprise-again-1
+   11-19 16:25:11.764 10765 10765 I PERFCHECK: w27 surprise-close-1
+   11-19 16:25:20.492 10812 10812 I PERFCHECK: w27 surprise-open-2
+   11-19 16:25:33.728 10843 10843 I PERFCHECK: w27 surprise-again-2
+   11-19 16:25:46.726 10874 10874 I PERFCHECK: w27 surprise-close-2
+   11-19 16:25:55.758 10921 10921 I PERFCHECK: w27 surprise-open-3
+   11-19 16:26:08.706 10953 10953 I PERFCHECK: w27 surprise-again-3
+   11-19 16:26:21.756 10983 10983 I PERFCHECK: w27 surprise-close-3
+   11-19 16:26:27.475 11023 11023 I PERFCHECK: section: C11. Open a book from the list and come back ×3 rows 1–3
+   11-19 16:26:41.480 11128 11128 I PERFCHECK: w27 book-open-1
+   11-19 16:26:50.724 11160 11160 I PERFCHECK: w27 book-back-1
+   11-19 16:26:59.376 11205 11205 I PERFCHECK: w27 book-open-2
+   11-19 16:27:08.613 11238 11238 I PERFCHECK: w27 book-back-2
+   11-19 16:27:17.176 11284 11284 I PERFCHECK: w27 book-open-3
+   11-19 16:27:26.185 11316 11316 I PERFCHECK: w27 book-back-3
+   11-19 16:27:31.869 11353 11353 I PERFCHECK: section: C12. Pull to refresh ×2
+   11-19 16:27:36.815 11376 11376 I PERFCHECK: w27 refresh-1
+   11-19 16:27:51.335 11422 11422 I PERFCHECK: w27 refresh-2
+   11-19 16:28:00.713 11446 11446 I PERFCHECK: section: C13. Back to the app from the launcher catalogue in front ×2
+   11-19 16:28:06.697 11485 11485 I PERFCHECK: w27 resume-1
+   11-19 16:28:19.316 11539 11539 I PERFCHECK: w27 resume-2
+   11-19 16:28:26.359 11559 11559 I PERFCHECK: section: C14. All interactions ui = as JankStats frameDurationUiNanos: vsync → end of the sync; doFrame from the trace

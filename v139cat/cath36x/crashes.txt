@@ -1,0 +1,102 @@
+11-19 16:09:17.070   646  2826 E ActivityManager: ANR in com.google.android.gms.persistent
+11-19 16:09:17.070   646  2826 E ActivityManager: PID: 1387
+11-19 16:09:17.070   646  2826 E ActivityManager: Reason: Broadcast of Intent { act=android.intent.action.DOMAINS_NEED_VERIFICATION flg=0x10000010 xflg=0x4 cmp=com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver (has extras) }
+11-19 16:09:17.070   646  2826 E ActivityManager: ErrorId: ec9ea44a-d460-411b-8d28-d1c6a83b1974
+11-19 16:09:17.070   646  2826 E ActivityManager: Frozen: false
+11-19 16:09:17.070   646  2826 E ActivityManager: Load: 0.0 / 0.0 / 0.0
+11-19 16:09:17.070   646  2826 E ActivityManager: ----- Output from /proc/pressure/memory -----
+11-19 16:09:17.070   646  2826 E ActivityManager: some avg10=8.63 avg60=4.55 avg300=1.23 total=4051277
+11-19 16:09:17.070   646  2826 E ActivityManager: full avg10=0.34 avg60=0.21 avg300=0.06 total=373883
+11-19 16:09:17.070   646  2826 E ActivityManager: ----- End output from /proc/pressure/memory -----
+11-19 16:09:17.070   646  2826 E ActivityManager: ----- Output from /proc/pressure/cpu -----
+11-19 16:09:17.070   646  2826 E ActivityManager: some avg10=90.75 avg60=51.35 avg300=14.53 total=48117505
+11-19 16:09:17.070   646  2826 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+11-19 16:09:17.070   646  2826 E ActivityManager: ----- End output from /proc/pressure/cpu -----
+11-19 16:09:17.070   646  2826 E ActivityManager: ----- Output from /proc/pressure/io -----
+11-19 16:09:17.070   646  2826 E ActivityManager: some avg10=25.91 avg60=16.32 avg300=4.85 total=16490822
+11-19 16:09:17.070   646  2826 E ActivityManager: full avg10=0.11 avg60=1.58 avg300=0.73 total=2839494
+11-19 16:09:17.070   646  2826 E ActivityManager: ----- End output from /proc/pressure/io -----
+11-19 16:09:17.070   646  2826 E ActivityManager: 
+11-19 16:09:17.070   646  2826 E ActivityManager: CPU usage from 42772ms to -1ms ago (2026-11-19 16:08:31.117 to 2026-11-19 16:09:13.891):
+11-19 16:09:17.070   646  2826 E ActivityManager:   38% 524/surfaceflinger: 1.6% user + 37% kernel / faults: 2603 minor
+11-19 16:09:17.070   646  2826 E ActivityManager:   25% 646/system_server: 19% user + 6.1% kernel / faults: 86712 minor 548 major
+11-19 16:09:17.070   646  2826 E ActivityManager:   4.1% 471/android.hardware.graphics.allocator-service.ranchu: 0% user + 4% kernel / faults: 5 minor
+11-19 16:09:17.070   646  2826 E ActivityManager:   5.2% 492/android.hardware.graphics.composer3-service.ranchu: 0.1% user + 5% kernel / faults: 29 minor
+11-19 16:09:17.070   646  2826 E ActivityManager:   3.4% 586/logcat: 0.2% user + 3.2% kernel / faults: 7 minor
+11-19 16:09:17.070   646  2826 E ActivityManager:   1% 211/logd: 0.4% user + 0.5% kernel / faults: 1945 minor 2 major
+11-19 16:09:17.070   646  2826 E ActivityManager:   0.8% 43/kswapd0: 0% user + 0.8% kernel
+11-19 16:09:17.070   646  2826 E ActivityManager:   0.7% 28/kworker/1:0H-kverityd: 0% user + 0.7% kernel
+11-19 16:09:17.070   646  2826 E ActivityManager:   0.7% 213/servicemanager: 0% user + 0.6% kernel / faults: 13 minor
+11-19 16:09:17.070   646  2826 E ActivityManager:   0.6% 1/init: 0% user + 0.5% kernel / faults: 1045 minor
+11-19 16:09:17.070   646  2826 E ActivityManager: 99% TOTAL: 33% user + 64% kernel + 0.5% iowait + 1.2% irq + 0.5% softirq
+11-19 16:09:17.070   646  2826 E ActivityManager: CPU usage from 77440ms to 77440ms ago (1970-01-01 00:00:00.000 to 1970-01-01 00:00:00.000) with 0% awake:
+11-19 16:09:17.070   646  2826 E ActivityManager: 0% TOTAL: 0% user + 0% kernel
+
+11-19 16:10:06.550   646  4044 E ActivityManager: ANR in com.google.android.gms.persistent
+11-19 16:10:06.550   646  4044 E ActivityManager: PID: 3006
+11-19 16:10:06.550   646  4044 E ActivityManager: Reason: executing service com.google.android.gms/.location.geocode.GeocodeService, waited 20524ms
+11-19 16:10:06.550   646  4044 E ActivityManager: ErrorId: a506c443-a1af-4c60-8c73-014da42408e2
+11-19 16:10:06.550   646  4044 E ActivityManager: Frozen: false
+11-19 16:10:06.550   646  4044 E ActivityManager: Load: 0.0 / 0.0 / 0.0
+11-19 16:10:06.550   646  4044 E ActivityManager: ----- Output from /proc/pressure/memory -----
+11-19 16:10:06.550   646  4044 E ActivityManager: some avg10=18.38 avg60=11.23 avg300=3.54 total=12259989
+11-19 16:10:06.550   646  4044 E ActivityManager: full avg10=0.91 avg60=0.70 avg300=0.22 total=1130714
+11-19 16:10:06.550   646  4044 E ActivityManager: ----- End output from /proc/pressure/memory -----
+11-19 16:10:06.550   646  4044 E ActivityManager: ----- Output from /proc/pressure/cpu -----
+11-19 16:10:06.550   646  4044 E ActivityManager: some avg10=92.51 avg60=74.31 avg300=26.72 total=93637317
+11-19 16:10:06.550   646  4044 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+11-19 16:10:06.550   646  4044 E ActivityManager: ----- End output from /proc/pressure/cpu -----
+11-19 16:10:06.550   646  4044 E ActivityManager: ----- Output from /proc/pressure/io -----
+11-19 16:10:06.550   646  4044 E ActivityManager: some avg10=19.43 avg60=17.57 avg300=6.96 total=25614829
+11-19 16:10:06.550   646  4044 E ActivityManager: full avg10=0.00 avg60=0.68 avg300=0.61 total=2839520
+11-19 16:10:06.550   646  4044 E ActivityManager: ----- End output from /proc/pressure/io -----
+11-19 16:10:06.550   646  4044 E ActivityManager: 
+11-19 16:10:06.550   646  4044 E ActivityManager: CPU usage from 49169ms to -3ms ago (2026-11-19 16:09:13.891 to 2026-11-19 16:10:03.062):
+11-19 16:10:06.550   646  4044 E ActivityManager:   26% 646/system_server: 19% user + 7.2% kernel / faults: 83289 minor 964 major
+11-19 16:10:06.550   646  4044 E ActivityManager:   15% 524/surfaceflinger: 0.7% user + 14% kernel / faults: 127 minor 176 major
+11-19 16:10:06.550   646  4044 E ActivityManager:   14% 1255/com.google.android.apps.nexuslauncher: 9.1% user + 5.4% kernel / faults: 366227 minor 266 major
+11-19 16:10:06.550   646  4044 E ActivityManager:   10% 492/android.hardware.graphics.composer3-service.ranchu: 0.3% user + 10% kernel / faults: 9 minor 133 major
+11-19 16:10:06.550   646  4044 E ActivityManager:   10% 1506/com.google.android.inputmethod.latin: 8.3% user + 1.7% kernel / faults: 26034 minor 277 major
+11-19 16:10:06.550   646  4044 E ActivityManager:   5.7% 1810/com.google.android.googlequicksearchbox:search: 4.5% user + 1.1% kernel / faults: 39514 minor 372 major
+11-19 16:10:06.550   646  4044 E ActivityManager:   4.7% 2708/com.google.android.tts: 4.2% user + 0.4% kernel / faults: 31246 minor 54 major
+11-19 16:10:06.550   646  4044 E ActivityManager:   4.1% 1016/com.android.systemui: 2.2% user + 1.8% kernel / faults: 20893 minor 242 major
+11-19 16:10:06.550   646  4044 E ActivityManager:   3.6% 1711/com.google.android.gms: 2.9% user + 0.7% kernel / faults: 29809 minor 303 major
+11-19 16:10:06.550   646  4044 E ActivityManager:   2.8% 2777/com.google.android.apps.wallpaper: 2.7% user + 0.1% kernel / faults: 15533 minor 22 major
+11-19 16:10:06.550   646  4044 E ActivityManager: 99% TOTAL: 50% user + 47% kernel + 1.5% irq + 0.9% softirq
+11-19 16:10:06.550   646  4044 E ActivityManager: CPU usage from 126610ms to 126610ms ago (1970-01-01 00:00:00.000 to 1970-01-01 00:00:00.000) with 0% awake:
+11-19 16:10:06.550   646  4044 E ActivityManager: 0% TOTAL: 0% user + 0% kernel
+
+11-19 16:10:32.296   646  4516 E ActivityManager: ANR in com.google.android.gms.persistent
+11-19 16:10:32.296   646  4516 E ActivityManager: PID: 4140
+11-19 16:10:32.296   646  4516 E ActivityManager: Reason: Broadcast of Intent { act=android.intent.action.DOMAINS_NEED_VERIFICATION flg=0x10000010 xflg=0x4 cmp=com.google.android.gms/.chimera.GmsIntentOperationService$PersistentTrustedReceiver (has extras) }
+11-19 16:10:32.296   646  4516 E ActivityManager: ErrorId: 474edcd7-6f44-4c7f-a3f7-8e197ebedfe8
+11-19 16:10:32.296   646  4516 E ActivityManager: Frozen: false
+11-19 16:10:32.296   646  4516 E ActivityManager: Load: 0.0 / 0.0 / 0.0
+11-19 16:10:32.296   646  4516 E ActivityManager: ----- Output from /proc/pressure/memory -----
+11-19 16:10:32.296   646  4516 E ActivityManager: some avg10=15.23 avg60=12.19 avg300=4.37 total=15890829
+11-19 16:10:32.296   646  4516 E ActivityManager: full avg10=1.58 avg60=0.97 avg300=0.32 total=1566501
+11-19 16:10:32.296   646  4516 E ActivityManager: ----- End output from /proc/pressure/memory -----
+11-19 16:10:32.296   646  4516 E ActivityManager: ----- Output from /proc/pressure/cpu -----
+11-19 16:10:32.296   646  4516 E ActivityManager: some avg10=91.47 avg60=79.91 avg300=31.83 total=116993102
+11-19 16:10:32.296   646  4516 E ActivityManager: full avg10=0.00 avg60=0.00 avg300=0.00 total=0
+11-19 16:10:32.296   646  4516 E ActivityManager: ----- End output from /proc/pressure/cpu -----
+11-19 16:10:32.296   646  4516 E ActivityManager: ----- Output from /proc/pressure/io -----
+11-19 16:10:32.296   646  4516 E ActivityManager: some avg10=19.29 avg60=17.52 avg300=7.76 total=30197200
+11-19 16:10:32.296   646  4516 E ActivityManager: full avg10=0.00 avg60=0.45 avg300=0.56 total=2839520
+11-19 16:10:32.296   646  4516 E ActivityManager: ----- End output from /proc/pressure/io -----
+11-19 16:10:32.296   646  4516 E ActivityManager: 
+11-19 16:10:32.296   646  4516 E ActivityManager: CPU usage from 25113ms to -1ms ago (2026-11-19 16:10:03.062 to 2026-11-19 16:10:28.176):
+11-19 16:10:32.296   646  4516 E ActivityManager:   26% 3860/org.chyavorec.app: 7.3% user + 19% kernel / faults: 33953 minor 111 major
+11-19 16:10:32.296   646  4516 E ActivityManager:   22% 524/surfaceflinger: 1.1% user + 21% kernel / faults: 5 minor 131 major
+11-19 16:10:32.296   646  4516 E ActivityManager:   17% 646/system_server: 11% user + 5.9% kernel / faults: 25943 minor 230 major
+11-19 16:10:32.296   646  4516 E ActivityManager:   10% 492/android.hardware.graphics.composer3-service.ranchu: 0.2% user + 9.9% kernel
+11-19 16:10:32.296   646  4516 E ActivityManager:   5.1% 1506/com.google.android.inputmethod.latin: 3.9% user + 1.2% kernel / faults: 6265 minor 21 major
+11-19 16:10:32.296   646  4516 E ActivityManager:   4.1% 3988/com.google.android.settings.intelligence: 3.2% user + 0.9% kernel / faults: 28750 minor 86 major
+11-19 16:10:32.296   646  4516 E ActivityManager:   3.6% 1255/com.google.android.apps.nexuslauncher: 2.1% user + 1.5% kernel / faults: 30120 minor 252 major
+11-19 16:10:32.296   646  4516 E ActivityManager:   3.5% 1252/com.android.settings: 2.7% user + 0.7% kernel / faults: 11992 minor 1920 major
+11-19 16:10:32.296   646  4516 E ActivityManager:   1% 600/media.swcodec: 0.9% user + 0% kernel / faults: 4869 minor 542 major
+11-19 16:10:32.296   646  4516 E ActivityManager:   2.8% 586/logcat: 0.1% user + 2.7% kernel / faults: 2 major
+11-19 16:10:32.296   646  4516 E ActivityManager: 99% TOTAL: 37% user + 59% kernel + 2% irq + 1.1% softirq
+11-19 16:10:32.296   646  4516 E ActivityManager: CPU usage from 151726ms to 151726ms ago (1970-01-01 00:00:00.000 to 1970-01-01 00:00:00.000) with 0% awake:
+11-19 16:10:32.296   646  4516 E ActivityManager: 0% TOTAL: 0% user + 0% kernel
+

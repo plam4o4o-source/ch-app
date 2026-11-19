@@ -1,0 +1,127 @@
+app pids seen: ['4952', '7414', '7662', '8133', '8322']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 52
+   skipped-frames events=52 max=121 total=2620
+   11-19 16:11:12.285  4952  4952 I Choreographer: Skipped 63 frames!  The application may be doing too much work on its main thread.
+   11-19 16:11:13.059  4952  4952 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-19 16:11:14.924  4952  4952 I Choreographer: Skipped 84 frames!  The application may be doing too much work on its main thread.
+   11-19 16:11:16.525  4952  4952 I Choreographer: Skipped 70 frames!  The application may be doing too much work on its main thread.
+   11-19 16:11:17.081  4952  4952 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-19 16:11:18.631  4952  4952 I Choreographer: Skipped 79 frames!  The application may be doing too much work on its main thread.
+   11-19 16:11:20.092  4952  4952 I Choreographer: Skipped 75 frames!  The application may be doing too much work on its main thread.
+   11-19 16:11:20.813  4952  4952 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-19 16:11:34.345  4952  4952 I Choreographer: Skipped 57 frames!  The application may be doing too much work on its main thread.
+   11-19 16:12:06.296  4952  4952 I Choreographer: Skipped 69 frames!  The application may be doing too much work on its main thread.
+   11-19 16:12:32.442  4952  4952 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-19 16:12:38.848  4952  4952 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+== Davey: 162
+   davey events=162 max=4054ms median=833ms
+   11-19 16:11:16.507  4952  4964 I OpenGLRenderer: Davey! duration=2741ms; Flags=1, FrameTimelineVsyncId=6145, IntendedVsync=105590111557, Vsync=106240111531, InputEventId=0, HandleInputStart=106254015384, AnimationStart=106254015895, Perform
+   11-19 16:11:17.053  4952  4964 I OpenGLRenderer: Davey! duration=1816ms; Flags=0, FrameTimelineVsyncId=6447, IntendedVsync=108123444789, Vsync=108140111455, InputEventId=0, HandleInputStart=108146495640, AnimationStart=108146495990, Perform
+   11-19 16:11:17.286  4952  4964 I OpenGLRenderer: Davey! duration=909ms; Flags=0, FrameTimelineVsyncId=6484, IntendedVsync=108156778121, Vsync=108523444773, InputEventId=0, HandleInputStart=108527213849, AnimationStart=108527214390, PerformT
+   11-19 16:11:18.623  4952  4964 I OpenGLRenderer: Davey! duration=2076ms; Flags=0, FrameTimelineVsyncId=6494, IntendedVsync=108540111439, Vsync=109706778059, InputEventId=0, HandleInputStart=109713342732, AnimationStart=109713343163, Perform
+   11-19 16:11:18.778  4952  4966 I OpenGLRenderer: Davey! duration=1901ms; Flags=0, FrameTimelineVsyncId=6716, IntendedVsync=109723444725, Vsync=110256778037, InputEventId=0, HandleInputStart=110269491597, AnimationStart=110269492138, Perform
+   11-19 16:11:20.024  4952  4964 I OpenGLRenderer: Davey! duration=961ms; Flags=0, FrameTimelineVsyncId=6755, IntendedVsync=110290111369, Vsync=110473444695, InputEventId=0, HandleInputStart=110476808262, AnimationStart=110476808713, PerformT
+   11-19 16:11:21.030  4952  4964 I OpenGLRenderer: Davey! duration=2559ms; Flags=0, FrameTimelineVsyncId=6765, IntendedVsync=110490111361, Vsync=111806777975, InputEventId=0, HandleInputStart=111819084630, AnimationStart=111819085572, Perform
+   11-19 16:11:21.091  4952  4964 I OpenGLRenderer: Davey! duration=1171ms; Flags=0, FrameTimelineVsyncId=6814, IntendedVsync=111823444641, Vsync=112006777967, InputEventId=0, HandleInputStart=112020573699, AnimationStart=112020574089, Perform
+   11-19 16:11:21.435  4952  4966 I OpenGLRenderer: Davey! duration=1709ms; Flags=0, FrameTimelineVsyncId=6828, IntendedVsync=112023444633, Vsync=113273444583, InputEventId=0, HandleInputStart=113280635830, AnimationStart=113280636552, Perform
+   11-19 16:11:21.706  4952  4966 I OpenGLRenderer: Davey! duration=1032ms; Flags=0, FrameTimelineVsyncId=6890, IntendedVsync=113290111249, Vsync=113990111221, InputEventId=0, HandleInputStart=114001138323, AnimationStart=114001138693, Perform
+   11-19 16:11:27.572  4952  4963 I OpenGLRenderer: Davey! duration=701ms; Flags=0, FrameTimelineVsyncId=7545, IntendedVsync=119873444319, Vsync=120040110979, InputEventId=0, HandleInputStart=120044663687, AnimationStart=120044663967, PerformT
+   11-19 16:11:32.451  4952  4966 I OpenGLRenderer: Davey! duration=720ms; Flags=0, FrameTimelineVsyncId=7848, IntendedVsync=124456777469, Vsync=124723444125, InputEventId=0, HandleInputStart=124736675508, AnimationStart=124736676309, PerformT
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-19 16:11:10.066  4930  4930 I PERFCHECK: section: C0. First launch after install: Home → „Каталог“ the catalogue is fetched and indexed; not representative, then speed-profile
+   11-19 16:12:04.965  5934  5934 I PERFCHECK: w27 first-install-open
+   11-19 16:13:30.371  7636  7636 I PERFCHECK: section: C1. Cold process: Home, then tap „Каталог“ first composition of the tab, the view models, the index ×3
+   11-19 16:14:09.080  8071  8071 I PERFCHECK: w27 cold-open-1
+   11-19 16:14:48.377  8261  8261 I PERFCHECK: w27 cold-open-2
+   11-19 16:15:31.409  8446  8446 I PERFCHECK: w27 cold-open-3
+   11-19 16:15:43.787  8513  8513 I PERFCHECK: section: C2. Warm: leave the tab and come back ×3; to News / More and back
+   11-19 16:15:47.191  8532  8532 I PERFCHECK: w27 leave-home-1
+   11-19 16:15:55.939  8577  8577 I PERFCHECK: w27 warm-open-1
+   11-19 16:16:05.434  8615  8615 I PERFCHECK: w27 leave-home-2
+   11-19 16:16:14.218  8653  8653 I PERFCHECK: w27 warm-open-2
+   11-19 16:16:23.693  8691  8691 I PERFCHECK: w27 leave-home-3
+   11-19 16:16:32.047  8729  8729 I PERFCHECK: w27 warm-open-3
+   11-19 16:16:41.430  8765  8765 I PERFCHECK: w27 leave-news
+   11-19 16:16:50.925  8815  8815 I PERFCHECK: w27 back-from-news
+   11-19 16:17:00.363  8853  8853 I PERFCHECK: w27 leave-more
+   11-19 16:17:08.830  8891  8891 I PERFCHECK: w27 back-from-more
+   11-19 16:17:14.883  8913  8913 I PERFCHECK: section: C3. Fling the list 6 up, 4 down ×3; tab reselect → top ×2
+   11-19 16:17:18.297  8932  8932 I PERFCHECK: w27 fling-list-1
+   11-19 16:17:40.439  9043  9043 I PERFCHECK: w27 fling-list-2
+   11-19 16:18:02.483  9140  9140 I PERFCHECK: w27 fling-list-3
+   11-19 16:18:27.515  9290  9290 I PERFCHECK: w27 reselect-top-1
+   11-19 16:18:40.987  9346  9346 I PERFCHECK: w27 reselect-top-2
+   11-19 16:18:46.217  9390  9390 I PERFCHECK: section: C4. „Покажи още“ load more ×2
+   11-19 16:20:38.020 10121 10121 I PERFCHECK: section: C5. Typing with a test IME Cyrillic, one letter every 350 ms, field chips, clear ×, erasing letter by letter
+   11-19 16:20:58.164 10316 10316 I PERFCHECK: w27 type-1
+   11-19 16:21:15.206 10377 10377 I PERFCHECK: w27 chip-author
+   11-19 16:21:23.978 10414 10414 I PERFCHECK: w27 chip-title
+   11-19 16:21:34.918 10451 10451 I PERFCHECK: w27 chip-all
+   11-19 16:21:46.493 10492 10492 I PERFCHECK: w27 clear-1
+   11-19 16:21:55.397 10529 10529 I PERFCHECK: w27 type-2
+   11-19 16:22:07.850 10592 10592 I PERFCHECK: w27 clear-2
+   11-19 16:22:16.653 10629 10629 I PERFCHECK: w27 type-3
+   11-19 16:22:28.904 10714 10714 I PERFCHECK: w27 erase-3
+   11-19 16:22:39.695 10790 10790 I PERFCHECK: section: C6. The system keyboard com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME: show by tapping the field / hide with Back ×3, digits with it
+   11-19 16:22:58.947 10975 10975 I PERFCHECK: w27 ime-show-1
+   11-19 16:23:08.180 11023 11023 I PERFCHECK: w27 ime-hide-1
+   11-19 16:23:16.897 11058 11058 I PERFCHECK: w27 ime-show-2
+   11-19 16:23:25.887 11098 11098 I PERFCHECK: w27 ime-hide-2
+   11-19 16:23:34.556 11133 11133 I PERFCHECK: w27 ime-show-3
+   11-19 16:23:43.721 11174 11174 I PERFCHECK: w27 ime-hide-3
+   11-19 16:23:52.299 11209 11209 I PERFCHECK: w27 ime-show-4
+   11-19 16:24:01.426 11250 11250 I PERFCHECK: w27 type-digits
+   11-19 16:24:12.916 11320 11320 I PERFCHECK: w27 clear-digits
+   11-19 16:24:22.346 11363 11363 I PERFCHECK: w27 ime-hide-4
+   11-19 16:24:40.925 11488 11488 I PERFCHECK: section: C7. Sort menu ×3: open, „Година нови първо“ / „Най-подходящи“
+   11-19 16:24:44.329 11507 11507 I PERFCHECK: w27 sort-open-1
+   11-19 16:24:54.404 11563 11563 I PERFCHECK: w27 sort-year-1
+   11-19 16:25:03.581 11617 11617 I PERFCHECK: w27 sort-open-2
+   11-19 16:25:13.750 11673 11673 I PERFCHECK: w27 sort-relevance-2
+   11-19 16:25:22.886 11712 11712 I PERFCHECK: w27 sort-open-3
+   11-19 16:25:32.972 11768 11768 I PERFCHECK: w27 sort-year-3
+   11-19 16:25:50.382 11850 11850 I PERFCHECK: section: C8. Filters sheet ×3: open, a filter „Само налични“ / „книга“, close with Back; then „Без филтри“
+   11-19 16:25:53.809 11869 11869 I PERFCHECK: w27 filters-open-1
+   11-19 16:26:04.882 11925 11925 I PERFCHECK: w27 filters-available-1
+   11-19 16:26:13.866 11963 11963 I PERFCHECK: w27 filters-close-1
+   11-19 16:26:22.444 11999 11999 I PERFCHECK: w27 filters-open-2
+   11-19 16:26:33.738 12056 12056 I PERFCHECK: w27 filters-doctype-2
+   11-19 16:26:42.573 12095 12095 I PERFCHECK: w27 filters-close-2
+   11-19 16:26:51.004 12131 12131 I PERFCHECK: w27 filters-open-3
+   11-19 16:27:02.295 12188 12188 I PERFCHECK: w27 filters-available-3
+   11-19 16:27:11.130 12226 12226 I PERFCHECK: w27 filters-close-3
+   11-19 16:27:19.606 12262 12262 I PERFCHECK: w27 filters-open-4
+   11-19 16:27:30.778 12320 12320 I PERFCHECK: w27 filters-clear
+   11-19 16:27:39.611 12358 12358 I PERFCHECK: w27 filters-close-4
+   11-19 16:27:48.889 12411 12411 I PERFCHECK: section: C9. Shelf view ×3: list → shelf, fling, shelf → list
+   11-19 16:27:52.297 12430 12430 I PERFCHECK: w27 shelf-on-1
+   11-19 16:28:01.569 12467 12467 I PERFCHECK: w27 fling-shelf-1
+   11-19 16:28:22.129 12559 12559 I PERFCHECK: w27 shelf-off-1
+   11-19 16:28:33.338 12604 12604 I PERFCHECK: w27 shelf-on-2
+   11-19 16:28:42.526 12641 12641 I PERFCHECK: w27 fling-shelf-2
+   11-19 16:29:02.114 12735 12735 I PERFCHECK: w27 shelf-off-2
+   11-19 16:29:12.869 12775 12775 I PERFCHECK: w27 shelf-on-3
+   11-19 16:29:21.575 12810 12810 I PERFCHECK: w27 fling-shelf-3
+   11-19 16:29:40.633 12897 12897 I PERFCHECK: w27 shelf-off-3
+   11-19 16:29:47.990 12923 12923 I PERFCHECK: section: C10. „Изненадай ме“ top-bar button ×3: open shuffle, „Още една“, close
+   11-19 16:29:51.393 12942 12942 I PERFCHECK: w27 surprise-open-1
+   11-19 16:30:05.746 12997 12997 I PERFCHECK: w27 surprise-close-1
+   11-19 16:30:39.619 13455 13455 I PERFCHECK: w27 surprise-open-2
+   11-19 16:30:52.622 13519 13519 I PERFCHECK: w27 surprise-close-2
+   11-19 16:31:03.804 13585 13585 I PERFCHECK: w27 surprise-open-3
+   11-19 16:31:16.298 13632 13632 I PERFCHECK: w27 surprise-close-3
+   11-19 16:31:23.366 13671 13671 I PERFCHECK: section: C11. Open a book from the list and come back ×3 rows 1–3
+   11-19 16:31:41.824 13797 13797 I PERFCHECK: w27 book-back-1
+   11-19 16:32:03.571 13941 13941 I PERFCHECK: w27 book-back-2
+   11-19 16:32:25.514 14077 14077 I PERFCHECK: w27 book-back-3
+   11-19 16:32:43.982 14202 14202 I PERFCHECK: section: C12. Pull to refresh ×2
+   11-19 16:32:49.424 14230 14230 I PERFCHECK: w27 refresh-1
+   11-19 16:33:04.703 14276 14276 I PERFCHECK: w27 refresh-2
+   11-19 16:33:14.727 14299 14299 I PERFCHECK: section: C13. Back to the app from the launcher catalogue in front ×2
+   11-19 16:33:21.167 14379 14379 I PERFCHECK: w27 resume-1
+   11-19 16:33:34.627 14425 14425 I PERFCHECK: w27 resume-2
+   11-19 16:33:41.320 14447 14447 I PERFCHECK: section: C14. All interactions ui = as JankStats frameDurationUiNanos: vsync → end of the sync; doFrame from the trace

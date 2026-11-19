@@ -1,0 +1,24 @@
+buffers { size_kb: 65536 fill_policy: DISCARD }
+buffers { size_kb: 4096 fill_policy: DISCARD }
+data_sources { config { name: "linux.ftrace" target_buffer: 0 ftrace_config {
+  ftrace_events: "sched/sched_switch"
+  ftrace_events: "sched/sched_waking"
+  ftrace_events: "sched/sched_blocked_reason"
+  ftrace_events: "power/suspend_resume"
+  ftrace_events: "task/task_newtask"
+  ftrace_events: "task/task_rename"
+  atrace_categories: "gfx"
+  atrace_categories: "view"
+  atrace_categories: "am"
+  atrace_categories: "dalvik"
+  atrace_categories: "input"
+  atrace_categories: "wm"
+  atrace_categories: "res"
+  atrace_categories: "binder_driver"
+  atrace_categories: "aidl"
+  atrace_apps: "org.chyavorec.app"
+  buffer_size_kb: 16384 drain_period_ms: 250
+} } }
+data_sources { config { name: "linux.process_stats" target_buffer: 1 process_stats_config { scan_all_processes_on_start: true } } }
+data_sources { config { name: "track_event" target_buffer: 0 track_event_config { enabled_categories: "*" } } }
+duration_ms: 60000
