@@ -129,7 +129,7 @@ jobs:
             ./gradlew --no-daemon assembleProdRelease
           fi
           mkdir -p dist
-          case ${{ matrix.app }} in new) O=app.apk; R=apk-ref.txt; M=app-mapping.txt; D="";; hook) O=app-hook.apk; R=apk-hook-ref.txt; M=app-hook-mapping.txt; D=" + w27-hook.patch (DEBUG ONLY: looper message trace sections, profileable shell, runtime-tracing$NOTE)";; esac
+          case ${{ matrix.app }} in new) O=app.apk; R=apk-ref.txt; M=app-mapping.txt; D="";; hook) O=app-hook.apk; R=apk-hook-ref.txt; M=app-hook-mapping.txt; D=" + w27-hook.patch (DEBUG ONLY: looper message trace sections, profileable shell, measure sections in the catalogue row/cover, flag plaincover$NOTE)";; esac
           cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/$O
           cp app/build/outputs/mapping/prodRelease/mapping.txt dist/$M || true
           echo "${{ matrix.vname }} $(git rev-parse --short HEAD) prodRelease (minified), x86_64 added, applicationId org.chyavorec.app${{ matrix.suffix }}, throwaway key, versionCode ${{ matrix.vc }}$D" > dist/$R

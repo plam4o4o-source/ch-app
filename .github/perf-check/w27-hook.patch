@@ -1,16 +1,3 @@
-diff --git a/app/build.gradle.kts b/app/build.gradle.kts
-index 2c76b93e..17feb3cd 100644
---- a/app/build.gradle.kts
-+++ b/app/build.gradle.kts
-@@ -340,6 +340,8 @@ dependencies {
-     implementation(libs.compose.material3)
-     implementation(libs.compose.material.icons.extended)
-     implementation(libs.compose.animation)
-+    implementation("androidx.compose.runtime:runtime-tracing") // W27 DEBUG ONLY (debug/w27-cat): composable names in traces
-+    implementation("androidx.tracing:tracing-perfetto-binary:1.0.1") // W27 DEBUG ONLY: the native lib runtime-tracing loads
-     // RoundedPolygon + Morph: избраният раздел „разцъфва“ от хапче в осморъка.
-     implementation(libs.androidx.graphics.shapes)
-     debugImplementation(libs.compose.ui.tooling)
 diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
 index 01fedec0..9fd5a7a2 100644
 --- a/app/src/main/AndroidManifest.xml
@@ -37,18 +24,32 @@ index 77173fe5..e6685322 100644
          if (BuildConfig.DEBUG) detectLeaks()
          // Локалният дневник на грешките (само на устройството) — и за сривовете.
          AppDiagnostics.install(this)
+diff --git a/app/src/main/kotlin/org/chyavorec/app/MainActivity.kt b/app/src/main/kotlin/org/chyavorec/app/MainActivity.kt
+index 311d439b..eeacda9a 100644
+--- a/app/src/main/kotlin/org/chyavorec/app/MainActivity.kt
++++ b/app/src/main/kotlin/org/chyavorec/app/MainActivity.kt
+@@ -49,6 +49,7 @@ class MainActivity : ComponentActivity() {
+     }
+ 
+     override fun onCreate(savedInstanceState: Bundle?) {
++        W27Trace.flags = intent?.getStringExtra("w27").orEmpty() // W27 DEBUG ONLY (debug/w27-cat)
+         val splash = installSplashScreen()
+         super.onCreate(savedInstanceState)
+         // Кратък splash: държим го само докато настройките се заредят (милисекунди).
 diff --git a/app/src/main/kotlin/org/chyavorec/app/W27Trace.kt b/app/src/main/kotlin/org/chyavorec/app/W27Trace.kt
 new file mode 100644
-index 00000000..5ccb5f3b
+index 00000000..fa730cb7
 --- /dev/null
 +++ b/app/src/main/kotlin/org/chyavorec/app/W27Trace.kt
-@@ -0,0 +1,45 @@
+@@ -0,0 +1,59 @@
 +package org.chyavorec.app
 +
 +import android.os.Build
 +import android.os.Looper
 +import android.os.Trace
 +import android.util.Printer
++import androidx.compose.ui.Modifier
++import androidx.compose.ui.layout.layout
 +
 +/**
 + * W27 DEBUG ONLY (branch debug/w27-cat, emulator builds, never released): every message of the main
@@ -58,6 +59,11 @@ index 00000000..5ccb5f3b
 + * restricted on API 26-27) because a release build is not debuggable.
 + */
 +object W27Trace {
++    /** Test switches from the launch intent (`am start --es w27 nohyph,…`), read in MainActivity.onCreate. */
++    @Volatile @JvmField var flags: String = ""
++
++    fun has(flag: String): Boolean = flags.split(',').contains(flag)
++
 +    private val hash = Regex("\\{[0-9a-f]+\\}|@[0-9a-f]{4,}")
 +
 +    fun install() {
@@ -88,3 +94,91 @@ index 00000000..5ccb5f3b
 +        if (Build.VERSION.SDK_INT >= 29) Trace.isEnabled()
 +        else runCatching { isTagEnabled?.invoke(null, 1L shl 12) as? Boolean }.getOrNull() ?: false
 +}
++
++/** W27 DEBUG ONLY: a trace section around the measurement of the wrapped node (text layout happens there). */
++fun Modifier.w27Measure(label: String): Modifier = this.layout { measurable, constraints ->
++    Trace.beginSection(label)
++    val placeable = try { measurable.measure(constraints) } finally { Trace.endSection() }
++    layout(placeable.width, placeable.height) { placeable.place(0, 0) }
++}
+diff --git a/app/src/main/kotlin/org/chyavorec/app/ui/components/Images.kt b/app/src/main/kotlin/org/chyavorec/app/ui/components/Images.kt
+index d446f5fc..000acf13 100644
+--- a/app/src/main/kotlin/org/chyavorec/app/ui/components/Images.kt
++++ b/app/src/main/kotlin/org/chyavorec/app/ui/components/Images.kt
+@@ -1,6 +1,8 @@
+ package org.chyavorec.app.ui.components
+ 
+ import androidx.compose.foundation.background
++import org.chyavorec.app.W27Trace
++import org.chyavorec.app.w27Measure
+ import androidx.compose.foundation.border
+ import androidx.compose.foundation.layout.aspectRatio
+ import androidx.compose.foundation.layout.fillMaxHeight
+@@ -380,6 +382,7 @@ fun BookCover(
+                     // без него тясната колона къса думите насред („Армени|я“) без тире.
+                     Text(
+                         book.title,
++                        modifier = Modifier.w27Measure("w27 cover title"), // W27 DEBUG ONLY
+                         color = CoverInk,
+                         fontFamily = Cormorant,
+                         fontWeight = FontWeight.SemiBold,
+@@ -388,8 +391,9 @@ fun BookCover(
+                         maxLines = if (width < 72.dp) 3 else 4,
+                         overflow = TextOverflow.Ellipsis,
+                         style = LocalTextStyle.current.copy(
+-                            hyphens = Hyphens.Auto,
+-                            lineBreak = LineBreak.Heading,
++                            // W27 DEBUG ONLY: flag "plaincover" — no hyphenation, simple line breaks (A/B)
++                            hyphens = if (W27Trace.has("plaincover")) Hyphens.None else Hyphens.Auto,
++                            lineBreak = if (W27Trace.has("plaincover")) LineBreak.Simple else LineBreak.Heading,
+                         ),
+                     )
+                     Box(Modifier.weight(1f))
+@@ -400,6 +404,7 @@ fun BookCover(
+                     )
+                     Text(
+                         book.author,
++                        modifier = Modifier.w27Measure("w27 cover author"), // W27 DEBUG ONLY
+                         color = CoverInk.copy(alpha = 0.92f),
+                         fontFamily = Raleway,
+                         fontSize = maxOf(9f, 8.5f * scale).sp,
+diff --git a/app/src/main/kotlin/org/chyavorec/app/ui/screens/catalog/CatalogScreens.kt b/app/src/main/kotlin/org/chyavorec/app/ui/screens/catalog/CatalogScreens.kt
+index 2a886866..9f87b61b 100644
+--- a/app/src/main/kotlin/org/chyavorec/app/ui/screens/catalog/CatalogScreens.kt
++++ b/app/src/main/kotlin/org/chyavorec/app/ui/screens/catalog/CatalogScreens.kt
+@@ -1,6 +1,7 @@
+ package org.chyavorec.app.ui.screens.catalog
+ 
+ import android.os.Build
++import org.chyavorec.app.w27Measure
+ import androidx.activity.compose.LocalActivity
+ import org.chyavorec.domain.model.BookStatus
+ import org.chyavorec.app.ui.theme.LocalExtendedColors
+@@ -472,15 +473,16 @@ fun CatalogScreen(navigate: (String) -> Unit) {
+  */
+ @Composable
+ fun BookListItem(b: CatalogBook, onClick: () -> Unit, modifier: Modifier = Modifier) {
++    android.os.Trace.beginSection("w27 BookListItem compose") // W27 DEBUG ONLY
+     val available = b.status == BookStatus.AVAILABLE
+     Row(
+-        modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 6.dp),
++        modifier.w27Measure("w27 row measure").fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 6.dp),
+         verticalAlignment = Alignment.CenterVertically,
+     ) {
+-        BookCover(b, width = 50.dp, showStatusDot = false, modifier = Modifier.bookCoverShared(b.inv), decorative = true)
++        BookCover(b, width = 50.dp, showStatusDot = false, modifier = Modifier.w27Measure("w27 row cover").bookCoverShared(b.inv), decorative = true)
+         Spacer(Modifier.width(14.dp))
+         Column(Modifier.weight(1f)) {
+-            Text(b.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
++            Text(b.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis, modifier = Modifier.w27Measure("w27 row title"))
+             if (b.author.isNotBlank()) {
+                 Text(b.author, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1, overflow = TextOverflow.Ellipsis)
+             }
+@@ -498,6 +500,7 @@ fun BookListItem(b: CatalogBook, onClick: () -> Unit, modifier: Modifier = Modif
+             if (!available) BookStatusPill(b.status, Modifier.padding(top = 4.dp))
+         }
+     }
++    android.os.Trace.endSection() // W27 DEBUG ONLY
+ }
+ 
+ @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)

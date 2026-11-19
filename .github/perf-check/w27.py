@@ -518,6 +518,20 @@ def cmd_agg(fscsv, trcsv):
     print("highest main-thread CPU in one frame: " + ', '.join(f"{n} {v:.0f} ms" for v, n in bad[:14]))
 
 
+def cmd_ab(trcsv):
+    """Mean of the highest main-thread CPU in one frame per interaction kind, by flag label (r1-asis vs r1-plain…)."""
+    groups = defaultdict(lambda: defaultdict(list))
+    for r in csvmod.DictReader(open(trcsv, encoding='utf-8')):
+        m = re.match(r'^(.*?)-(r\d+)(?:-(\w+))?(?:-(\d+))?$', r['name'])
+        if not m:
+            continue
+        kind, flag = m.group(1), m.group(3) or 'asis'
+        groups[kind][flag].append(float(r['cpumax'] or 0))
+    print("A/B by interaction (max main-thread CPU per frame, ms: mean [values]):")
+    for kind, fl in groups.items():
+        print(f"  {kind}: " + ' | '.join(f"{f} {sum(v) / len(v):.1f} {[round(x) for x in v]}" for f, v in sorted(fl.items())))
+
+
 def cmd_warm():
     from perfetto.trace_processor.platform import PlatformDelegate
     print('trace_processor_shell:', PlatformDelegate().get_shell_path(None))
@@ -533,5 +547,7 @@ if __name__ == '__main__':
         sys.exit(3 if cmd_at(*a) else 0)
     elif c == 'agg':
         cmd_agg(*a)
+    elif c == 'ab':
+        cmd_ab(*a)
     elif c == 'warm':
         cmd_warm()

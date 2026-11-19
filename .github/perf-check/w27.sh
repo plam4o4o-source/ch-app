@@ -281,8 +281,58 @@ part_cat() {
   log "composition tracing / test IME in logcat: $(grep -cE 'PerfettoSdk|androidx.tracing' $OUT/logcat-live.txt) tracing lines; $(grep -E 'PCIME' $OUT/logcat-live.txt | tail -2 | cut -c1-200 | tr '\n' ' ')"
 }
 
+# ---------------------------------------------------------------- run 3: the entry frames, A/B of the cover text
+launch_w() {  # $1 — flags for the hook build (W27Trace.flags), empty — none
+  a am force-stop $PKG; sleep 1
+  a am start -W -a android.intent.action.MAIN -c android.intent.category.LAUNCHER -n $ACT ${1:+--es w27 $1} >/dev/null 2>&1
+  sleep 8; ready >/dev/null; sleep 2
+}
+entry_round() {  # $1 — label (round + flags), $2 — flags
+  local L=$1 r p
+  launch_w "$2"
+  mtap cold-open-$L 6 "$CAT"
+  for r in 1 2 3; do mtap leave-home-$L-$r 3 "$HOME_"; mtap warm-open-$L-$r 4 "$CAT"; done
+  mtap leave-news-$L 4 "$NEWS"; mtap back-from-news-$L 4 "$CAT"
+  dump
+  for r in 1 2; do
+    p=$(python3 $H_/find.py $OUT/ui.xml --clickables $(results_top) $((H * 8 / 10)) 100 | sed -n ${r}p)
+    mtap book-open-$L-$r 4.5 "$p"
+    meas book-back-$L-$r 3.5 a input keyevent 4
+    dump; has "$RX_RESULTS" || { log "  (not back on the list: $(texts 6 | cut -c1-160))"; on_catalog; }
+  done
+  meas fling-list-$L 1.5 gest g-scroll
+  list_top
+  mtap sort-open-$L 2.5 "$SORT"; dump; p=$(xy text 'Година (нови първо)|Year (newest'); mtap sort-year-$L 3.5 "$p"
+  tap content-desc '=Подреждане|=Sort' >/dev/null; sleep 1.5; tap text 'Най-подходящи|Most relevant' >/dev/null; sleep 3; list_top
+}
+part_entry() {
+  local k fl
+  helper_install; ime_init
+  log "IME debug: enable → $(a ime enable org.pc.helper/.Ime 2>&1 | tr -d '\r' | tr '\n' ' ' | cut -c1-200); all: $(a ime list -a -s 2>&1 | tr -d '\r' | tr '\n' ' '); package: $(a dumpsys package org.pc.helper | tr -d '\r' | grep -m3 -E 'Ime|InputMethod' | tr '\n' ' ' | cut -c1-300)"
+  anims 1
+  tr_init
+  sec "E0. First launch after install: Home → „Каталог“ (fetch + index), then speed-profile"
+  launch >/dev/null; sleep 8; ready; dims; pos_tabs; gest_init
+  meas first-install-open 12 tapxy $CAT
+  waitfor "$RX_RESULTS" 150 && log "first-install catalogue results after ${WAITED} ms (+12 s)" || log "first-install: NO catalogue results"
+  tab news >/dev/null; sleep 4; tab home >/dev/null; sleep 4
+  x_compile
+  launch >/dev/null; sleep 6; ready >/dev/null; tab catalog >/dev/null; sleep 3; pos_catalog; tab home >/dev/null; sleep 2
+  case $PART in
+    cath*) for k in 1 2; do
+             sec "E$k. Round $k, the cover title as released (hyphenation + LineBreak.Heading)"; entry_round r$k-asis ""
+             sec "E$k. Round $k, flag plaincover (cover title without hyphenation, LineBreak.Simple)"; entry_round r$k-plain plaincover
+           done;;
+    *) for k in 1 2 3; do sec "E$k. Round $k (released code)"; entry_round r$k ""; done;;
+  esac
+  sec "E9. All interactions (cpu = main-thread Running time in one doFrame)"
+  python3 $W27 agg $OUT/fs.csv $OUT/tr.csv 2>&1 | tee $OUT/table.md | cut -c1-400 | tee -a $SUM
+  python3 $W27 ab $OUT/tr.csv 2>&1 | tee -a $SUM
+  log "traces kept: $TRKEPT (gzip) in tr/, $(du -sh $OUT/tr | cut -f1); FATAL lines $(grep -c 'FATAL EXCEPTION' $OUT/logcat-live.txt), ANR $(grep -c 'ANR in ' $OUT/logcat-live.txt)"
+}
+
 part_w27() {
   case "$W27_PARTS" in *" $PART "*) ;; *) return 1;; esac
-  part_cat
+  part_entry
   return 0
 }

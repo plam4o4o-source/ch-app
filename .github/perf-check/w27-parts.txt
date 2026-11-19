@@ -1,2 +1,2 @@
 # Parts of the next run (one emulator job each); empty = publish the notes only.
-cat33 cath33 cat36x cath36x cat26 cath26
+cat33 cath33 cath36x
