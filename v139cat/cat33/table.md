@@ -1,81 +1,52 @@
 interaction | frames | ui>32 | ui max | doFrames | main CPU/frame >16 | >32 | max CPU in a frame | path in that frame (CPU ms) | worst work outside frames (CPU ms)
 ---|---|---|---|---|---|---|---|---|---
-first-install-open | 18 | 10 | 1591.8 | 17 | 4 | 3 | 89.7 |  > traversal 74 > draw 74 > Record View#draw() 74 > AndroidOwner:measureAndLayout 66 > Compose:recompose 10 | deliverInputEvent src=0x1002 eventTimeNano=161881000000 id=0 12 > ViewPostImeInputStage id=0xc4a2a22e 12 > AndroidOwner:onTouch 12
-cold-open-1 | 20 | 16 | 648.6 | 37 | 3 | 1 | 43.9 |  > traversal 32 > draw 32 > Record View#draw() 32 > AndroidOwner:measureAndLayout 29 > Compose:recompose 8 > res/oU.webp 5 > ImageDecoder#decodeDrawable 5 > ID#w=241;h=25 | deliverInputEvent src=0x1002 eventTimeNano=272729000000 id=0 6 > ViewPostImeInputStage id=0xd32e2563 6 > AndroidOwner:onTouch 6
-cold-open-2 | 18 | 17 | 529.9 | 44 | 2 | 0 | 28.6 |  > traversal 27 > draw 27 > Record View#draw() 27 > AndroidOwner:measureAndLayout 22 > Compose:recompose 3 | unnamed main-thread burst 8
-cold-open-3 | 11 | 11 | 588.6 | 16 | 2 | 0 | 24.3 |  > traversal 22 > draw 22 > Record View#draw() 22 > AndroidOwner:measureAndLayout 18 > Compose:recompose 2 | unnamed main-thread burst 4
-leave-home-1 | 10 | 9 | 446.5 | 10 | 1 | 0 | 27.9 |  > traversal 25 > draw 25 > Record View#draw() 25 > AndroidOwner:measureAndLayout 22 > Compose:recompose 4 > res/oU.webp 4 > ImageDecoder#decodeDrawable 4 > ID#w=241;h=25 | unnamed main-thread burst 2
-warm-open-1 | 8 | 8 | 645.6 | 20 | 1 | 1 | 58.6 |  > traversal 54 > draw 54 > Record View#draw() 54 > AndroidOwner:measureAndLayout 47 > Compose:recompose 5 | AndroidOwner:measureAndLayout 2
-leave-home-2 | 9 | 8 | 513.3 | 9 | 1 | 1 | 32.8 |  > traversal 31 > draw 31 > Record View#draw() 31 > AndroidOwner:measureAndLayout 24 > Compose:recompose 4 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | unnamed main-thread burst 3
-warm-open-2 | 9 | 8 | 501.9 | 9 | 1 | 0 | 26.4 |  > traversal 24 > draw 24 > Record View#draw() 24 > AndroidOwner:measureAndLayout 22 > Compose:recompose 5 | unnamed main-thread burst 4
-leave-home-3 | 11 | 10 | 432.3 | 11 | 1 | 0 | 20.4 |  > traversal 18 > draw 18 > Record View#draw() 18 > AndroidOwner:measureAndLayout 15 | deliverInputEvent src=0x1002 eventTimeNano=411471000000 id=0 1 > ViewPostImeInputStage id=0xfb042c70 1 > AndroidOwner:onTouch 1
-warm-open-3 | 9 | 8 | 471.6 | 10 | 1 | 1 | 50.7 |  > traversal 49 > draw 49 > Record View#draw() 49 > AndroidOwner:measureAndLayout 42 > Compose:recompose 4 | unnamed main-thread burst 1
-leave-news | 12 | 11 | 557.3 | 12 | 2 | 0 | 23.8 |  > traversal 21 > draw 21 > Record View#draw() 21 > AndroidOwner:measureAndLayout 19 > Compose:recompose 6 > res/oU.webp 5 > ImageDecoder#decodeDrawable 5 > ID#w=241;h=25 | unnamed main-thread burst 1
-back-from-news | 9 | 8 | 506.1 | 10 | 1 | 1 | 45.1 |  > traversal 43 > draw 43 > Record View#draw() 43 > AndroidOwner:measureAndLayout 39 > Compose:recompose 4 | binder transaction 2
-leave-more | 12 | 11 | 452.1 | 15 | 1 | 0 | 23.8 |  > traversal 22 > draw 22 > Record View#draw() 22 > AndroidOwner:measureAndLayout 17 > Compose:recompose 3 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | unnamed main-thread burst 4
-back-from-more | 10 | 9 | 498.3 | 10 | 1 | 1 | 35.5 |  > traversal 33 > draw 33 > Record View#draw() 30 > AndroidOwner:measureAndLayout 27 > Compose:recompose 7 > res/oU.webp 6 > ImageDecoder#decodeDrawable 6 > ID#w=241;h=25 | deliverInputEvent src=0x1002 eventTimeNano=456188000000 id=0 1 > ViewPostImeInputStage id=0xe59a6c2f 1 > AndroidOwner:onTouch 1
-fling-list-1 | 59 | 51 | 561.3 | 62 | 1 | 1 | 32.5 |  > traversal 31 > draw 31 > Record View#draw() 31 > AndroidOwner:measureAndLayout 29 > Compose:recompose 9 | compose:lazy:prefetch:idle_frame 5 > compose:lazy:prefetch:execute:urgent 5 > compose:lazy:prefetch:measure 4 > An
-fling-list-2 | 60 | 52 | 1144.6 | 64 | 1 | 1 | 62.2 |  > traversal 59 > draw 59 > Record View#draw() 59 > AndroidOwner:measureAndLayout 53 > Compose:recompose 4 | AndroidOwner:measureAndLayout 13
-fling-list-3 | 0 | 0 | 0.0 | 50 | 0 | 0 | 0.3 |  | unnamed main-thread burst 0
-reselect-top-1 | 10 | 4 | 287.9 | 8 | 0 | 0 | 1.1 |  | unnamed main-thread burst 1
-reselect-top-2 | 10 | 7 | 286.2 | 10 | 0 | 0 | 1.0 |  | unnamed main-thread burst 2
-type-1 | 39 | 34 | 352.2 | 164 | 0 | 0 | 6.1 |  > traversal 5 > draw 5 > Record View#draw() 5 > AndroidOwner:draw 4 | unnamed main-thread burst 2
-chip-author | 16 | 9 | 263.0 | 28 | 0 | 0 | 3.0 |  > traversal 3 > draw 3 > Record View#draw() 3 > AndroidOwner:draw 3 | unnamed main-thread burst 1
-chip-title | 25 | 23 | 360.4 | 36 | 0 | 0 | 3.5 |  > traversal 2 > draw 2 > Record View#draw() 2 | unnamed main-thread burst 2
-chip-all | 24 | 24 | 328.0 | 44 | 0 | 0 | 4.7 |  > traversal 3 > draw 2 > Record View#draw() 2 > AndroidOwner:draw 1 | unnamed main-thread burst 1
-clear-1 | 14 | 9 | 365.5 | 34 | 0 | 0 | 13.2 |  > traversal 12 > draw 12 > Record View#draw() 12 > AndroidOwner:measureAndLayout 11 | unnamed main-thread burst 1
-type-2 | 15 | 10 | 720.2 | 28 | 2 | 0 | 30.6 |  > traversal 28 > draw 28 > Record View#draw() 28 > AndroidOwner:measureAndLayout 23 > Compose:recompose 4 | unnamed main-thread burst 4
-clear-2 | 12 | 7 | 538.0 | 24 | 1 | 1 | 34.2 |  > traversal 29 > draw 29 > Record View#draw() 29 > AndroidOwner:measureAndLayout 27 > Compose:onPositionedCallbacks 4 | unnamed main-thread burst 1
-type-3 | 17 | 14 | 653.5 | 26 | 3 | 1 | 34.6 |  > traversal 29 > draw 29 > Record View#draw() 29 > AndroidOwner:measureAndLayout 27 > Compose:recompose 3 | unnamed main-thread burst 4
-erase-3 | 16 | 13 | 673.1 | 29 | 2 | 0 | 29.8 |  > traversal 24 > draw 24 > Record View#draw() 24 > AndroidOwner:measureAndLayout 22 > TextStringSimpleNode::measure 5 | unnamed main-thread burst 2
-ime-show-1 | 9 | 5 | 562.0 | 23 | 0 | 0 | 0.9 |  | unnamed main-thread burst 5
-ime-hide-1 | 8 | 3 | 606.7 | 19 | 0 | 0 | 3.9 |  > traversal 3 > draw 3 > Record View#draw() 3 | unnamed main-thread burst 2
-ime-show-2 | 9 | 4 | 592.9 | 24 | 0 | 0 | 0.7 |  | deliverInputEvent src=0x1002 eventTimeNano=786919000000 id=0 1
-ime-hide-2 | 8 | 2 | 783.7 | 21 | 0 | 0 | 0.8 |  | unnamed main-thread burst 0
-ime-show-3 | 9 | 4 | 615.1 | 22 | 0 | 0 | 3.4 |  > traversal 3 > draw 3 | deliverInputEvent src=0x1002 eventTimeNano=804050000000 id=0 1
-ime-hide-3 | 9 | 6 | 533.6 | 21 | 0 | 0 | 2.8 |  > traversal 3 | unnamed main-thread burst 0
-ime-show-4 | 9 | 4 | 608.0 | 23 | 0 | 0 | 0.8 |  | deliverInputEvent src=0x1002 eventTimeNano=821251000000 id=0 1
-type-digits | 11 | 7 | 952.1 | 24 | 1 | 0 | 30.7 |  > traversal 28 > draw 28 > Record View#draw() 28 > AndroidOwner:measureAndLayout 24 > Compose:recompose 3 | unnamed main-thread burst 1
-clear-digits | 10 | 7 | 708.7 | 22 | 1 | 1 | 44.4 |  > traversal 38 > draw 38 > Record View#draw() 38 > AndroidOwner:measureAndLayout 33 > TextStringSimpleNode::measure 4 | unnamed main-thread burst 2
-ime-hide-4 | 9 | 4 | 700.0 | 23 | 0 | 0 | 0.7 |  | unnamed main-thread burst 0
-sort-open-1 | 9 | 6 | 1066.7 | 24 | 0 | 0 | 14.2 |  > traversal 12 > draw 2 > Record View#draw() 2 > AndroidOwner:draw 2 | unnamed main-thread burst 1
-sort-year-1 | 10 | 8 | 895.1 | 126 | 1 | 0 | 29.5 |  > traversal 25 > draw 25 > Record View#draw() 25 > AndroidOwner:measureAndLayout 24 > Compose:recompose 3 | unnamed main-thread burst 2
-sort-open-2 | 11 | 7 | 912.1 | 37 | 0 | 0 | 8.8 |  > traversal 7 > draw 2 > Record View#draw() 2 > AndroidOwner:draw 1 | unnamed main-thread burst 1
-sort-relevance-2 | 10 | 8 | 768.0 | 126 | 1 | 0 | 25.3 |  > traversal 22 > draw 22 > Record View#draw() 22 > AndroidOwner:measureAndLayout 20 > Compose:applyChanges 3 | unnamed main-thread burst 2
-sort-open-3 | 9 | 7 | 749.4 | 37 | 0 | 0 | 6.7 |  > traversal 5 > measure 1 > AndroidOwner:onMeasure 1 | unnamed main-thread burst 3
-sort-year-3 | 10 | 8 | 897.5 | 127 | 1 | 0 | 28.7 |  > traversal 25 > draw 25 > Record View#draw() 25 > AndroidOwner:measureAndLayout 20 | unnamed main-thread burst 1
-filters-open-1 | 10 | 6 | 1157.4 | 16 | 1 | 0 | 23.6 |  > traversal 20 > Compose:recompose 6 | unnamed main-thread burst 1
-filters-available-1 | 8 | 8 | 1028.5 | 8 | 0 | 0 | 3.7 |  > animation 2 > Recomposer:recompose 2 | unnamed main-thread burst 1
-filters-close-1 | 5 | 2 | 110.4 | 19 | 0 | 0 | 3.4 |  > animation 3 > Recomposer:recompose 3 > Compose:onForgotten 3 | unnamed main-thread burst 2
-filters-open-2 | 7 | 5 | 1180.1 | 14 | 1 | 0 | 18.4 |  > traversal 15 > Compose:recompose 3 | unnamed main-thread burst 1
-filters-doctype-2 | 7 | 7 | 1175.9 | 7 | 0 | 0 | 4.1 |  > animation 2 > Recomposer:recompose 2 | unnamed main-thread burst 1
-filters-close-2 | 6 | 2 | 71.9 | 19 | 0 | 0 | 4.2 |  > animation 4 > Recomposer:recompose 4 > Compose:onForgotten 3 | unnamed main-thread burst 3
-filters-open-3 | 9 | 6 | 1155.7 | 15 | 1 | 0 | 28.9 |  > traversal 26 > Compose:recompose 8 | unnamed main-thread burst 4
-filters-available-3 | 8 | 7 | 945.2 | 7 | 0 | 0 | 4.1 |  > animation 2 > Recomposer:recompose 2 | unnamed main-thread burst 1
-filters-close-3 | 6 | 2 | 51.8 | 19 | 0 | 0 | 3.3 |  > animation 3 > Recomposer:recompose 3 > Compose:onForgotten 2 | unnamed main-thread burst 1
-filters-open-4 | 9 | 6 | 960.9 | 15 | 1 | 0 | 26.4 |  > traversal 23 > Compose:recompose 6 | deliverInputEvent src=0x1002 eventTimeNano=1026774000000 id= 1 > ViewPostImeInputStage id=0xf7ad8365 1
-filters-clear | 8 | 7 | 1088.6 | 7 | 0 | 0 | 4.7 |  > animation 3 > Recomposer:recompose 3 | unnamed main-thread burst 1
-filters-close-4 | 5 | 2 | 45.2 | 20 | 0 | 0 | 3.2 |  > animation 3 > Recomposer:recompose 3 > Compose:onForgotten 2 | MSG_WINDOW_FOCUS_CHANGED 1
-shelf-on-1 | 14 | 10 | 390.5 | 27 | 1 | 0 | 20.4 |  > traversal 18 > draw 18 > Record View#draw() 18 > AndroidOwner:measureAndLayout 16 > Compose:recompose 1 | AndroidOwner:measureAndLayout 1
-fling-shelf-1 | 64 | 50 | 535.6 | 84 | 0 | 0 | 5.5 |  > traversal 4 > draw 4 > Record View#draw() 4 > AndroidOwner:draw 4 | compose:lazy:prefetch:compose 4 > Compose:recompose 4
-shelf-off-1 | 12 | 8 | 524.9 | 23 | 1 | 1 | 51.2 |  > traversal 40 > draw 40 > Record View#draw() 40 > AndroidOwner:measureAndLayout 33 > TextStringSimpleNode::measure 9 | unnamed main-thread burst 1
-shelf-on-2 | 14 | 8 | 386.6 | 25 | 1 | 0 | 19.3 |  > traversal 17 > draw 17 > Record View#draw() 17 > AndroidOwner:measureAndLayout 15 > Compose:recompose 1 | unnamed main-thread burst 1
-fling-shelf-2 | 63 | 55 | 577.6 | 78 | 1 | 1 | 42.4 |  > traversal 40 > draw 40 > Record View#draw() 39 > AndroidOwner:measureAndLayout 35 > Compose:recompose 3 | unnamed main-thread burst 3
-shelf-off-2 | 0 | 0 | 0.0 | 0 | 0 | 0 | 0.0 |  | unnamed main-thread burst 0
-shelf-on-3 | 0 | 0 | 0.0 | 0 | 0 | 0 | 0.0 |  | unnamed main-thread burst 0
-fling-shelf-3 | 59 | 53 | 659.2 | 64 | 0 | 0 | 3.4 |  > traversal 3 | deliverInputEvent src=0x1002 eventTimeNano=1149722000000 id= 1
-shelf-off-3 | 0 | 0 | 0.0 | 0 | 0 | 0 | 0.0 |  | unnamed main-thread burst 0
-surprise-open-1 | 0 | 0 | 0.0 | 0 | 0 | 0 | 0.0 |  | unnamed main-thread burst 0
-surprise-close-1 | 9 | 8 | 509.8 | 10 | 2 | 2 | 60.5 |  > traversal 56 > draw 56 > Record View#draw() 56 > AndroidOwner:measureAndLayout 53 > Compose:recompose 7 | unnamed main-thread burst 2
-surprise-open-2 | 17 | 16 | 1589.9 | 19 | 0 | 0 | 7.2 |  > traversal 7 > draw 7 > Record View#draw() 7 > AndroidOwner:measureAndLayout 6 > Compose:recompose 1 | unnamed main-thread burst 12
-surprise-close-2 | 5 | 5 | 333.8 | 8 | 0 | 0 | 14.4 |  > traversal 8 > draw 8 > Record View#draw() 8 > AndroidOwner:draw 6 | unnamed main-thread burst 3
-surprise-open-3 | 15 | 15 | 788.0 | 20 | 0 | 0 | 7.1 |  > traversal 7 > draw 7 > Record View#draw() 7 > AndroidOwner:measureAndLayout 6 | unnamed main-thread burst 4
-surprise-close-3 | 5 | 5 | 356.3 | 8 | 0 | 0 | 13.1 |  > traversal 11 > draw 11 > Record View#draw() 11 > AndroidOwner:measureAndLayout 6 > TextAnnotatedStringNode:measure 4 | AndroidOwner:outOfFrameExecutor 4 > Compose:deactivate 4 > Compose:onForgotten 3
-book-back-1 | 8 | 7 | 296.8 | 9 | 1 | 1 | 61.3 |  > traversal 58 > draw 57 > Record View#draw() 57 > AndroidOwner:measureAndLayout 51 > TextStringSimpleNode::measure 24 | unnamed main-thread burst 1
-book-back-2 | 8 | 7 | 335.9 | 9 | 1 | 1 | 36.7 |  > traversal 32 > draw 32 > Record View#draw() 32 > AndroidOwner:measureAndLayout 23 > TextStringSimpleNode::measure 3 > TextLayout:initLayout 3 | unnamed main-thread burst 1
-book-back-3 | 8 | 7 | 354.3 | 9 | 1 | 1 | 40.5 |  > traversal 39 > draw 39 > Record View#draw() 39 > AndroidOwner:measureAndLayout 36 > Compose:recompose 4 | unnamed main-thread burst 3
-refresh-1 | 15 | 13 | 457.5 | 16 | 0 | 0 | 2.4 |  > animation 2 > Recomposer:animation 2 | unnamed main-thread burst 1
-refresh-2 | 14 | 12 | 417.5 | 16 | 0 | 0 | 4.7 |  > traversal 3 | unnamed main-thread burst 1
-resume-1 | 1 | 1 | 459.2 | 3 | 0 | 0 | 2.5 |  > traversal 2 > draw 2 > Record View#draw() 1 > AndroidOwner:draw 1 | unnamed main-thread burst 3
-resume-2 | 1 | 1 | 386.6 | 3 | 0 | 0 | 6.4 |  > traversal 6 > draw 6 > Record View#draw() 6 > AndroidOwner:draw 5 | unnamed main-thread burst 1
-highest main-thread CPU in one frame: first-install-open 90 ms, fling-list-2 62 ms, book-back-1 61 ms, surprise-close-1 60 ms, warm-open-1 59 ms, shelf-off-1 51 ms, warm-open-3 51 ms, back-from-news 45 ms, clear-digits 44 ms, cold-open-1 44 ms, fling-shelf-2 42 ms, book-back-3 40 ms, book-back-2 37 ms, back-from-more 36 ms
+first-install-open | 13 | 11 | 689.3 | 29 | 4 | 2 | 76.8 |  > traversal 55 > draw 55 > Record View#draw() 55 > AndroidOwner:measureAndLayout 47 > Compose:recompose 3 | unnamed main-thread burst 7
+cold-open-r1 | 14 | 13 | 579.2 | 24 | 2 | 0 | 22.7 |  > traversal 21 > draw 21 > Record View#draw() 21 > AndroidOwner:measureAndLayout 17 > Compose:recompose 3 | unnamed main-thread burst 3
+leave-home-r1-1 | 10 | 9 | 448.1 | 10 | 1 | 0 | 22.0 |  > traversal 20 > draw 20 > Record View#draw() 20 > AndroidOwner:measureAndLayout 17 > Compose:recompose 3 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | unnamed main-thread burst 1
+warm-open-r1-1 | 9 | 8 | 689.3 | 21 | 1 | 1 | 61.9 |  > traversal 60 > draw 60 > Record View#draw() 60 > AndroidOwner:measureAndLayout 54 > Compose:recompose 17 > res/oU.webp 16 > ImageDecoder#decodeDrawable 16 > ID#w=241;h | AndroidOwner:measureAndLayout 2
+leave-home-r1-2 | 11 | 10 | 388.6 | 11 | 1 | 0 | 18.7 |  > traversal 17 > draw 17 > Record View#draw() 17 > AndroidOwner:measureAndLayout 14 | unnamed main-thread burst 1
+warm-open-r1-2 | 9 | 8 | 459.0 | 10 | 1 | 1 | 39.4 |  > traversal 38 > draw 38 > Record View#draw() 38 > AndroidOwner:measureAndLayout 35 > Compose:recompose 4 | unnamed main-thread burst 4
+leave-home-r1-3 | 10 | 9 | 354.2 | 10 | 1 | 0 | 20.2 |  > traversal 17 > draw 17 > Record View#draw() 17 > AndroidOwner:measureAndLayout 15 | unnamed main-thread burst 1
+warm-open-r1-3 | 9 | 8 | 418.9 | 9 | 1 | 1 | 44.7 |  > traversal 43 > draw 43 > Record View#draw() 43 > AndroidOwner:measureAndLayout 39 > TextStringSimpleNode::measure 6 | unnamed main-thread burst 1
+leave-news-r1 | 11 | 10 | 505.1 | 11 | 1 | 0 | 17.4 |  > traversal 15 > draw 15 > Record View#draw() 15 > AndroidOwner:measureAndLayout 14 > Compose:recompose 4 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | unnamed main-thread burst 1
+back-from-news-r1 | 10 | 9 | 563.9 | 10 | 1 | 0 | 26.5 |  > traversal 22 > draw 22 > Record View#draw() 22 > AndroidOwner:measureAndLayout 19 > Compose:applyChanges 3 | unnamed main-thread burst 1
+book-open-r1-1 | 12 | 10 | 712.3 | 13 | 1 | 1 | 59.8 |  > traversal 55 > draw 55 > Record View#draw() 55 > AndroidOwner:measureAndLayout 53 > Compose:recompose 44 | unnamed main-thread burst 2
+book-back-r1-1 | 6 | 6 | 768.5 | 8 | 1 | 1 | 32.3 |  > traversal 30 > draw 30 > Record View#draw() 30 > AndroidOwner:measureAndLayout 27 > Compose:recompose 2 | unnamed main-thread burst 1
+book-open-r1-2 | 14 | 12 | 533.6 | 17 | 1 | 0 | 17.0 |  > traversal 15 > draw 15 > Record View#draw() 15 > AndroidOwner:measureAndLayout 12 > Compose:applyChanges 4 | deliverInputEvent src=0x1002 eventTimeNano=393384000000 id=0 2 > ViewPostImeInputStage id=0xd1f51749 2 > AndroidOwner:onTouch 1
+book-back-r1-2 | 8 | 7 | 600.3 | 9 | 1 | 0 | 31.6 |  > traversal 28 > draw 28 > Record View#draw() 28 > AndroidOwner:measureAndLayout 25 > Compose:recompose 4 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | unnamed main-thread burst 5
+fling-list-r1 | 46 | 35 | 709.2 | 56 | 3 | 3 | 56.6 |  > traversal 51 > draw 51 > Record View#draw() 51 > AndroidOwner:measureAndLayout 48 > Compose:recompose 9 > res/oU.webp 8 > ImageDecoder#decodeDrawable 8 > ID#w=241;h=25 | AndroidOwner:measureAndLayout 44 > TextStringSimpleNode::measure 5
+sort-open-r1 | 9 | 6 | 1026.6 | 14 | 0 | 0 | 12.1 |  > traversal 10 > measure 3 > AndroidOwner:onMeasure 3 | unnamed main-thread burst 1
+sort-year-r1 | 2 | 2 | 499.0 | 116 | 0 | 0 | 5.0 |  > animation 4 > Recomposer:recompose 3 > Compose:onForgotten 2 | deliverInputEvent src=0x1002 eventTimeNano=446892000000 id=0 1
+cold-open-r2 | 17 | 16 | 463.9 | 39 | 1 | 0 | 18.2 |  > traversal 15 > draw 15 > Record View#draw() 15 > AndroidOwner:measureAndLayout 13 > Compose:recompose 4 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | deliverInputEvent src=0x1002 eventTimeNano=490747000000 id=0 2 > ViewPostImeInputStage id=0xf2399239 2 > AndroidOwner:onTouch 2
+leave-home-r2-1 | 18 | 16 | 465.2 | 28 | 1 | 0 | 27.0 |  > traversal 25 > draw 25 > Record View#draw() 25 > AndroidOwner:measureAndLayout 22 | unnamed main-thread burst 2
+warm-open-r2-1 | 7 | 7 | 430.8 | 12 | 1 | 1 | 53.5 |  > traversal 51 > draw 51 > Record View#draw() 51 > AndroidOwner:measureAndLayout 44 > Compose:recompose 8 > res/oU.webp 8 > ImageDecoder#decodeDrawable 6 > ID#w=241;h=25 | deliverInputEvent src=0x1002 eventTimeNano=511641000000 id=0 1 > ViewPostImeInputStage id=0xe4e0ba25 1 > AndroidOwner:onTouch 1
+leave-home-r2-2 | 10 | 7 | 519.2 | 10 | 1 | 0 | 22.4 |  > traversal 21 > draw 21 > Record View#draw() 21 > AndroidOwner:measureAndLayout 18 > Compose:recompose 4 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | deliverInputEvent src=0x1002 eventTimeNano=521112000000 id=0 1 > ViewPostImeInputStage id=0xf378401a 1 > AndroidOwner:onTouch 1
+warm-open-r2-2 | 9 | 8 | 543.8 | 21 | 1 | 1 | 62.6 |  > traversal 61 > draw 61 > Record View#draw() 61 > AndroidOwner:measureAndLayout 58 > Compose:recompose 16 > res/oU.webp 15 > ImageDecoder#decodeDrawable 15 > ID#w=241;h | unnamed main-thread burst 3
+leave-home-r2-3 | 10 | 9 | 448.8 | 10 | 1 | 0 | 16.9 |  > traversal 15 > draw 15 > Record View#draw() 15 > AndroidOwner:measureAndLayout 12 | unnamed main-thread burst 4
+warm-open-r2-3 | 9 | 8 | 597.0 | 10 | 1 | 1 | 35.4 |  > traversal 33 > draw 33 > Record View#draw() 33 > AndroidOwner:measureAndLayout 30 > TextStringSimpleNode::measure 3 | unnamed main-thread burst 1
+leave-news-r2 | 12 | 11 | 425.0 | 12 | 2 | 0 | 22.2 |  > traversal 20 > draw 20 > Record View#draw() 20 > AndroidOwner:measureAndLayout 18 > Compose:recompose 1 | unnamed main-thread burst 1
+back-from-news-r2 | 10 | 9 | 578.5 | 10 | 1 | 1 | 37.2 |  > traversal 35 > draw 35 > Record View#draw() 35 > AndroidOwner:measureAndLayout 29 > Compose:recompose 3 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | unnamed main-thread burst 4
+book-open-r2-1 | 15 | 14 | 346.4 | 16 | 0 | 0 | 13.1 |  > traversal 10 > draw 10 > Record View#draw() 10 > AndroidOwner:measureAndLayout 8 > Compose:recompose 2 | deliverInputEvent src=0x1002 eventTimeNano=577951000000 id=0 2 > ViewPostImeInputStage id=0xd14a8f48 2 > AndroidOwner:onTouch 1
+book-back-r2-1 | 8 | 7 | 585.6 | 9 | 1 | 1 | 49.1 |  > traversal 47 > draw 47 > Record View#draw() 47 > AndroidOwner:measureAndLayout 44 > Compose:recompose 9 > res/oU.webp 9 > ImageDecoder#decodeDrawable 9 > ID#w=241;h=25 | unnamed main-thread burst 3
+book-open-r2-2 | 13 | 12 | 533.2 | 15 | 1 | 0 | 20.9 |  > traversal 18 > draw 18 > Record View#draw() 18 > AndroidOwner:measureAndLayout 13 > Compose:recompose 2 | unnamed main-thread burst 3
+book-back-r2-2 | 8 | 7 | 615.3 | 9 | 1 | 0 | 29.2 |  > traversal 27 > draw 27 > Record View#draw() 27 > AndroidOwner:measureAndLayout 23 > Compose:recompose 3 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | unnamed main-thread burst 1
+fling-list-r2 | 63 | 51 | 625.4 | 69 | 5 | 2 | 42.5 |  > traversal 33 > draw 33 > Record View#draw() 33 > AndroidOwner:measureAndLayout 30 > Compose:recompose 5 | AndroidOwner:measureAndLayout 19 > Compose:recompose 5
+sort-open-r2 | 9 | 7 | 809.8 | 32 | 0 | 0 | 9.3 |  > traversal 7 > measure 1 > AndroidOwner:onMeasure 1 | monitor contention with owner ConnectivityThread (31) at boo 3 > Lock contention on a monitor lock (owner tid: 3
+sort-year-r2 | 2 | 2 | 502.9 | 118 | 0 | 0 | 9.0 |  > traversal 7 > draw 4 > Record View#draw() 4 > AndroidOwner:measureAndLayout 4 | unnamed main-thread burst 3
+cold-open-r3 | 14 | 13 | 487.5 | 25 | 2 | 0 | 20.5 |  > traversal 18 > draw 18 > Record View#draw() 18 > AndroidOwner:measureAndLayout 14 > Compose:recompose 4 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | unnamed main-thread burst 8
+leave-home-r3-1 | 9 | 8 | 408.0 | 9 | 1 | 0 | 28.4 |  > traversal 27 > draw 27 > Record View#draw() 27 > AndroidOwner:measureAndLayout 23 > Compose:recompose 6 > res/oU.webp 5 > ImageDecoder#decodeDrawable 5 > ID#w=241;h=25 | unnamed main-thread burst 1
+warm-open-r3-1 | 8 | 8 | 524.8 | 20 | 1 | 1 | 54.3 |  > traversal 50 > draw 50 > Record View#draw() 50 > AndroidOwner:measureAndLayout 42 > Compose:recompose 9 > res/oU.webp 8 > ImageDecoder#decodeDrawable 8 > ID#w=241;h=25 | AndroidOwner:measureAndLayout 2
+leave-home-r3-2 | 10 | 9 | 352.3 | 10 | 1 | 0 | 20.9 |  > traversal 19 > draw 19 > Record View#draw() 19 > AndroidOwner:measureAndLayout 16 > Compose:recompose 3 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | unnamed main-thread burst 1
+warm-open-r3-2 | 9 | 8 | 516.8 | 10 | 1 | 0 | 21.9 |  > traversal 20 > draw 20 > Record View#draw() 20 > AndroidOwner:measureAndLayout 17 > Compose:recompose 1 | unnamed main-thread burst 1
+leave-home-r3-3 | 10 | 9 | 380.5 | 10 | 1 | 0 | 19.0 |  > traversal 17 > draw 17 > Record View#draw() 17 > AndroidOwner:measureAndLayout 14 | unnamed main-thread burst 1
+warm-open-r3-3 | 9 | 8 | 502.4 | 9 | 1 | 1 | 46.1 |  > traversal 44 > draw 44 > Record View#draw() 44 > AndroidOwner:measureAndLayout 40 > Compose:applyChanges 3 | unnamed main-thread burst 4
+leave-news-r3 | 11 | 10 | 412.1 | 11 | 1 | 0 | 16.2 |  > traversal 14 > draw 14 > Record View#draw() 14 > AndroidOwner:measureAndLayout 12 > Compose:recompose 4 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | deliverInputEvent src=0x1002 eventTimeNano=767979000000 id=0 1 > ViewPostImeInputStage id=0xefca898e 1 > AndroidOwner:onTouch 1
+back-from-news-r3 | 10 | 9 | 539.1 | 10 | 1 | 0 | 24.0 |  > traversal 22 > draw 22 > Record View#draw() 22 > AndroidOwner:measureAndLayout 19 > TextStringSimpleNode::measure 1 | unnamed main-thread burst 3
+book-open-r3-1 | 13 | 12 | 586.8 | 15 | 1 | 0 | 16.5 |  > traversal 12 > draw 12 > Record View#draw() 12 > AndroidOwner:measureAndLayout 10 > Compose:recompose 3 | deliverInputEvent src=0x1002 eventTimeNano=788609000000 id=0 2 > ViewPostImeInputStage id=0xecdf3bbb 2 > AndroidOwner:onTouch 2
+book-back-r3-1 | 8 | 7 | 549.9 | 9 | 1 | 1 | 42.0 |  > traversal 40 > draw 40 > Record View#draw() 40 > AndroidOwner:measureAndLayout 37 > Compose:recompose 7 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3 > ID#w=241;h=25 | unnamed main-thread burst 1
+book-open-r3-2 | 13 | 12 | 535.2 | 16 | 0 | 0 | 12.4 |  > traversal 7 > draw 7 > Record View#draw() 7 > AndroidOwner:measureAndLayout 6 > Compose:recompose 2 | unnamed main-thread burst 1
+book-back-r3-2 | 8 | 7 | 509.9 | 9 | 1 | 1 | 53.8 |  > traversal 52 > draw 52 > Record View#draw() 52 > AndroidOwner:measureAndLayout 47 > Compose:recompose 5 | unnamed main-thread burst 1
+fling-list-r3 | 52 | 39 | 720.4 | 64 | 1 | 1 | 38.7 |  > animation 37 > Recomposer:animation 33 > AndroidOwner:measureAndLayout 33 > Compose:recompose 3 | compose:lazy:prefetch:idle_frame 6 > compose:lazy:prefetch:execute:urgent 6 > compose:lazy:prefetch:measure 5 > An
+sort-open-r3 | 9 | 6 | 1056.1 | 21 | 0 | 0 | 8.0 |  > traversal 6 > measure 2 > AndroidOwner:onMeasure 2 | MSG_KEEP_CLEAR_RECTS_CHANGED 1
+sort-year-r3 | 7 | 7 | 718.2 | 120 | 1 | 1 | 42.4 |  > traversal 32 > draw 32 > Record View#draw() 32 > AndroidOwner:measureAndLayout 27 > Compose:recompose 4 | unnamed main-thread burst 3
+highest main-thread CPU in one frame: first-install-open 77 ms, warm-open-r2-2 63 ms, warm-open-r1-1 62 ms, book-open-r1-1 60 ms, fling-list-r1 57 ms, warm-open-r3-1 54 ms, book-back-r3-2 54 ms, warm-open-r2-1 54 ms, book-back-r2-1 49 ms, warm-open-r3-3 46 ms, warm-open-r1-3 45 ms, fling-list-r2 42 ms, sort-year-r3 42 ms, book-back-r3-1 42 ms

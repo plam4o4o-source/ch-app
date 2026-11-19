@@ -1,5 +1,5 @@
 == free
                total        used        free      shared  buff/cache   available
-Mem:           15983        1062        4287          50       11028       14920
+Mem:           15982        1828        3313          49       11233       14153
 Swap:           3071           0        3071
 == host kernel: oom / kvm / segfault
