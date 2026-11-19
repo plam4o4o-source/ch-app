@@ -1,9 +1,9 @@
 Applications Graphics Acceleration Info:
-Uptime: 1446674 Realtime: 1446674
+Uptime: 1331392 Realtime: 1331392
 
-** Graphics info for pid 6900 [org.chyavorec.app] **
+** Graphics info for pid 6391 [org.chyavorec.app] **
 
-Stats since: 1446307186386ns
+Stats since: 1331070308464ns
 Total frames rendered: 0
 Janky frames: 0 (0.00%)
 Janky frames (legacy): 0 (0.00%)
@@ -33,14 +33,14 @@ Memory policy:
   GPU Context timeout: 10
 Contexts: 1 (stopped = 1)
 CPU Caches:
-  Glyph Cache: 1.03 MB (1 entry)
-  Glyph Count: 138 
+  Glyph Cache: 841.97 KB (1 entry)
+  Glyph Count: 118 
 Total CPU memory usage:
-  1078549 bytes, 1.03 MB (0.00 bytes is purgeable)
+  862177 bytes, 841.97 KB (0.00 bytes is purgeable)
 GPU Caches:
   Other:
     Other: 0.00 bytes (1 entry)
-    StencilAttachment: 2.12 MB (5 entries)
+    StencilAttachment: 1.62 MB (4 entries)
     Buffer Object: 9.45 KB (3 entries)
   Image:
     Texture: 283.70 KB (13 entries)
@@ -48,7 +48,7 @@ GPU Caches:
     Buffer Object: 78.03 KB (3 entries)
     Texture: 2.00 MB (2 entries)
 Total GPU memory usage:
-  4705595 bytes, 4.49 MB (2.41 MB is purgeable)
+  4181307 bytes, 3.99 MB (1.91 MB is purgeable)
 
 GraphicBufferAllocator buffers:
             Handle |         Size |     W (Stride) x H | Layers |   Format |      Usage | Requestor
@@ -58,9 +58,9 @@ Total imported by gralloc: 0KiB
 
 Profile data in ms:
 
-	org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@a9d4e7b (visibility=8)
+	org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@c72353f (visibility=8)
 Window: org.chyavorec.app/org.chyavorec.app.MainActivity
-Stats since: 1446307186095ns
+Stats since: 1331070308263ns
 Total frames rendered: 0
 Janky frames: 0 (0.00%)
 Janky frames (legacy): 0 (0.00%)
@@ -91,11 +91,11 @@ Flags,FrameTimelineVsyncId,IntendedVsync,Vsync,InputEventId,HandleInputStart,Ani
 
 View hierarchy:
 
-  org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@a9d4e7b
-  14 views, 25,16 kB of render nodes
+  org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@c72353f
+  14 views, 25,27 kB of render nodes
 
 
 Total ViewRootImpl   : 1
 Total attached Views : 14
-Total RenderNode     : 25,16 kB (used) / 25,16 kB (capacity)
+Total RenderNode     : 25,27 kB (used) / 29,16 kB (capacity)
 

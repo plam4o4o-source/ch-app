@@ -1,81 +1,81 @@
-name,doframes,df32,df80,dfmax,worst_path,long_nonframe
-first-install-open,19,15,13,235.0,traversal 186 > draw 186 > Record View#draw() 0 > AndroidOwner:draw 0,
-cold-open-1,56,31,26,192.8,traversal 177 > draw 177 > Record View#draw() 45 > AndroidOwner:measureAndLayout 43 > Compose:recompose 8,
-cold-open-2,55,29,26,188.3,traversal 188 > draw 188 > Record View#draw() 0 > AndroidOwner:draw 0,
-cold-open-3,59,30,23,203.9,traversal 185 > draw 183 > Record View#draw() 115 > AndroidOwner:measureAndLayout 98 > TextStringSimpleNode::measure 6 > TextLayout:initLayout 0,
-leave-home-1,55,24,20,207.9,traversal 201 > draw 201 > Record View#draw() 1 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-warm-open-1,35,19,16,230.5,traversal 230 > draw 230 > Record View#draw() 1 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-leave-home-2,57,25,21,180.6,traversal 179 > draw 178 > Record View#draw() 1 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-warm-open-2,44,19,16,149.7,traversal 149 > draw 149 > Record View#draw() 0 > AndroidOwner:draw 0,
-leave-home-3,52,25,10,244.4,traversal 243 > draw 243 > Record View#draw() 1 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-warm-open-3,45,20,12,181.3,traversal 181 > draw 180 > Record View#draw() 1 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-leave-news,13,10,8,131.7,traversal 126 > draw 126 > Record View#draw() 22 > AndroidOwner:measureAndLayout 20 > TextStringSimpleNode::measure 5 > TextLayout:initLayout 0,
-back-from-news,9,5,4,175.0,traversal 168 > draw 168 > Record View#draw() 1 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-leave-more,15,13,11,134.9,traversal 133 > draw 133 > Record View#draw() 3 > AndroidOwner:draw 2,
-back-from-more,9,6,5,181.2,traversal 180 > draw 180 > Record View#draw() 4 > AndroidOwner:draw 3,
-fling-list-1,95,71,44,157.9,traversal 158 > draw 158 > Record View#draw() 0 > AndroidOwner:draw 0,Recomposer:animation 97
-fling-list-2,107,74,43,231.6,traversal 215 > draw 215 > Record View#draw() 57 > AndroidOwner:measureAndLayout 55 > Compose:recompose 25,
-fling-list-3,163,121,25,110.6,traversal 110 > draw 110 > Record View#draw() 3 > AndroidOwner:draw 3,
-reselect-top-1,0,0,0,0.0,,
-reselect-top-2,0,0,0,0.0,,
-type-1,38,25,19,178.8,traversal 172 > draw 172 > Record View#draw() 1 > AndroidOwner:measureAndLayout 1 > Compose:onPositionedCallbacks 0,
-chip-author,47,41,25,144.0,traversal 143 > draw 143 > Record View#draw() 1 > AndroidOwner:draw 0,
-chip-title,47,42,21,140.3,traversal 140 > draw 139 > Record View#draw() 0 > AndroidOwner:draw 0,
-chip-all,19,9,5,151.8,traversal 151 > draw 151 > Record View#draw() 0 > AndroidOwner:draw 0,
-clear-1,17,8,5,192.9,traversal 192 > draw 191 > Record View#draw() 0 > AndroidOwner:draw 0,
-type-2,30,14,12,169.7,traversal 164 > draw 164 > Record View#draw() 1 > AndroidOwner:measureAndLayout 1 > Compose:onPositionedCallbacks 0,
-clear-2,20,9,7,167.8,traversal 164 > draw 164 > Record View#draw() 1 > AndroidOwner:measureAndLayout 1 > Compose:onPositionedCallbacks 0,
-type-3,34,22,16,164.4,traversal 163 > draw 163 > Record View#draw() 0 > AndroidOwner:draw 0,
-erase-3,34,21,13,178.8,traversal 170 > draw 170 > Record View#draw() 4 > AndroidOwner:measureAndLayout 1 > Compose:onPositionedCallbacks 0,
-ime-show-1,22,0,0,18.1,traversal 18 > layout 0 > AndroidOwner:onLayout 0 > AndroidOwner:viewLayout 0,
-ime-hide-1,22,0,0,22.9,traversal 23 > measure 0 > AndroidOwner:onMeasure 0 > AndroidOwner:androidViewMeasure 0,
-ime-show-2,23,0,0,18.9,animation 19,
-ime-hide-2,22,0,0,10.1,traversal 9 > draw 0,
-ime-show-3,21,0,0,15.8,traversal 16 > layout 0 > AndroidOwner:onLayout 0 > AndroidOwner:viewLayout 0,
-ime-hide-3,23,0,0,8.9,traversal 9 > layout 0 > AndroidOwner:onLayout 0 > AndroidOwner:viewLayout 0,
-ime-show-4,22,0,0,17.3,traversal 17 > draw 0,
-type-digits,19,6,3,202.5,traversal 201 > draw 201 > Record View#draw() 1 > AndroidOwner:measureAndLayout 1 > Compose:onPositionedCallbacks 0,
-clear-digits,20,10,8,208.7,traversal 208 > draw 208 > Record View#draw() 1 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-ime-hide-4,23,0,0,29.1,traversal 29 > draw 0,
-sort-open-1,148,3,3,127.8,traversal 127 > draw 50 > Record View#draw() 0 > AndroidOwner:draw 0,
-sort-year-1,96,10,6,161.2,traversal 160 > draw 159 > Record View#draw() 0 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-sort-open-2,136,5,4,150.8,traversal 145 > measure 4 > AndroidOwner:onMeasure 4 > TextStringSimpleNode::measure 0 > TextLayout:initLayout 0,
-sort-relevance-2,96,13,8,182.3,traversal 182 > draw 182 > Record View#draw() 2 > AndroidOwner:draw 0,
-sort-open-3,144,4,2,116.7,traversal 116 > draw 7 > Record View#draw() 0 > AndroidOwner:draw 0,
-sort-year-3,96,8,5,191.5,traversal 191 > draw 191 > Record View#draw() 0 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-filters-open-1,11,7,5,309.6,traversal 308 > draw 195 > Record View#draw() 0 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-filters-close-1,15,5,3,119.6,traversal 119 > draw 118 > Record View#draw() 0 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-filters-open-2,10,5,5,296.9,traversal 294 > draw 190 > Record View#draw() 0 > AndroidOwner:draw 0,
-filters-close-2,15,5,1,102.3,traversal 101 > draw 101 > Record View#draw() 0 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-filters-open-3,10,5,4,290.5,traversal 288 > draw 191 > Record View#draw() 0 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-filters-close-3,15,5,2,122.0,traversal 121 > draw 121 > Record View#draw() 0 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-filters-open-4,11,7,5,311.0,traversal 310 > draw 178 > Record View#draw() 0 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-filters-close-4,15,5,3,138.0,traversal 137 > draw 137 > Record View#draw() 3 > AndroidOwner:measureAndLayout 3 > Compose:onPositionedCallbacks 3,
-shelf-on-1,15,3,3,142.2,traversal 141 > draw 141 > Record View#draw() 0 > AndroidOwner:draw 0,
-fling-shelf-1,125,72,46,206.6,traversal 203 > draw 203 > Record View#draw() 0 > AndroidOwner:draw 0,
-shelf-off-1,21,10,7,186.3,traversal 185 > draw 185 > Record View#draw() 0 > AndroidOwner:draw 0,
-shelf-on-2,14,5,2,138.7,traversal 138 > draw 138 > Record View#draw() 0 > AndroidOwner:draw 0,
-fling-shelf-2,119,83,46,180.6,traversal 180 > draw 180 > Record View#draw() 0 > AndroidOwner:draw 0,
-shelf-off-2,21,8,6,188.9,traversal 179 > draw 179 > Record View#draw() 55 > AndroidOwner:measureAndLayout 52 > Compose:applyChanges 10 > FullSuspendCheck 8,
-shelf-on-3,14,4,2,109.6,traversal 109 > draw 109 > Record View#draw() 0 > AndroidOwner:draw 0,
-fling-shelf-3,128,89,51,408.3,traversal 408 > draw 408 > Record View#draw() 0 > AndroidOwner:draw 0,
-shelf-off-3,13,4,2,113.5,traversal 113 > draw 113 > Record View#draw() 0 > AndroidOwner:draw 0,
-surprise-open-1,35,22,20,305.2,traversal 303 > draw 303 > Record View#draw() 9 > AndroidOwner:measureAndLayout 8 > Compose:applyChanges 2,
-surprise-again-1,35,19,17,264.1,traversal 261 > draw 261 > Record View#draw() 4 > AndroidOwner:measureAndLayout 3 > TextStringSimpleNode::measure 1 > TextLayout:initLayout 0,
-surprise-close-1,18,6,3,148.1,traversal 147 > draw 147 > Record View#draw() 0,
-surprise-open-2,40,25,16,325.2,traversal 324 > draw 324 > Record View#draw() 0 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-surprise-again-2,39,24,20,226.0,traversal 225 > draw 225 > Record View#draw() 0,
-surprise-close-2,18,8,6,134.9,traversal 133 > draw 133 > Record View#draw() 1 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-surprise-open-3,34,20,16,255.5,traversal 255 > draw 255 > Record View#draw() 0 > AndroidOwner:draw 0,
-surprise-again-3,36,22,20,206.6,traversal 206 > draw 206 > Record View#draw() 0 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-surprise-close-3,19,7,5,147.5,traversal 135 > draw 135 > Record View#draw() 1 > AndroidOwner:measureAndLayout 0 > Compose:onPositionedCallbacks 0,
-book-open-1,22,13,9,223.7,traversal 219 > draw 217 > Record View#draw() 24 > AndroidOwner:measureAndLayout 23 > TextAnnotatedStringNode:measure 3 > TextLayout:initLayout 0,
-book-back-1,9,6,4,221.5,traversal 221 > draw 221 > Record View#draw() 1 > AndroidOwner:measureAndLayout 1 > Compose:onPositionedCallbacks 0,
-book-open-2,20,15,7,218.3,traversal 212 > draw 212 > Record View#draw() 6 > AndroidOwner:measureAndLayout 6 > Compose:onPositionedCallbacks 0,
-book-back-2,9,6,5,240.1,traversal 239 > draw 239 > Record View#draw() 1 > AndroidOwner:measureAndLayout 1 > Compose:onPositionedCallbacks 0,
-book-open-3,17,15,7,282.6,traversal 279 > draw 279 > Record View#draw() 45 > AndroidOwner:measureAndLayout 40 > TextStringSimpleNode::measure 4 > FullSuspendCheck 3,
-book-back-3,9,6,5,256.2,traversal 248 > draw 248 > Record View#draw() 1 > AndroidOwner:measureAndLayout 1 > Compose:onPositionedCallbacks 0,
-refresh-1,18,16,9,159.7,traversal 151 > draw 150 > Record View#draw() 0 > AndroidOwner:draw 0,
-refresh-2,16,13,7,157.9,traversal 151 > draw 151 > Record View#draw() 1 > AndroidOwner:measureAndLayout 1 > Compose:onPositionedCallbacks 0,
-resume-1,25,4,0,79.1,traversal 77 > draw 6 > Record View#draw() 2 > AndroidOwner:draw 2,
-resume-2,25,3,3,148.8,traversal 148 > draw 48 > Record View#draw() 3 > AndroidOwner:draw 3,
+name,doframes,cpu16,cpu32,cpumax,worst_path,nonframe
+first-install-open,56,30,28,169.3, > traversal 133 > draw 133 > Record View#draw() 77 > AndroidOwner:measureAndLayout 67 > Compose:recompose 8 > res/oU.webp 2 > decodeBitmap 2,AndroidOwner:onTouch 17 > Lock contention on Jit code cache (owner tid: 10
+cold-open-1,59,34,34,155.6, > traversal 140 > draw 140 > Record View#draw() 63 > AndroidOwner:measureAndLayout 59 > TextStringSimpleNode::measure 5,AndroidOwner:onTouch 2
+cold-open-2,56,33,33,175.4, > traversal 175 > draw 175,AndroidOwner:onTouch 7
+cold-open-3,57,33,33,149.2, > traversal 149 > draw 149,AndroidOwner:measureAndLayout 5
+leave-home-1,63,29,28,159.1, > traversal 159 > draw 159,AndroidOwner:onTouch 3
+warm-open-1,50,24,23,179.5, > traversal 177 > draw 177 > Record View#draw() 15 > AndroidOwner:measureAndLayout 15,AndroidOwner:onTouch 1
+leave-home-2,58,26,24,167.0, > traversal 166 > draw 166,AndroidOwner:onTouch 2
+warm-open-2,47,21,21,195.9, > traversal 195 > draw 195,AndroidOwner:onTouch 3
+leave-home-3,61,29,28,168.1, > traversal 167 > draw 167 > Record View#draw() 1 > AndroidOwner:measureAndLayout 1,AndroidOwner:onTouch 1
+warm-open-3,49,21,21,131.3, > traversal 131 > draw 130,AndroidOwner:onTouch 1
+leave-news,14,13,13,113.9, > traversal 113 > draw 113,AndroidOwner:onTouch 3
+back-from-news,12,10,8,152.6, > traversal 152 > draw 152,AndroidOwner:onTouch 1
+leave-more,17,14,13,110.6, > traversal 109 > draw 109 > Record View#draw() 1,FullSuspendCheck 2
+back-from-more,10,8,8,107.8, > traversal 107 > draw 107,AndroidOwner:onTouch 1
+fling-list-1,92,60,54,159.9, > traversal 156 > draw 156 > Record View#draw() 22 > AndroidOwner:measureAndLayout 20 > Compose:recompose 10,compose:lazy:prefetch:idle_frame 12 > compose:lazy:prefetch:execute:urgent 12 > compose:lazy:prefetch:measure 11 > 
+fling-list-2,70,0,0,1.1,,AndroidOwner:onTouch 0
+fling-list-3,72,0,0,1.0,,AndroidOwner:onTouch 0
+reselect-top-1,0,0,0,0.0,,AndroidOwner:onTouch 0
+reselect-top-2,0,0,0,0.0,,AndroidOwner:onTouch 0
+type-1,42,33,32,150.0, > traversal 146 > draw 146 > Record View#draw() 20 > AndroidOwner:measureAndLayout 18 > TextStringSimpleNode::measure 2 > TextLayout:initLayout 2,AndroidOwner:outOfFrameExecutor 1
+chip-author,49,44,43,121.6, > traversal 120 > draw 116 > Record View#draw() 1,AndroidOwner:onTouch 1
+chip-title,53,47,44,121.9, > traversal 120 > draw 120,AndroidOwner:onTouch 1
+chip-all,21,9,8,125.8, > traversal 125 > draw 125,AndroidOwner:onTouch 1
+clear-1,18,11,9,158.5, > traversal 158 > draw 158,AndroidOwner:outOfFrameExecutor 1
+type-2,32,20,15,155.2, > traversal 154 > draw 154 > Record View#draw() 2 > AndroidOwner:measureAndLayout 1,AndroidOwner:outOfFrameExecutor 1
+clear-2,21,12,9,176.6, > traversal 176 > draw 176,AndroidOwner:outOfFrameExecutor 1
+type-3,38,28,23,168.2, > traversal 163 > draw 163,AndroidOwner:measureAndLayout 4
+erase-3,37,24,23,158.4, > traversal 157 > draw 157 > Record View#draw() 1,AndroidOwner:outOfFrameExecutor 1
+ime-show-1,21,0,0,11.2, > traversal 11,AndroidOwner:onTouch 1
+ime-hide-1,21,0,0,13.8, > traversal 13,
+ime-show-2,22,0,0,9.6, > traversal 9,AndroidOwner:onTouch 1
+ime-hide-2,22,0,0,11.4, > traversal 11 > draw 4,monitor contention with owner kx.DefaultExecutor (8231) at b 0
+ime-show-3,21,0,0,9.1, > traversal 9,monitor contention with owner kx.DefaultExecutor (8231) at b 1
+ime-hide-3,23,1,0,18.0, > traversal 18,Lock contention on a monitor lock (owner tid: 7917) 0
+ime-show-4,22,0,0,9.4, > traversal 9,AndroidOwner:onTouch 0
+type-digits,21,8,7,183.7, > traversal 183 > draw 183,AndroidOwner:outOfFrameExecutor 1
+clear-digits,20,10,9,172.6, > traversal 158 > draw 158 > Record View#draw() 36 > AndroidOwner:measureAndLayout 33 > TextStringSimpleNode::measure 3,AndroidOwner:outOfFrameExecutor 1
+ime-hide-4,23,0,0,6.4, > traversal 6,Lock contention on a monitor lock (owner tid: 8231) 0
+sort-open-1,107,3,3,464.3, > traversal 462 > draw 183,AndroidOwner:onTouch 0
+sort-year-1,96,13,12,177.3, > traversal 177 > draw 177,AndroidOwner:outOfFrameExecutor 16 > Compose:deactivate 15 > Compose:onForgotten 15
+sort-open-2,103,4,4,555.6, > traversal 555 > draw 168,AndroidOwner:onTouch 0
+sort-relevance-2,95,13,12,157.5, > traversal 156 > draw 156,AndroidOwner:outOfFrameExecutor 1
+sort-open-3,100,4,4,398.1, > traversal 395 > draw 172,AndroidOwner:onTouch 0
+sort-year-3,97,13,12,149.6, > traversal 149 > draw 149,AndroidOwner:outOfFrameExecutor 1
+filters-open-1,10,7,7,255.1, > traversal 253 > draw 161,AndroidOwner:onTouch 0
+filters-close-1,15,5,5,116.5, > traversal 115 > draw 115,monitor contention with owner kx.DefaultExecutor (9634) at b 0
+filters-open-2,11,7,7,253.1, > traversal 247 > draw 156,AndroidOwner:onTouch 0
+filters-close-2,15,6,5,109.8, > traversal 109 > draw 109,monitor contention with owner kx.DefaultExecutor (9712) at b 0
+filters-open-3,12,8,7,222.1, > traversal 221 > draw 221,AndroidOwner:onTouch 0
+filters-close-3,15,5,5,97.5, > traversal 96 > draw 96,FocusOwnerImpl:dispatchKeyEvent 0
+filters-open-4,10,7,6,255.5, > traversal 254 > draw 164,AndroidOwner:onTouch 0
+filters-close-4,15,6,5,100.8, > traversal 96 > draw 96,FocusOwnerImpl:dispatchKeyEvent 0
+shelf-on-1,13,4,3,130.3, > traversal 126 > draw 126 > Record View#draw() 58 > AndroidOwner:measureAndLayout 52 > Compose:recompose 15,AndroidOwner:onTouch 1
+fling-shelf-1,127,97,87,940.9, > traversal 941 > draw 941,traversal 226 > draw 136
+shelf-off-1,14,5,4,115.3, > traversal 115 > draw 115,AndroidOwner:onTouch 1
+shelf-on-2,14,5,4,119.7, > traversal 119 > draw 119,AndroidOwner:onTouch 0
+fling-shelf-2,140,101,83,481.5, > traversal 478 > draw 478,AndroidOwner:onTouch 1
+shelf-off-2,14,4,2,136.1, > traversal 136 > draw 136,AndroidOwner:onTouch 0
+shelf-on-3,14,5,5,87.1, > traversal 85 > draw 85,monitor contention with owner kx.DefaultExecutor (9869) at v 1
+fling-shelf-3,129,102,94,174.8, > traversal 174 > draw 174,AndroidOwner:onTouch 3
+shelf-off-3,14,4,4,79.9, > traversal 79 > draw 79,AndroidOwner:onTouch 0
+surprise-open-1,39,26,25,210.5, > traversal 210 > draw 210,AndroidOwner:onTouch 0
+surprise-again-1,38,25,24,198.5, > traversal 192 > draw 191 > Record View#draw() 8 > AndroidOwner:draw 5,AndroidOwner:onTouch 2
+surprise-close-1,19,10,8,120.4, > traversal 119 > draw 119,AndroidOwner:onTouch 0
+surprise-open-2,41,25,23,238.2, > traversal 236 > draw 236 > Record View#draw() 5 > AndroidOwner:measureAndLayout 5,AndroidOwner:onTouch 0
+surprise-again-2,37,23,23,180.8, > traversal 174 > draw 174 > Record View#draw() 11 > AndroidOwner:measureAndLayout 7,AndroidOwner:onTouch 0
+surprise-close-2,19,9,9,118.0, > traversal 118 > draw 117,AndroidOwner:onTouch 0
+surprise-open-3,38,25,25,252.6, > traversal 250 > draw 250,AndroidOwner:onTouch 0
+surprise-again-3,39,25,25,185.8, > traversal 185 > draw 185 > Record View#draw() 4,monitor contention with owner DefaultDispatcher-worker-2 (10 0
+surprise-close-3,19,9,8,118.2, > traversal 118 > draw 116,FocusOwnerImpl:dispatchKeyEvent 1
+book-open-1,25,19,15,247.4, > traversal 245 > draw 245 > Record View#draw() 28 > AndroidOwner:measureAndLayout 26 > TextAnnotatedStringNode:measure 7 > TextLayout:initLayout 6,AndroidOwner:onTouch 2
+book-back-1,10,7,6,246.1, > traversal 242 > draw 242,
+book-open-2,22,18,15,219.6, > traversal 213 > draw 213 > Record View#draw() 23 > AndroidOwner:measureAndLayout 15 > TextStringSimpleNode::measure 2 > TextLayout:initLayout 2,AndroidOwner:onTouch 2
+book-back-2,9,7,7,236.5, > traversal 235 > draw 235,
+book-open-3,21,18,18,169.2, > traversal 168 > draw 167,AndroidOwner:onTouch 2
+book-back-3,10,7,6,234.7, > traversal 233 > draw 233,
+refresh-1,20,16,16,145.6, > traversal 145 > draw 145,AndroidOwner:onTouch 1
+refresh-2,19,16,14,126.1, > traversal 125 > draw 125,AndroidOwner:onTouch 1
+resume-1,26,4,3,187.8, > traversal 176 > draw 81 > Record View#draw() 4 > AndroidOwner:draw 4,activityResume 39 > FocusTransactions:requestFocus 1
+resume-2,26,4,3,138.9, > traversal 138,activityResume 8

@@ -1,9 +1,9 @@
 Applications Graphics Acceleration Info:
-Uptime: 1447795 Realtime: 1447795
+Uptime: 1364058 Realtime: 1364058
 
-** Graphics info for pid 8322 [org.chyavorec.app] **
+** Graphics info for pid 7752 [org.chyavorec.app] **
 
-Stats since: 1447473503614ns
+Stats since: 1363739670754ns
 Total frames rendered: 0
 Janky frames: 0 (0.00%)
 Janky frames (legacy): 0 (0.00%)
@@ -27,28 +27,28 @@ GPU HISTOGRAM: 1ms=0 2ms=0 3ms=0 4ms=0 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms
 
 Pipeline=Skia (OpenGL)
 CPU Caches:
-  Glyph Cache: 860.30 KB (1 entry)
-  Glyph Count: 118 
+  Glyph Cache: 962.86 KB (1 entry)
+  Glyph Count: 120 
 Total CPU memory usage:
-  880946 bytes, 860.30 KB (0.00 bytes is purgeable)
+  985970 bytes, 962.86 KB (0.00 bytes is purgeable)
 GPU Caches:
   Other:
     Other: 0.00 bytes (1 entry)
-    StencilAttachment: 8.31 MB (9 entries)
-    Buffer Object: 9.45 KB (3 entries)
+    StencilAttachment: 28.19 MB (7 entries)
+    Buffer Object: 9.44 KB (3 entries)
   Image:
-    Texture: 283.70 KB (13 entries)
+    Texture: 299.70 KB (14 entries)
   Scratch:
     Buffer Object: 78.00 KB (2 entries)
-    Texture: 2.00 MB (2 entries)
+    Texture: 4.00 MB (2 entries)
 Total GPU memory usage:
-  11193627 bytes, 10.68 MB (8.60 MB is purgeable)
+  34147588 bytes, 32.57 MB (28.49 MB is purgeable)
 
 Profile data in ms:
 
-	org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@fc52a9d (visibility=8)
+	org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@8be9ae9 (visibility=8)
 Window: org.chyavorec.app/org.chyavorec.app.MainActivity
-Stats since: 1447473502982ns
+Stats since: 1363739670529ns
 Total frames rendered: 0
 Janky frames: 0 (0.00%)
 Janky frames (legacy): 0 (0.00%)
@@ -79,7 +79,7 @@ Flags,FrameTimelineVsyncId,IntendedVsync,Vsync,InputEventId,HandleInputStart,Ani
 
 View hierarchy:
 
-  org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@fc52a9d
+  org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@8be9ae9
   13 views, 23,60 kB of render nodes
 
 

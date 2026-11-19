@@ -1,9 +1,9 @@
 Applications Graphics Acceleration Info:
-Uptime: 1415190 Realtime: 1415190
+Uptime: 1386034 Realtime: 1386034
 
-** Graphics info for pid 8342 [org.chyavorec.app] **
+** Graphics info for pid 8080 [org.chyavorec.app] **
 
-Stats since: 1414870353991ns
+Stats since: 1385712522909ns
 Total frames rendered: 0
 Janky frames: 0 (0.00%)
 Janky frames (legacy): 0 (0.00%)
@@ -27,14 +27,14 @@ GPU HISTOGRAM: 1ms=0 2ms=0 3ms=0 4ms=0 5ms=0 6ms=0 7ms=0 8ms=0 9ms=0 10ms=0 11ms
 
 Pipeline=Skia (OpenGL)
 CPU Caches:
-  Glyph Cache: 874.58 KB (1 entry)
-  Glyph Count: 118 
+  Glyph Cache: 810.39 KB (1 entry)
+  Glyph Count: 117 
 Total CPU memory usage:
-  895574 bytes, 874.58 KB (0.00 bytes is purgeable)
+  829837 bytes, 810.39 KB (0.00 bytes is purgeable)
 GPU Caches:
   Other:
     Other: 0.00 bytes (1 entry)
-    StencilAttachment: 6.84 MB (8 entries)
+    StencilAttachment: 7.86 MB (10 entries)
     Buffer Object: 9.45 KB (3 entries)
   Image:
     Texture: 283.70 KB (13 entries)
@@ -42,13 +42,13 @@ GPU Caches:
     Buffer Object: 78.00 KB (2 entries)
     Texture: 2.00 MB (2 entries)
 Total GPU memory usage:
-  9653531 bytes, 9.21 MB (7.13 MB is purgeable)
+  10718491 bytes, 10.22 MB (8.15 MB is purgeable)
 
 Profile data in ms:
 
-	org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@d5c5768 (visibility=8)
+	org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@9eca53d (visibility=8)
 Window: org.chyavorec.app/org.chyavorec.app.MainActivity
-Stats since: 1414870353790ns
+Stats since: 1385712522699ns
 Total frames rendered: 0
 Janky frames: 0 (0.00%)
 Janky frames (legacy): 0 (0.00%)
@@ -79,7 +79,7 @@ Flags,FrameTimelineVsyncId,IntendedVsync,Vsync,InputEventId,HandleInputStart,Ani
 
 View hierarchy:
 
-  org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@d5c5768
+  org.chyavorec.app/org.chyavorec.app.MainActivity/android.view.ViewRootImpl@9eca53d
   13 views, 23,60 kB of render nodes
 
 

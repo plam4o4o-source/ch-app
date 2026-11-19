@@ -1,79 +1,84 @@
-name,doframes,df32,df80,dfmax,worst_path,long_nonframe
-first-install-open,11,9,8,1167.9,traversal 1111 > draw 1111 > Record View#draw() 975 > AndroidOwner:measureAndLayout 675 > Lock contention on Jit code cache (owner 154,msg Handler (android.os.Handler) jd: 0 71
-cold-open-1,16,15,13,384.8,traversal 356 > draw 356 > postAndWait 282,
-cold-open-2,34,26,25,388.7,traversal 386 > draw 386 > postAndWait 367,msg Handler (android.app.ActivityThread$H) null: 1 197
-cold-open-3,12,11,10,287.9,traversal 288 > draw 288 > postAndWait 288,msg Handler (android.os.Handler) jd: 0 54
-leave-home-1,10,9,9,228.5,traversal 228 > draw 228 > postAndWait 228,
-warm-open-1,21,15,15,422.4,traversal 353 > draw 353 > postAndWait 353,msg Handler (android.app.ActivityThread$H) null: 1 151
-leave-home-2,11,8,7,282.5,traversal 281 > draw 281 > postAndWait 279,
-warm-open-2,21,16,14,385.0,traversal 382 > draw 382 > postAndWait 382,msg Handler (android.app.ActivityThread$H) null: 1 248
-leave-home-3,10,9,9,201.4,traversal 201 > draw 201 > postAndWait 201,
-warm-open-3,9,7,7,306.9,traversal 307 > draw 306 > postAndWait 306,
-leave-news,16,14,13,244.1,traversal 243 > draw 243 > postAndWait 242,
-back-from-news,10,8,7,288.4,traversal 288 > draw 288 > postAndWait 287,
-leave-more,13,10,8,425.3,traversal 423 > draw 423 > postAndWait 402,
-back-from-more,10,8,8,323.1,traversal 323 > draw 323 > postAndWait 322,
-fling-list-1,60,30,29,477.9,traversal 477 > draw 476 > postAndWait 476,msg Handler (android.view.ViewRootImpl$ViewRootHan 60
-fling-list-2,61,36,35,393.5,traversal 393 > draw 393 > postAndWait 393,
-fling-list-3,58,46,44,545.6,traversal 527 > draw 527 > postAndWait 511,msg Handler (android.os.Handler) jd: 0 72
-reselect-top-1,9,6,6,363.7,traversal 364 > draw 363 > postAndWait 363,
-reselect-top-2,9,7,7,269.2,traversal 269 > draw 269 > postAndWait 269,
-type-1,157,34,27,311.3,traversal 311 > draw 311 > postAndWait 311,msg Handler (android.app.ActivityThread$H) null: 1 32
-chip-author,28,8,7,190.2,traversal 190 > draw 190 > postAndWait 190,
-chip-title,37,23,18,278.8,traversal 278 > draw 278 > postAndWait 278,msg Handler (android.app.ActivityThread$H) null: 1 184
-chip-all,45,38,36,230.4,traversal 230 > draw 230 > postAndWait 230,msg Handler (android.app.ActivityThread$H) null: 1 144
-clear-1,29,14,12,262.7,traversal 263 > draw 262 > postAndWait 262,msg Handler (android.app.ActivityThread$H) null: 1 174
-type-2,29,11,10,471.4,traversal 465 > draw 465 > postAndWait 461,msg Handler (android.os.Handler) jd: 0 100
-clear-2,24,7,6,369.1,traversal 368 > draw 368 > postAndWait 367,
-type-3,27,15,14,446.5,traversal 443 > draw 443 > postAndWait 436,
-erase-3,29,13,13,618.4,traversal 618 > draw 618 > postAndWait 618,msg Handler (android.view.ViewRootImpl$ViewRootHan 79
-ime-show-1,23,6,4,309.0,traversal 307 > draw 307 > postAndWait 307,
-ime-hide-1,21,4,3,542.6,traversal 542 > draw 542 > postAndWait 542,
-ime-show-2,21,4,3,391.1,traversal 391 > draw 391 > postAndWait 391,
-ime-hide-2,22,4,4,402.7,traversal 402 > draw 402 > postAndWait 402,
-ime-show-3,23,4,4,295.8,traversal 295 > draw 295 > postAndWait 295,
-ime-hide-3,23,4,4,235.8,traversal 236 > draw 235 > postAndWait 235,
-ime-show-4,23,4,3,374.0,traversal 219 > draw 219 > postAndWait 218,
-type-digits,24,6,6,514.4,traversal 513 > draw 513 > postAndWait 490,
-clear-digits,21,9,9,367.5,traversal 367 > draw 367 > postAndWait 364,
-ime-hide-4,22,5,4,448.2,traversal 448 > draw 448 > postAndWait 448,
-sort-open-1,42,6,6,676.6,traversal 672 > draw 391 > postAndWait 235,
-sort-year-1,125,8,8,358.1,traversal 358 > draw 358 > postAndWait 357,
-sort-open-2,48,6,6,656.5,traversal 641 > draw 460 > postAndWait 230,
-sort-relevance-2,125,7,7,467.9,traversal 466 > draw 273 > postAndWait 250,
-sort-open-3,47,7,7,466.9,traversal 463 > draw 451 > postAndWait 289,
-sort-year-3,126,8,7,535.1,traversal 535 > draw 535 > postAndWait 534,
-filters-open-1,13,7,7,933.0,traversal 928 > draw 494 > postAndWait 227,msg Handler (android.app.ActivityThread$H) null: 1 244
-filters-available-1,7,6,5,648.2,traversal 648 > draw 353 > postAndWait 353,
-filters-close-1,19,6,3,280.2,animation 280 > Recomposer:recompose 280 > Compose:onForgotten 279 > binder transaction 3,
-filters-open-2,16,7,7,957.8,traversal 953 > draw 539 > postAndWait 240,
-filters-doctype-2,7,7,6,649.4,traversal 649 > draw 360 > postAndWait 360,
-filters-close-2,18,7,5,382.1,animation 382 > Recomposer:recompose 382 > Compose:onForgotten 381 > binder transaction 4,
-filters-open-3,16,7,7,915.3,traversal 910 > relayoutWindow#first=true/resize=true/vi 456 > binder transaction 6,msg Handler (android.app.ActivityThread$H) null: 1 231
-filters-available-3,6,5,4,664.7,traversal 664 > draw 442 > postAndWait 441,
-filters-close-3,17,6,5,406.2,animation 406 > Recomposer:recompose 406 > Compose:onForgotten 405 > binder transaction 10,
-filters-open-4,16,7,6,733.1,traversal 733 > draw 399 > postAndWait 399,msg Handler (android.app.ActivityThread$H) null: 1 54
-filters-clear,7,6,4,755.5,traversal 755 > draw 424 > postAndWait 423,
-filters-close-4,19,5,3,207.3,traversal 206 > draw 206 > postAndWait 206,
-shelf-on-1,25,9,8,338.9,traversal 336 > draw 336 > postAndWait 318,
-fling-shelf-1,84,47,46,343.3,traversal 343 > draw 343 > postAndWait 343,
-shelf-off-1,22,8,8,421.6,traversal 422 > draw 422 > postAndWait 421,
-shelf-on-2,25,7,6,201.6,traversal 202 > draw 202 > postAndWait 201,
-fling-shelf-2,80,54,51,319.0,traversal 319 > draw 319 > postAndWait 319,msg Handler (android.os.Handler) jd: 0 65
-shelf-off-2,0,0,0,0.0,,
-shelf-on-3,0,0,0,0.0,,
-fling-shelf-3,79,62,55,339.5,traversal 340 > draw 339 > postAndWait 339,msg Handler (android.os.Handler) jd: 0 52
-shelf-off-3,0,0,0,0.0,,
-surprise-open-1,0,0,0,0.0,,
-surprise-close-1,9,7,5,333.3,traversal 333 > draw 333 > postAndWait 326,
-surprise-open-2,20,16,15,546.8,traversal 546 > draw 546 > postAndWait 535,
-surprise-close-2,8,5,5,257.6,traversal 257 > draw 257 > postAndWait 254,
-surprise-open-3,18,15,15,617.6,traversal 617 > draw 617 > postAndWait 617,
-surprise-close-3,8,5,4,291.4,traversal 291 > draw 291 > postAndWait 291,
-book-back-1,9,8,8,225.1,traversal 224 > draw 224 > postAndWait 223,
-book-back-2,9,8,7,242.6,traversal 242 > draw 242 > postAndWait 242,
-book-back-3,9,7,7,223.1,traversal 223 > draw 223 > postAndWait 222,
-refresh-1,13,11,11,260.1,traversal 260 > draw 260 > postAndWait 260,
-refresh-2,14,11,11,260.9,traversal 260 > draw 260 > postAndWait 259,
-resume-1,3,1,1,812.1,traversal 812 > draw 205 > postAndWait 19,
-resume-2,3,1,1,551.0,traversal 551 > draw 156 > postAndWait 145,
+name,doframes,cpu16,cpu32,cpumax,worst_path,nonframe
+first-install-open,40,3,2,67.1, > traversal 58 > draw 58 > Record View#draw() 58 > AndroidOwner:measureAndLayout 52 > Compose:recompose 3,unnamed main-thread burst 7
+cold-open-1,41,2,0,23.2, > traversal 18 > draw 18 > Record View#draw() 18 > AndroidOwner:measureAndLayout 16 > Compose:recompose 3 > res/oU.webp 2 > ImageDecoder#decodeDrawable 2 > ID#w=241;h=256;src=AssetInputStream{s=null} 2,unnamed main-thread burst 8
+cold-open-2,45,2,0,18.9, > traversal 17 > draw 17 > Record View#draw() 17 > AndroidOwner:measureAndLayout 14 > Compose:recompose 2,unnamed main-thread burst 6
+cold-open-3,26,3,0,26.3, > traversal 23 > draw 23 > Record View#draw() 23 > AndroidOwner:measureAndLayout 17 > Compose:recompose 4,unnamed main-thread burst 13
+leave-home-1,11,1,0,20.0, > traversal 18 > draw 18 > Record View#draw() 18 > AndroidOwner:measureAndLayout 16 > Compose:recompose 3 > res/oU.webp 2 > ImageDecoder#decodeDrawable 2 > ID#w=241;h=256;src=AssetInputStream{s=null} 2,unnamed main-thread burst 4
+warm-open-1,24,1,0,26.2, > traversal 24 > draw 24 > Record View#draw() 24 > AndroidOwner:measureAndLayout 22 > Compose:recompose 3 > res/oU.webp 2 > ImageDecoder#decodeDrawable 2 > ID#w=241;h=256;src=AssetInputStream{s=null} 2,unnamed main-thread burst 5
+leave-home-2,11,1,0,19.1, > traversal 17 > draw 17 > Record View#draw() 17 > AndroidOwner:measureAndLayout 14,deliverInputEvent src=0x1002 eventTimeNano=380294000000 id=0 1 > ViewPostImeInputStage id=0xc547612e 1 > AndroidOwner:onTouch 1
+warm-open-2,10,1,1,47.0, > traversal 45 > draw 45 > Record View#draw() 45 > AndroidOwner:measureAndLayout 42 > TextStringSimpleNode::measure 4,unnamed main-thread burst 1
+leave-home-3,11,1,0,18.4, > traversal 16 > draw 16 > Record View#draw() 16 > AndroidOwner:measureAndLayout 14 > Compose:recompose 2 > res/oU.webp 2 > ImageDecoder#decodeDrawable 2 > ID#w=241;h=256;src=AssetInputStream{s=null} 2,deliverInputEvent src=0x1002 eventTimeNano=397529000000 id=0 1 > ViewPostImeInputStage id=0xe045d374 1
+warm-open-3,10,1,0,24.5, > traversal 19 > draw 19 > Record View#draw() 19 > AndroidOwner:measureAndLayout 16,unnamed main-thread burst 1
+leave-news,14,0,0,14.5, > traversal 12 > draw 12 > Record View#draw() 12 > AndroidOwner:measureAndLayout 11 > Compose:recompose 3 > res/oU.webp 2 > ImageDecoder#decodeDrawable 2 > ID#w=241;h=256;src=AssetInputStream{s=null} 2,deliverInputEvent src=0x1002 eventTimeNano=414570000000 id=0 1 > ViewPostImeInputStage id=0xfaf231dc 1 > AndroidOwner:onTouch 1
+back-from-news,11,1,0,31.5, > traversal 30 > draw 30 > Record View#draw() 30 > AndroidOwner:measureAndLayout 28 > TextStringSimpleNode::measure 5 > TextLayout:initLayout 5,unnamed main-thread burst 1
+leave-more,15,0,0,13.8, > traversal 12 > draw 12 > Record View#draw() 12 > AndroidOwner:measureAndLayout 10,unnamed main-thread burst 2
+back-from-more,12,1,0,20.3, > traversal 18 > draw 18 > Record View#draw() 18 > AndroidOwner:measureAndLayout 16 > Compose:recompose 3 > res/oU.webp 2 > ImageDecoder#decodeDrawable 2 > ID#w=241;h=256;src=AssetInputStream{s=null} 2,deliverInputEvent src=0x1002 eventTimeNano=440802000000 id=0 1
+fling-list-1,58,0,0,7.0, > animation 6 > AndroidOwner:measureAndLayout 6 > Compose:applyChanges 4,compose:lazy:prefetch:idle_frame 5 > compose:lazy:prefetch:execute:urgent 5 > compose:lazy:prefetch:compose 4 > Co
+fling-list-2,65,3,2,38.6, > traversal 34 > draw 34 > Record View#draw() 34 > AndroidOwner:measureAndLayout 31 > Compose:recompose 5 > res/oU.webp 4 > ImageDecoder#decodeDrawable 4 > ID#w=241;h=256;src=AssetInputStream{s=null} 4,AndroidOwner:measureAndLayout 11
+fling-list-3,63,0,0,3.8, > animation 3 > AndroidOwner:measureAndLayout 2,compose:lazy:prefetch:execute:urgent 5 > compose:lazy:prefetch:apply 3 > PausedComposition:applyChanges 3
+reselect-top-1,2,0,0,0.2,,unnamed main-thread burst 3
+reselect-top-2,0,0,0,0.0,,unnamed main-thread burst 1
+type-1,387,0,0,3.1, > animation 3 > Recomposer:animation 3 > Choreographer#scheduleVsyncLocked 3,unnamed main-thread burst 1
+chip-author,196,0,0,3.0, > animation 3 > Recomposer:animation 3 > Choreographer#scheduleVsyncLocked 3,deliverInputEvent src=0x1002 eventTimeNano=662932000000 id=0 1
+chip-title,137,1,1,38.9, > traversal 32 > draw 32 > Record View#draw() 32 > AndroidOwner:measureAndLayout 28 > TextStringSimpleNode::measure 10 > TextLayout:initLayout 10,deliverInputEvent src=0x1002 eventTimeNano=671097000000 id=0 1
+chip-all,120,1,0,20.1, > traversal 19 > draw 19 > Record View#draw() 19 > AndroidOwner:measureAndLayout 18 > Compose:applyChanges 4,unnamed main-thread burst 1
+clear-1,126,0,0,14.4, > traversal 12 > draw 12 > Record View#draw() 12 > AndroidOwner:measureAndLayout 11,unnamed main-thread burst 2
+type-2,26,0,0,0.4,,unnamed main-thread burst 0
+type-3,25,0,0,0.3,,unnamed main-thread burst 0
+erase-3,24,0,0,0.3,,unnamed main-thread burst 0
+ime-show-1,24,0,0,0.9,,deliverInputEvent src=0x1002 eventTimeNano=748698000000 id=0 1
+ime-hide-1,23,0,0,0.8,,unnamed main-thread burst 0
+ime-show-2,24,0,0,0.6,,unnamed main-thread burst 1
+ime-hide-2,20,0,0,0.8,,unnamed main-thread burst 0
+ime-show-3,25,0,0,0.9,,deliverInputEvent src=0x1002 eventTimeNano=781390000000 id=0 1
+ime-hide-3,21,0,0,1.8, > insets_animation 2,unnamed main-thread burst 0
+ime-show-4,23,0,0,0.8,,deliverInputEvent src=0x1002 eventTimeNano=797843000000 id=0 1
+type-digits,27,1,0,19.7, > traversal 17 > draw 17 > Record View#draw() 17 > AndroidOwner:measureAndLayout 15,unnamed main-thread burst 1
+clear-digits,24,0,0,13.9, > traversal 11 > draw 11 > Record View#draw() 11 > AndroidOwner:measureAndLayout 10,unnamed main-thread burst 1
+ime-hide-4,20,0,0,0.9,,unnamed main-thread burst 0
+sort-open-1,67,0,0,8.7, > traversal 7 > measure 2 > AndroidOwner:onMeasure 2,MSG_WINDOW_FOCUS_CHANGED 1
+sort-year-1,129,1,0,18.1, > traversal 14 > draw 14 > Record View#draw() 14 > AndroidOwner:measureAndLayout 13 > Compose:applyChanges 1,unnamed main-thread burst 3
+sort-open-2,66,0,0,6.0, > traversal 4,unnamed main-thread burst 1
+sort-relevance-2,128,1,0,27.3, > traversal 25 > draw 25 > Record View#draw() 25 > AndroidOwner:measureAndLayout 24 > TextStringSimpleNode::measure 3,unnamed main-thread burst 3
+sort-open-3,65,0,0,9.4, > traversal 7 > draw 3 > Record View#draw() 3 > AndroidOwner:draw 3,unnamed main-thread burst 1
+sort-year-3,128,0,0,12.0, > traversal 10 > draw 10 > Record View#draw() 10 > AndroidOwner:measureAndLayout 10,unnamed main-thread burst 3
+filters-open-1,16,1,0,30.6, > traversal 26 > measure 12 > AndroidOwner:onMeasure 12,unnamed main-thread burst 4
+filters-available-1,9,0,0,4.0, > animation 2 > Recomposer:recompose 2,deliverInputEvent src=0x1002 eventTimeNano=922812000000 id=0 1
+filters-close-1,20,0,0,3.1, > animation 3 > Recomposer:recompose 3 > Compose:onForgotten 2,MSG_WINDOW_FOCUS_CHANGED 1
+filters-open-2,17,1,0,16.2, > traversal 13 > Compose:recompose 4,unnamed main-thread burst 2
+filters-doctype-2,8,0,0,6.8, > traversal 5 > draw 4 > Record View#draw() 4 > AndroidOwner:measureAndLayout 4 > TextStringSimpleNode::measure 3,unnamed main-thread burst 1
+filters-close-2,20,0,0,2.9, > animation 3 > Recomposer:recompose 3 > Compose:onForgotten 2,MSG_WINDOW_FOCUS_CHANGED 1
+filters-open-3,15,1,0,17.9, > traversal 15 > measure 3 > AndroidOwner:onMeasure 3,unnamed main-thread burst 1
+filters-available-3,9,0,0,3.4, > animation 2 > Recomposer:recompose 2,unnamed main-thread burst 1
+filters-close-3,20,0,0,2.9, > animation 3 > Recomposer:recompose 3 > Compose:onForgotten 2,MSG_WINDOW_FOCUS_CHANGED 1
+filters-open-4,15,1,0,16.7, > traversal 13 > Compose:recompose 4,unnamed main-thread burst 3
+filters-clear,8,0,0,3.8, > animation 2 > Recomposer:recompose 2,unnamed main-thread burst 1
+filters-close-4,20,0,0,3.0, > animation 3 > Recomposer:recompose 3 > Compose:onForgotten 2,unnamed main-thread burst 1
+shelf-on-1,28,1,0,23.2, > traversal 21 > draw 21 > Record View#draw() 21 > AndroidOwner:measureAndLayout 18 > TextStringSimpleNode::measure 2,unnamed main-thread burst 2
+fling-shelf-1,108,0,0,5.6, > traversal 4 > draw 4 > postAndWait 3,unnamed main-thread burst 6
+shelf-off-1,28,0,0,13.3, > traversal 10 > draw 10 > Record View#draw() 10 > AndroidOwner:measureAndLayout 8,unnamed main-thread burst 1
+shelf-on-2,29,0,0,12.5, > traversal 11 > draw 11 > Record View#draw() 11 > AndroidOwner:measureAndLayout 9,unnamed main-thread burst 6
+fling-shelf-2,113,0,0,5.1, > traversal 4 > draw 4 > Record View#draw() 4 > AndroidOwner:draw 4,compose:lazy:prefetch:compose 8 > Compose:recompose 7
+shelf-off-2,30,0,0,12.6, > traversal 9 > draw 9 > Record View#draw() 9 > AndroidOwner:measureAndLayout 8,unnamed main-thread burst 1
+shelf-on-3,27,1,0,17.4, > traversal 15 > draw 15 > Record View#draw() 15 > AndroidOwner:measureAndLayout 13 > Compose:recompose 3,deliverInputEvent src=0x1002 eventTimeNano=1099494000000 id= 1
+fling-shelf-3,110,0,0,3.8, > traversal 3 > draw 3 > Record View#draw() 3 > AndroidOwner:draw 3,compose:lazy:prefetch:execute:urgent 3 > compose:lazy:prefetch:compose 1 > Compose:recompose 1
+shelf-off-3,30,1,0,17.5, > traversal 14 > draw 14 > Record View#draw() 14 > AndroidOwner:measureAndLayout 11,unnamed main-thread burst 1
+surprise-open-1,38,0,0,11.3, > traversal 11 > draw 11 > Record View#draw() 11 > AndroidOwner:measureAndLayout 10 > Compose:recompose 4,unnamed main-thread burst 3
+surprise-again-1,38,0,0,3.8, > animation 2 > Recomposer:recompose 2,unnamed main-thread burst 1
+surprise-close-1,23,0,0,11.0, > traversal 6 > draw 6 > Record View#draw() 6 > AndroidOwner:draw 4,unnamed main-thread burst 2
+surprise-open-2,39,0,0,5.8, > traversal 6 > draw 5 > Record View#draw() 5 > AndroidOwner:measureAndLayout 5,unnamed main-thread burst 3
+surprise-again-2,40,0,0,3.3, > animation 2 > Recomposer:recompose 2,unnamed main-thread burst 4
+surprise-close-2,23,0,0,4.3, > traversal 3 > draw 3 > Record View#draw() 2 > AndroidOwner:measureAndLayout 2,unnamed main-thread burst 1
+surprise-open-3,39,0,0,4.1, > traversal 2 > draw 2 > Record View#draw() 2 > AndroidOwner:draw 1,unnamed main-thread burst 1
+surprise-again-3,40,0,0,6.5, > traversal 3 > draw 3 > Record View#draw() 3 > AndroidOwner:measureAndLayout 3 > TextStringSimpleNode::measure 2,unnamed main-thread burst 3
+surprise-close-3,24,0,0,4.7, > traversal 3 > draw 3 > Record View#draw() 3 > AndroidOwner:measureAndLayout 2,unnamed main-thread burst 1
+book-open-1,28,1,0,16.3, > traversal 11 > draw 10 > Record View#draw() 10 > AndroidOwner:measureAndLayout 9 > Compose:recompose 2,deliverInputEvent src=0x1002 eventTimeNano=1258127000000 id= 2 > ViewPostImeInputStage id=0xfe2d09f5 2 > AndroidOwner:onTouch 2
+book-back-1,9,1,1,32.9, > traversal 31 > draw 31 > Record View#draw() 31 > AndroidOwner:measureAndLayout 29 > Compose:recompose 7 > res/oU.webp 4 > ImageDecoder#decodeDrawable 4 > ID#w=241;h=256;src=AssetInputStream{s=null} 4,unnamed main-thread burst 1
+book-open-2,19,1,0,18.8, > animation 9 > Recomposer:recompose 9 > Compose:onForgotten 4 > Compose:onForgotten 4,unnamed main-thread burst 3
+book-back-2,10,1,0,23.8, > traversal 22 > draw 22 > Record View#draw() 22 > AndroidOwner:measureAndLayout 19 > Compose:recompose 3 > res/oU.webp 2 > ImageDecoder#decodeDrawable 2 > ID#w=241;h=256;src=AssetInputStream{s=null} 2,unnamed main-thread burst 1
+book-open-3,16,0,0,11.4, > traversal 9 > draw 9 > Record View#draw() 9 > AndroidOwner:measureAndLayout 5 > Compose:recompose 1,deliverInputEvent src=0x1002 eventTimeNano=1298512000000 id= 1 > ViewPostImeInputStage id=0xd32c661d 1 > AndroidOwner:onTouch 1
+book-back-3,9,1,0,24.9, > traversal 23 > draw 23 > Record View#draw() 23 > AndroidOwner:measureAndLayout 21,unnamed main-thread burst 1
+refresh-1,14,0,0,3.9, > animation 3 > Recomposer:recompose 3 > Compose:applyChanges 2,deliverInputEvent src=0x1002 eventTimeNano=1320725000000 id= 1
+refresh-2,14,0,0,3.3, > animation 2 > Recomposer:recompose 1,unnamed main-thread burst 2
+resume-1,3,0,0,2.5, > traversal 2 > draw 2 > Record View#draw() 2 > AndroidOwner:draw 1,unnamed main-thread burst 1
+resume-2,3,0,0,3.1, > traversal 3 > draw 2 > Record View#draw() 2 > AndroidOwner:draw 2,unnamed main-thread burst 1

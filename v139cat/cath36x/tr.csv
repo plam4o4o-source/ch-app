@@ -1,81 +1,81 @@
-name,doframes,df32,df80,dfmax,worst_path,long_nonframe
-first-install-open,17,17,16,657.4,Choreographer#doFrame - resynced to 1311 644 > traversal 572 > draw-VRI[MainActivity] 571 > Record View#draw() 357 > AndroidOwner:measureAndLayout 309 > Compose:applyChanges 47,
-cold-open-1,43,34,33,457.5,Choreographer#doFrame - resynced to 2633 456 > traversal 442 > draw-VRI[MainActivity] 442 > Record View#draw() 247 > AndroidOwner:measureAndLayout 236 > TextStringSimpleNode::measure 79,msg Handler (android.app.ActivityThread$H) null: 1 188
-cold-open-2,35,32,32,515.0,Choreographer#doFrame - resynced to 3315 506 > traversal 503 > draw-VRI[MainActivity] 503 > Record View#draw() 287 > AndroidOwner:measureAndLayout 276 > TextStringSimpleNode::measure 150,
-cold-open-3,41,31,24,325.7,Choreographer#doFrame - resynced to 4005 326 > traversal 262 > draw-VRI[MainActivity] 262 > postAndWait 231,msg Handler (android.app.ActivityThread$H) null: 1 123
-leave-home-1,13,10,10,438.0,traversal 436 > draw-VRI[MainActivity] 436 > postAndWait 409,
-warm-open-1,35,29,29,308.4,Choreographer#doFrame - resynced to 4068 308 > traversal 308 > draw-VRI[MainActivity] 308 > postAndWait 307,msg Handler (android.app.ActivityThread$H) null: 1 129
-leave-home-2,16,13,13,239.8,traversal 240 > draw-VRI[MainActivity] 239 > postAndWait 239,
-warm-open-2,35,28,26,348.6,Choreographer#doFrame - resynced to 4121 348 > traversal 348 > draw-VRI[MainActivity] 348 > postAndWait 348,msg Handler (android.app.ActivityThread$H) null: 1 139
-leave-home-3,17,16,16,235.4,Choreographer#doFrame - resynced to 4142 235 > traversal 235 > draw-VRI[MainActivity] 235 > postAndWait 234,
-warm-open-3,14,13,13,287.3,Choreographer#doFrame - resynced to 4167 287 > traversal 287 > draw-VRI[MainActivity] 287 > postAndWait 287,
-leave-news,34,31,29,379.4,Choreographer#doFrame - resynced to 4187 378 > traversal 378 > draw-VRI[MainActivity] 378 > postAndWait 365,
-back-from-news,16,13,11,270.2,traversal 270 > draw-VRI[MainActivity] 270 > postAndWait 270,
-leave-more,22,18,18,280.4,traversal 278 > draw-VRI[MainActivity] 278 > postAndWait 273,
-back-from-more,15,10,10,247.5,traversal 244 > draw-VRI[MainActivity] 244 > postAndWait 217,
-fling-list-1,84,62,60,376.4,Choreographer#doFrame - resynced to 4279 372 > traversal 366 > draw-VRI[MainActivity] 366 > postAndWait 365,
-fling-list-2,93,59,59,369.4,Choreographer#doFrame - resynced to 4370 369 > traversal 369 > draw-VRI[MainActivity] 369 > postAndWait 369,
-fling-list-3,86,65,65,369.6,Choreographer#doFrame - resynced to 4539 369 > traversal 365 > draw-VRI[MainActivity] 365 > postAndWait 348,
-reselect-top-1,13,11,9,469.3,traversal 469 > draw-VRI[MainActivity] 469 > postAndWait 469,msg Handler (android.os.Handler) android.graphics. 74
-reselect-top-2,13,11,11,299.5,traversal 298 > draw-VRI[MainActivity] 298 > postAndWait 297,
-loadmore-1,12,9,9,314.8,Choreographer#doFrame - resynced to 4813 314 > traversal 314 > draw-VRI[MainActivity] 314 > postAndWait 314,
-loadmore-2,12,9,9,286.9,Choreographer#doFrame - resynced to 5229 284 > traversal 284 > draw-VRI[MainActivity] 284 > postAndWait 284,
-type-1,44,28,28,447.1,Choreographer#doFrame - resynced to 5337 447 > traversal 446 > draw-VRI[MainActivity] 446 > postAndWait 445,
-chip-author,56,44,41,283.4,Choreographer#doFrame - resynced to 5386 283 > traversal 280 > draw-VRI[MainActivity] 280 > postAndWait 279,msg Handler (android.app.ActivityThread$H) null: 1 163
-chip-title,85,78,78,202.9,Choreographer#doFrame - resynced to 5477 203 > traversal 202 > draw-VRI[MainActivity] 202 > postAndWait 202,msg Handler (android.app.ActivityThread$H) null: 1 193
-chip-all,60,46,40,264.5,Choreographer#doFrame - resynced to 5583 264 > traversal 264 > draw-VRI[MainActivity] 264 > postAndWait 263,msg Handler (android.app.ActivityThread$H) null: 1 159
-clear-1,31,14,14,331.9,Choreographer#doFrame - resynced to 5652 332 > traversal 331 > draw-VRI[MainActivity] 331 > postAndWait 331,
-type-2,38,23,22,359.3,Choreographer#doFrame - resynced to 5683 356 > traversal 354 > draw-VRI[MainActivity] 354 > postAndWait 353,
-clear-2,31,14,13,372.4,Choreographer#doFrame - resynced to 5737 372 > traversal 372 > draw-VRI[MainActivity] 372 > postAndWait 371,
-type-3,41,26,25,409.0,Choreographer#doFrame - resynced to 5781 409 > traversal 408 > draw-VRI[MainActivity] 408 > postAndWait 408,
-erase-3,42,25,23,557.8,Choreographer#doFrame - resynced to 5834 558 > traversal 556 > draw-VRI[MainActivity] 556 > postAndWait 556,
-ime-show-1,23,11,10,344.9,Choreographer#doFrame - resynced to 6039 344 > traversal 344 > draw-VRI[MainActivity] 344 > postAndWait 344,
-ime-hide-1,23,9,9,598.7,Choreographer#doFrame - resynced to 6123 598 > traversal 597 > draw-VRI[MainActivity] 597 > postAndWait 597,
-ime-show-2,26,7,7,373.4,Choreographer#doFrame - resynced to 6165 373 > traversal 372 > draw-VRI[MainActivity] 372 > postAndWait 368,
-ime-hide-2,25,9,9,549.7,Choreographer#doFrame - resynced to 6233 550 > traversal 550 > draw-VRI[MainActivity] 549 > postAndWait 549,
-ime-show-3,22,5,5,497.7,Choreographer#doFrame - resynced to 6278 498 > traversal 497 > draw-VRI[MainActivity] 497 > postAndWait 497,
-ime-hide-3,25,8,8,653.1,Choreographer#doFrame - resynced to 6337 653 > traversal 651 > draw-VRI[MainActivity] 651 > postAndWait 651,
-ime-show-4,27,4,4,313.1,traversal 313 > draw-VRI[MainActivity] 313 > postAndWait 313,
-type-digits,31,10,10,458.8,Choreographer#doFrame - resynced to 6442 458 > traversal 458 > draw-VRI[MainActivity] 458 > postAndWait 457,
-clear-digits,27,13,13,357.7,Choreographer#doFrame - resynced to 6490 357 > traversal 357 > draw-VRI[MainActivity] 357 > postAndWait 356,
-ime-hide-4,25,9,9,562.9,Choreographer#doFrame - resynced to 6530 560 > traversal 558 > draw-VRI[MainActivity] 558 > postAndWait 556,
-sort-open-1,27,6,6,788.3,traversal 780 > draw-VRI[Изскачащ прозорец] 352 > postAndWait 270,msg Handler (android.app.ActivityThread$H) null: 1 96
-sort-year-1,127,13,13,799.6,Choreographer#doFrame - resynced to 7001 797 > traversal 794 > draw-VRI[Изскачащ прозорец] 586 > postAndWait 586,
-sort-open-2,28,9,9,643.9,Choreographer#doFrame - resynced to 7059 636 > traversal 635 > draw-VRI[Изскачащ прозорец] 462 > postAndWait 120,msg Handler (android.app.ActivityThread$H) null: 1 221
-sort-relevance-2,128,13,13,511.5,Choreographer#doFrame - resynced to 7414 511 > traversal 505 > draw-VRI[Изскачащ прозорец] 261 > postAndWait 261,
-sort-open-3,26,10,10,803.5,Choreographer#doFrame - resynced to 7473 801 > traversal 800 > draw-VRI[Изскачащ прозорец] 459 > postAndWait 163,msg Handler (android.app.ActivityThread$H) null: 1 238
-sort-year-3,129,16,15,629.2,Choreographer#doFrame - resynced to 7825 629 > traversal 627 > draw-VRI[Изскачащ прозорец] 626 > postAndWait 626,
-filters-open-1,22,12,11,1000.1,traversal 994 > draw-VRI[MainActivity] 496 > postAndWait 141,msg Handler (android.app.ActivityThread$H) null: 1 132
-filters-available-1,12,12,12,667.6,Choreographer#doFrame - resynced to 8092 667 > traversal 663 > draw-VRI[MainActivity] 411 > postAndWait 411,
-filters-close-1,25,10,8,199.0,Choreographer#doFrame - resynced to 8110 199 > traversal 199 > draw-VRI[MainActivity] 199 > postAndWait 198,
-filters-open-2,20,10,9,1021.7,Choreographer#doFrame - resynced to 8169 1016 > traversal 1014 > draw-VRI[MainActivity] 760 > postAndWait 759,msg Handler (android.app.ActivityThread$H) null: 1 140
-filters-doctype-2,12,12,10,735.5,Choreographer#doFrame - resynced to 8194 733 > traversal 732 > draw-VRI[MainActivity] 477 > postAndWait 477,
-filters-close-2,25,9,8,294.7,Choreographer#doFrame - resynced to 8212 295 > traversal 295 > draw-VRI[MainActivity] 295 > postAndWait 288,
-filters-open-3,20,9,9,974.5,traversal 969 > draw-VRI[MainActivity] 779 > postAndWait 138,msg Handler (android.app.ActivityThread$H) null: 1 140
-filters-available-3,12,12,11,650.5,Choreographer#doFrame - resynced to 8300 644 > traversal 644 > draw-VRI[MainActivity] 388 > postAndWait 388,
-filters-close-3,25,10,6,300.9,Choreographer#doFrame - resynced to 8312 301 > animation 301 > Recomposer:recompose 301 > Compose:onForgotten 297 > binder transaction 22,
-filters-open-4,19,11,9,1139.6,traversal 1134 > draw-VRI[MainActivity] 715 > postAndWait 257,msg Handler (android.app.ActivityThread$H) null: 1 661
-filters-clear,12,12,12,864.9,Choreographer#doFrame - resynced to 8405 865 > traversal 864 > draw-VRI[MainActivity] 516 > postAndWait 516,
-filters-close-4,25,9,9,243.8,traversal 244 > draw-VRI[MainActivity] 244 > postAndWait 243,
-shelf-on-1,32,13,13,294.6,traversal 292 > draw-VRI[MainActivity] 292 > Record View#draw() 152 > AndroidOwner:measureAndLayout 150 > Compose:applyChanges 63,
-fling-shelf-1,142,100,98,270.1,Choreographer#doFrame - resynced to 8531 270 > traversal 266 > draw-VRI[MainActivity] 266 > postAndWait 266,
-shelf-off-1,32,12,12,352.5,Choreographer#doFrame - resynced to 8665 352 > traversal 352 > draw-VRI[MainActivity] 352 > postAndWait 352,
-shelf-on-2,35,11,9,185.7,traversal 186 > draw-VRI[MainActivity] 183 > postAndWait 183,
-fling-shelf-2,136,104,100,318.8,Choreographer#doFrame - resynced to 8773 315 > traversal 315 > draw-VRI[MainActivity] 315 > postAndWait 314,
-shelf-off-2,0,0,0,0.0,,
-shelf-on-3,0,0,0,0.0,,
-fling-shelf-3,120,103,100,296.5,Choreographer#doFrame - resynced to 8905 296 > traversal 294 > draw-VRI[MainActivity] 294 > postAndWait 276,
-shelf-off-3,0,0,0,0.0,,
-surprise-open-1,0,0,0,0.0,,
-surprise-close-1,16,13,10,413.8,Choreographer#doFrame - resynced to 9001 414 > traversal 413 > draw-VRI[MainActivity] 413 > postAndWait 409,
-surprise-open-2,31,27,27,541.1,Choreographer#doFrame - resynced to 9085 540 > traversal 540 > draw-VRI[MainActivity] 540 > postAndWait 540,
-surprise-close-2,13,9,9,351.4,Choreographer#doFrame - resynced to 9110 350 > traversal 347 > draw-VRI[MainActivity] 347 > postAndWait 347,
-surprise-open-3,30,27,27,377.4,Choreographer#doFrame - resynced to 9139 377 > traversal 377 > draw-VRI[MainActivity] 377 > postAndWait 377,
-surprise-close-3,11,7,7,300.9,Choreographer#doFrame - resynced to 9161 300 > traversal 299 > draw-VRI[MainActivity] 299 > postAndWait 299,
-book-back-1,17,14,12,235.6,Choreographer#doFrame - resynced to 9233 235 > traversal 235 > draw-VRI[MainActivity] 235 > postAndWait 234,
-book-back-2,17,14,12,271.4,Choreographer#doFrame - resynced to 9288 271 > traversal 271 > draw-VRI[MainActivity] 271 > postAndWait 270,
-book-back-3,17,14,14,216.5,Choreographer#doFrame - resynced to 9345 216 > traversal 215 > draw-VRI[MainActivity] 215 > postAndWait 215,
-refresh-1,29,27,27,171.8,Choreographer#doFrame - resynced to 9431 172 > traversal 171 > draw-VRI[MainActivity] 171 > postAndWait 171,
-refresh-2,27,23,23,259.5,Choreographer#doFrame - resynced to 9475 259 > traversal 258 > draw-VRI[MainActivity] 258 > postAndWait 258,
-resume-1,4,1,1,1221.2,traversal 1218 > draw-VRI[MainActivity] 321 > postAndWait 112,
-resume-2,4,2,2,1074.5,traversal 1072 > draw-VRI[MainActivity] 369 > postAndWait 99,
+name,doframes,cpu16,cpu32,cpumax,worst_path,nonframe
+first-install-open,20,6,4,92.2, > Choreographer#doFrame - resynced to 12444 in  92 > traversal 70 > draw-VRI[MainActivity] 70 > Record View#draw() 70 > AndroidOwner:measureAndLayout 63 > Compose:recompose 10,dispatchInputEvent MotionEvent ACTION_UP deviceId=-1 source= 5 > deliverInputEvent src=0x1002 eventTimeNano=15 5 > ViewPostImeInputStage id=0x
+cold-open-1,68,4,0,19.9, > Choreographer#doFrame - resynced to 19564 in  20 > traversal 16 > draw-VRI[MainActivity] 16 > Record View#draw() 16 > AndroidOwner:measureAndLayout 14 > Compose:recompose 6,dispatchInputEvent MotionEvent ACTION_DOWN deviceId=-1 sourc 11 > deliverInputEvent src=0x1002 eventTimeNano=24 11 > ViewPostImeInputStage id=0
+cold-open-2,63,4,0,24.2, > Choreographer#doFrame - resynced to 23420 in  24 > traversal 22 > draw-VRI[MainActivity] 22 > Record View#draw() 22 > AndroidOwner:measureAndLayout 19 > Compose:recompose 3,dispatchInputEvent MotionEvent ACTION_UP deviceId=-1 source= 2 > deliverInputEvent src=0x1002 eventTimeNano=28 2 > ViewPostImeInputStage id=0x
+cold-open-3,26,0,0,14.6, > traversal 12 > draw-VRI[MainActivity] 12 > Record View#draw() 12 > AndroidOwner:measureAndLayout 10 > Compose:recompose 3 > res/oU.webp 2 > ImageDecoder#decodeDrawable 2,unnamed main-thread burst 4
+leave-home-1,19,1,0,19.5, > traversal 17 > draw-VRI[MainActivity] 17 > Record View#draw() 17 > AndroidOwner:measureAndLayout 15 > Compose:recompose 2 > res/oU.webp 2 > ImageDecoder#decodeDrawable 2,dispatchInputEvent MotionEvent ACTION_UP deviceId=-1 source= 1 > deliverInputEvent src=0x1002 eventTimeNano=33 1 > ViewPostImeInputStage id=0x
+warm-open-1,35,1,0,31.8, > traversal 30 > draw-VRI[MainActivity] 30 > Record View#draw() 30 > AndroidOwner:measureAndLayout 27 > Compose:recompose 4,unnamed main-thread burst 1
+leave-home-2,18,0,0,15.3, > traversal 14 > draw-VRI[MainActivity] 13 > Record View#draw() 13 > AndroidOwner:measureAndLayout 11,unnamed main-thread burst 2
+warm-open-2,36,1,1,35.3, > traversal 33 > draw-VRI[MainActivity] 33 > Record View#draw() 33 > AndroidOwner:measureAndLayout 28 > Compose:recompose 4 > res/oU.webp 4 > ImageDecoder#decodeDrawable 4,AndroidOwner:outOfFrameExecutor 3
+leave-home-3,18,1,0,17.1, > traversal 15 > draw-VRI[MainActivity] 15 > Record View#draw() 15 > AndroidOwner:measureAndLayout 13 > Compose:recompose 1,unnamed main-thread burst 1
+warm-open-3,12,1,1,39.1, > traversal 37 > draw-VRI[MainActivity] 37 > Record View#draw() 37 > AndroidOwner:measureAndLayout 33 > Compose:recompose 6,unnamed main-thread burst 1
+leave-news,25,2,0,17.8, > Choreographer#doFrame - resynced to 29153 in  18 > traversal 11 > draw-VRI[MainActivity] 11 > Record View#draw() 11 > AndroidOwner:measureAndLayout 7 > TextStringSimpleNode::measure 3,unnamed main-thread burst 4
+back-from-news,16,1,0,27.6, > traversal 25 > draw-VRI[MainActivity] 25 > Record View#draw() 25 > AndroidOwner:measureAndLayout 22 > TextStringSimpleNode::measure 3,unnamed main-thread burst 1
+leave-more,25,1,0,19.4, > traversal 17 > draw-VRI[MainActivity] 17 > Record View#draw() 17 > AndroidOwner:measureAndLayout 15 > Compose:recompose 3,dispatchInputEvent MotionEvent ACTION_UP deviceId=-1 source= 1 > deliverInputEvent src=0x1002 eventTimeNano=41 1 > ViewPostImeInputStage id=0x
+back-from-more,18,1,0,29.6, > traversal 28 > draw-VRI[MainActivity] 28 > Record View#draw() 28 > AndroidOwner:measureAndLayout 25 > TextStringSimpleNode::measure 4 > TextLayout:initLayout 4,unnamed main-thread burst 3
+fling-list-1,90,0,0,7.1, > Choreographer#doFrame - resynced to 30541 in  7 > animation 6 > AndroidOwner:measureAndLayout 5 > Compose:recompose 2,compose:lazy:prefetch:idle_frame 5 > compose:lazy:prefetch:execute:urgent 5 > compose:lazy:prefetch:compose 4 > Co
+fling-list-2,99,2,2,40.6, > Choreographer#doFrame - resynced to 31830 in  41 > animation 35 > Recomposer:animation 35 > AndroidOwner:measureAndLayout 35 > Compose:applyChanges 3,compose:lazy:prefetch:idle_frame 2 > compose:lazy:prefetch:execute:urgent 2 > compose:lazy:prefetch:measure 1 > An
+fling-list-3,85,0,0,6.6, > animation 5 > AndroidOwner:measureAndLayout 5,compose:lazy:prefetch:idle_frame 5 > compose:lazy:prefetch:execute:urgent 5 > compose:lazy:prefetch:apply 3 > Paus
+reselect-top-1,15,0,0,11.9, > Choreographer#doFrame - resynced to 33279 in  12 > animation 10 > Recomposer:animation 10 > AndroidOwner:measureAndLayout 10,unnamed main-thread burst 3
+reselect-top-2,14,2,0,18.5, > Choreographer#doFrame - resynced to 33754 in  17 > animation 12 > Recomposer:animation 12 > AndroidOwner:measureAndLayout 12 > TextStringSimpleNode::measure 4,AndroidOwner:outOfFrameExecutor 2 > Compose:deactivate 2 > Compose:onForgotten 1
+loadmore-1,11,0,0,2.9, > traversal 2 > draw-VRI[MainActivity] 2 > Record View#draw() 2 > AndroidOwner:measureAndLayout 1,compose:lazy:prefetch:measure 1
+loadmore-2,13,0,0,2.6, > traversal 2 > draw-VRI[MainActivity] 2 > Record View#draw() 2 > AndroidOwner:measureAndLayout 1,compose:lazy:prefetch:measure 1
+type-1,52,7,0,23.0, > Choreographer#doFrame - resynced to 40628 in  23 > traversal 18 > draw-VRI[MainActivity] 18 > Record View#draw() 18 > AndroidOwner:measureAndLayout 16 > Compose:recompose 3,unnamed main-thread burst 1
+chip-author,59,0,0,3.1, > Choreographer#doFrame - resynced to 41087 in  3 > animation 2 > Recomposer:recompose 1,unnamed main-thread burst 1
+chip-title,101,0,0,4.9, > Choreographer#doFrame - resynced to 42154 in  5 > animation 4 > Recomposer:recompose 4 > Compose:onForgotten 2 > Compose:onForgotten 2,unnamed main-thread burst 1
+chip-all,68,2,0,19.6, > Choreographer#doFrame - resynced to 43252 in  20 > traversal 16 > draw-VRI[MainActivity] 16 > Record View#draw() 16 > AndroidOwner:measureAndLayout 15 > Compose:recompose 3,unnamed main-thread burst 3
+clear-1,29,0,0,11.3, > traversal 9 > draw-VRI[MainActivity] 9 > Record View#draw() 9 > AndroidOwner:measureAndLayout 8,unnamed main-thread burst 1
+type-2,46,1,0,22.2, > traversal 20 > draw-VRI[MainActivity] 20 > Record View#draw() 20 > AndroidOwner:measureAndLayout 15,unnamed main-thread burst 1
+clear-2,33,0,0,11.6, > Choreographer#doFrame - resynced to 44557 in  12 > traversal 9 > draw-VRI[MainActivity] 9 > Record View#draw() 9 > AndroidOwner:measureAndLayout 8,unnamed main-thread burst 1
+type-3,40,0,0,12.5, > Choreographer#doFrame - resynced to 45000 in  12 > traversal 9 > draw-VRI[MainActivity] 9 > Record View#draw() 9 > AndroidOwner:measureAndLayout 7,unnamed main-thread burst 3
+erase-3,46,2,0,18.4, > Choreographer#doFrame - resynced to 45523 in  18 > traversal 16 > draw-VRI[MainActivity] 16 > Record View#draw() 16 > AndroidOwner:measureAndLayout 11 > TextStringSimpleNode::measure 2,unnamed main-thread burst 1
+ime-show-1,26,0,0,1.1,,dispatchInputEvent MotionEvent ACTION_DOWN deviceId=-1 sourc 1
+ime-hide-1,27,0,0,1.0,,unnamed main-thread burst 1
+ime-show-2,28,0,0,1.2, > Choreographer#doFrame - resynced to 49216 in  1,dispatchInputEvent MotionEvent ACTION_DOWN deviceId=-1 sourc 1
+ime-hide-2,26,0,0,1.1,,unnamed main-thread burst 3
+ime-show-3,29,0,0,4.1, > traversal 4 > draw-VRI[MainActivity] 3 > Record View#draw() 3,monitor contention with owner binder:6391_4 (6422) at boolea 3
+ime-hide-3,24,0,0,1.2, > Choreographer#doFrame - resynced to 50828 in  1,unnamed main-thread burst 1
+ime-show-4,24,0,0,1.3, > Choreographer#doFrame - resynced to 51346 in  1,dispatchInputEvent MotionEvent ACTION_DOWN deviceId=-1 sourc 1
+type-digits,30,0,0,11.8, > traversal 10 > draw-VRI[MainActivity] 10 > Record View#draw() 10 > AndroidOwner:measureAndLayout 9,unnamed main-thread burst 1
+clear-digits,30,0,0,8.4, > Choreographer#doFrame - resynced to 52196 in  8 > traversal 7 > draw-VRI[MainActivity] 7 > Record View#draw() 7 > AndroidOwner:measureAndLayout 5,unnamed main-thread burst 3
+ime-hide-4,25,0,0,1.3, > Choreographer#doFrame - resynced to 52614 in  1,unnamed main-thread burst 1
+sort-open-1,42,1,0,18.8, > traversal 17 > measure 9 > AndroidOwner:onMeasure 9,unnamed main-thread burst 2
+sort-year-1,128,0,0,12.2, > Choreographer#doFrame - resynced to 57424 in  12 > traversal 9 > draw-VRI[MainActivity] 9 > Record View#draw() 9 > AndroidOwner:measureAndLayout 8,unnamed main-thread burst 3
+sort-open-2,44,1,0,16.7, > traversal 15 > VRI[Изскачащ прозорец]-relayoutWindow#first=t 7,unnamed main-thread burst 3
+sort-relevance-2,129,2,0,16.7, > Choreographer#doFrame - resynced to 61507 in  17 > traversal 14 > draw-VRI[MainActivity] 14 > Record View#draw() 14 > AndroidOwner:measureAndLayout 12 > TextStringSimpleNode::measure 3,unnamed main-thread burst 1
+sort-open-3,34,0,0,5.5, > traversal 4,unnamed main-thread burst 5
+sort-year-3,129,2,0,18.1, > Choreographer#doFrame - resynced to 65398 in  18 > traversal 15 > draw-VRI[MainActivity] 15 > Record View#draw() 15 > AndroidOwner:measureAndLayout 14 > Compose:recompose 3,unnamed main-thread burst 2
+filters-open-1,20,0,0,14.8, > traversal 12 > Compose:recompose 4,unnamed main-thread burst 1
+filters-available-1,12,0,0,6.5, > Choreographer#doFrame - resynced to 67828 in  6 > animation 5 > Recomposer:recompose 4 > Compose:recompose 3,dispatchInputEvent MotionEvent ACTION_DOWN deviceId=-1 sourc 1
+filters-close-1,25,0,0,6.4, > Choreographer#doFrame - resynced to 68010 in  6 > animation 6 > Recomposer:recompose 6 > Compose:onForgotten 6,unnamed main-thread burst 1
+filters-open-2,20,0,0,15.6, > traversal 13 > Compose:recompose 3,unnamed main-thread burst 1
+filters-doctype-2,14,0,0,3.4, > traversal 3 > draw-VRI[MainActivity] 3 > Record View#draw() 3 > AndroidOwner:draw 3,AndroidOwner:measureAndLayout 1
+filters-close-2,25,0,0,3.3, > Choreographer#doFrame - resynced to 68981 in  3 > animation 3 > Recomposer:recompose 3 > Compose:onForgotten 3,unnamed main-thread burst 1
+filters-open-3,22,0,0,13.5, > traversal 11 > Compose:recompose 3,MSG_TOUCH_BOOST_TIMEOUT 3 > ViewRootImpl#setFrameRateCategory no preferen 3
+filters-available-3,12,0,0,4.9, > Choreographer#doFrame - resynced to 69798 in  5 > animation 3 > Recomposer:recompose 3 > Compose:applyChanges 2,dispatchInputEvent MotionEvent ACTION_DOWN deviceId=-1 sourc 1
+filters-close-3,27,0,0,3.0, > Choreographer#doFrame - resynced to 69980 in  3 > animation 3 > Recomposer:recompose 3 > Compose:onForgotten 2,clientTransactionExecuted 3 > windowInsetsControlChanged 3
+filters-open-4,20,0,0,13.4, > traversal 11 > measure 3 > AndroidOwner:onMeasure 3,unnamed main-thread burst 2
+filters-clear,13,0,0,3.6, > animation 2 > Recomposer:recompose 2,AndroidOwner:measureAndLayout 4
+filters-close-4,28,0,0,3.9, > Choreographer#doFrame - resynced to 71055 in  4 > animation 4 > Recomposer:recompose 3 > Compose:applyChanges 3,unnamed main-thread burst 4
+shelf-on-1,37,1,0,17.8, > traversal 15 > draw-VRI[MainActivity] 15 > Record View#draw() 15 > AndroidOwner:measureAndLayout 14 > TextStringSimpleNode::measure 3,unnamed main-thread burst 2
+fling-shelf-1,149,0,0,3.4, > animation 3 > AndroidOwner:measureAndLayout 2,unnamed main-thread burst 3
+shelf-off-1,31,0,0,8.1, > traversal 6 > draw-VRI[MainActivity] 6 > Record View#draw() 6 > AndroidOwner:measureAndLayout 5,unnamed main-thread burst 0
+shelf-on-2,32,0,0,11.4, > traversal 9 > draw-VRI[MainActivity] 9 > Record View#draw() 9 > AndroidOwner:measureAndLayout 7,unnamed main-thread burst 0
+fling-shelf-2,148,4,0,24.4, > Choreographer#doFrame - resynced to 75119 in  24 > animation 21 > Recomposer:recompose 21 > Compose:onRemembered 10,unnamed main-thread burst 5
+shelf-off-2,0,0,0,0.0,,unnamed main-thread burst 0
+shelf-on-3,0,0,0,0.0,,unnamed main-thread burst 1
+fling-shelf-3,114,0,0,2.4, > Choreographer#doFrame - resynced to 75742 in  2 > animation 2,dispatchInputEvent MotionEvent ACTION_DOWN deviceId=-1 sourc 1
+shelf-off-3,0,0,0,0.0,,unnamed main-thread burst 0
+surprise-open-1,0,0,0,0.0,,unnamed main-thread burst 0
+surprise-close-1,18,1,0,29.3, > traversal 28 > draw-VRI[MainActivity] 27 > Record View#draw() 27 > AndroidOwner:measureAndLayout 24 > Compose:recompose 5 > res/oU.webp 4 > ImageDecoder#decodeDrawable 2,unnamed main-thread burst 2
+surprise-open-2,34,0,0,10.5, > Choreographer#doFrame - resynced to 77589 in  10 > traversal 8 > draw-VRI[MainActivity] 8 > Record View#draw() 8 > AndroidOwner:draw 6,unnamed main-thread burst 4
+surprise-close-2,13,0,0,12.7, > traversal 11 > draw-VRI[MainActivity] 11 > Record View#draw() 11 > AndroidOwner:measureAndLayout 6 > TextAnnotatedStringNode:measure 4,unnamed main-thread burst 5
+surprise-open-3,40,0,0,6.6, > Choreographer#doFrame - resynced to 77976 in  7 > traversal 6 > draw-VRI[MainActivity] 6 > Record View#draw() 6 > AndroidOwner:measureAndLayout 6,unnamed main-thread burst 1
+surprise-close-3,14,0,0,6.6, > traversal 5 > draw-VRI[MainActivity] 5 > Record View#draw() 5 > AndroidOwner:measureAndLayout 4,unnamed main-thread burst 1
+book-back-1,18,1,0,22.7, > traversal 21 > draw-VRI[MainActivity] 21 > Record View#draw() 21 > AndroidOwner:measureAndLayout 18 > Compose:recompose 4,unnamed main-thread burst 1
+book-back-2,17,0,0,13.6, > traversal 12 > draw-VRI[MainActivity] 12 > Record View#draw() 12 > AndroidOwner:measureAndLayout 10,unnamed main-thread burst 1
+book-back-3,16,1,0,19.3, > traversal 18 > draw-VRI[MainActivity] 18 > Record View#draw() 18 > AndroidOwner:measureAndLayout 15 > Compose:recompose 3 > res/oU.webp 3 > ImageDecoder#decodeDrawable 3,unnamed main-thread burst 1
+refresh-1,23,0,0,2.0, > Choreographer#doFrame - resynced to 80939 in  2 > animation 1,dispatchInputEvent MotionEvent ACTION_DOWN deviceId=-1 sourc 1 > deliverInputEvent src=0x1002 eventTimeNano=12 1
+refresh-2,29,0,0,3.6, > Choreographer#doFrame - resynced to 81405 in  3 > traversal 3 > draw-VRI[MainActivity] 3 > Record View#draw() 3 > AndroidOwner:draw 3,dispatchInputEvent MotionEvent ACTION_DOWN deviceId=-1 sourc 1
+resume-1,5,0,0,9.8, > Choreographer#doFrame - resynced to 82019 in  10 > traversal 10 > draw-VRI[MainActivity] 9 > Record View#draw() 9 > AndroidOwner:draw 8,unnamed main-thread burst 3
+resume-2,4,0,0,2.7, > traversal 3 > draw-VRI[MainActivity] 2 > Record View#draw() 2 > AndroidOwner:draw 2,clientTransactionExecuted 1

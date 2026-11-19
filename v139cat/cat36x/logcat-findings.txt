@@ -1,138 +1,132 @@
-app pids seen: ['4011', '5358', '5555', '6139', '6383']
+app pids seen: ['3985', '5455', '5614', '6227', '6493']
 == FATAL: 0
 == ANR: 0
 == StrictMode: 0
 == Skipped: 80
-   skipped-frames events=80 max=117 total=3531
-   11-19 16:09:57.166  4011  4011 I Choreographer: Skipped 64 frames!  The application may be doing too much work on its main thread.
-   11-19 16:09:59.550  4011  4011 I Choreographer: Skipped 106 frames!  The application may be doing too much work on its main thread.
-   11-19 16:10:00.199  4011  4011 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
-   11-19 16:10:00.915  4011  4011 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
-   11-19 16:10:01.608  4011  4011 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
-   11-19 16:10:02.372  4011  4011 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
-   11-19 16:10:03.207  4011  4011 I Choreographer: Skipped 49 frames!  The application may be doing too much work on its main thread.
-   11-19 16:10:03.760  4011  4011 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
-   11-19 16:10:15.872  4011  4011 I Choreographer: Skipped 99 frames!  The application may be doing too much work on its main thread.
-   11-19 16:10:17.792  4011  4011 I Choreographer: Skipped 59 frames!  The application may be doing too much work on its main thread.
-   11-19 16:10:20.338  4011  4011 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
-   11-19 16:10:31.147  4011  4011 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
-== Davey: 379
-   davey events=379 max=3122ms median=860ms
-   11-19 16:09:57.332  4011  4062 I HWUI    : Davey! duration=1538ms; Flags=1, FrameTimelineVsyncId=6597, IntendedVsync=117283270528, Vsync=117416603856, InputEventId=0, HandleInputStart=117438314677, AnimationStart=117438314958, PerformTraver
-   11-19 16:09:59.652  4011  4062 I HWUI    : Davey! duration=2384ms; Flags=0, FrameTimelineVsyncId=6663, IntendedVsync=118883270464, Vsync=119333270446, InputEventId=0, HandleInputStart=119335982630, AnimationStart=119335982881, PerformTraver
-   11-19 16:10:00.626  4011  4062 I HWUI    : Davey! duration=1639ms; Flags=0, FrameTimelineVsyncId=6745, IntendedVsync=119349937112, Vsync=119449937108, InputEventId=0, HandleInputStart=119464871155, AnimationStart=119464871446, PerformTraver
-   11-19 16:10:01.594  4011  4024 I HWUI    : Davey! duration=3122ms; Flags=0, FrameTimelineVsyncId=6768, IntendedVsync=119466603774, Vsync=121233270370, InputEventId=0, HandleInputStart=121245958321, AnimationStart=121245958822, PerformTraver
-   11-19 16:10:02.263  4011  4062 I HWUI    : Davey! duration=2079ms; Flags=0, FrameTimelineVsyncId=6961, IntendedVsync=121249937036, Vsync=121883270344, InputEventId=0, HandleInputStart=121894706720, AnimationStart=121894707200, PerformTraver
-   11-19 16:10:03.137  4011  4022 I HWUI    : Davey! duration=2385ms; Flags=0, FrameTimelineVsyncId=7001, IntendedVsync=121899937010, Vsync=122599936982, InputEventId=0, HandleInputStart=122665940042, AnimationStart=122665941235, PerformTraver
-   11-19 16:10:03.480  4011  4022 I HWUI    : Davey! duration=1663ms; Flags=0, FrameTimelineVsyncId=7032, IntendedVsync=122683270312, Vsync=123299936954, InputEventId=0, HandleInputStart=123303912536, AnimationStart=123303912907, PerformTraver
-   11-19 16:10:03.698  4011  4022 I HWUI    : Davey! duration=1250ms; Flags=0, FrameTimelineVsyncId=7055, IntendedVsync=123316603620, Vsync=124066603590, InputEventId=0, HandleInputStart=124068769605, AnimationStart=124068770116, PerformTraver
-   11-19 16:10:04.082  4011  4022 I HWUI    : Davey! duration=843ms; Flags=0, FrameTimelineVsyncId=7113, IntendedVsync=124916603556, Vsync=125449936868, InputEventId=0, HandleInputStart=125456278642, AnimationStart=125456279233, PerformTravers
-   11-19 16:10:10.211  4011  4023 I HWUI    : Davey! duration=713ms; Flags=0, FrameTimelineVsyncId=7524, IntendedVsync=130899936650, Vsync=130899936650, InputEventId=0, HandleInputStart=130909760264, AnimationStart=130909760645, PerformTravers
-   11-19 16:10:16.427  4011  4023 I HWUI    : Davey! duration=1661ms; Flags=0, FrameTimelineVsyncId=7663, IntendedVsync=135883269784, Vsync=135899936450, InputEventId=0, HandleInputStart=135902856550, AnimationStart=135902856810, PerformTraver
-   11-19 16:10:16.616  4011  4055 I HWUI    : Davey! duration=2152ms; Flags=0, FrameTimelineVsyncId=7678, IntendedVsync=135916603116, Vsync=137566603050, InputEventId=0, HandleInputStart=137567457862, AnimationStart=137567458243, PerformTraver
+   skipped-frames events=80 max=152 total=3984
+   11-19 16:48:13.747  3985  3985 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+   11-19 16:48:18.859  3985  3985 I Choreographer: Skipped 125 frames!  The application may be doing too much work on its main thread.
+   11-19 16:48:19.406  3985  3985 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-19 16:48:20.058  3985  3985 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-19 16:48:20.780  3985  3985 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-19 16:48:21.468  3985  3985 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-19 16:48:22.267  3985  3985 I Choreographer: Skipped 47 frames!  The application may be doing too much work on its main thread.
+   11-19 16:48:22.869  3985  3985 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-19 16:48:36.147  3985  3985 I Choreographer: Skipped 140 frames!  The application may be doing too much work on its main thread.
+   11-19 16:48:37.896  3985  3985 I Choreographer: Skipped 53 frames!  The application may be doing too much work on its main thread.
+   11-19 16:48:39.286  3985  3985 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-19 16:48:41.526  3985  3985 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+== Davey: 318
+   davey events=318 max=3446ms median=842ms
+   11-19 16:48:16.734  3985  3996 I HWUI    : Davey! duration=1973ms; Flags=1, FrameTimelineVsyncId=8905, IntendedVsync=116266479667, Vsync=116449812993, InputEventId=0, HandleInputStart=116460952034, AnimationStart=116460952734, PerformTraver
+   11-19 16:48:19.094  3985  4060 I HWUI    : Davey! duration=2718ms; Flags=0, FrameTimelineVsyncId=9001, IntendedVsync=118033146263, Vsync=118433146247, InputEventId=0, HandleInputStart=118439568040, AnimationStart=118439568702, PerformTraver
+   11-19 16:48:19.850  3985  4060 I HWUI    : Davey! duration=1361ms; Flags=0, FrameTimelineVsyncId=9038, IntendedVsync=118449812913, Vsync=118449812913, InputEventId=0, HandleInputStart=118458137671, AnimationStart=118458137921, PerformTraver
+   11-19 16:48:20.702  3985  4000 I HWUI    : Davey! duration=3446ms; Flags=0, FrameTimelineVsyncId=9045, IntendedVsync=118466479579, Vsync=120549812829, InputEventId=0, HandleInputStart=120553695876, AnimationStart=120553696587, PerformTraver
+   11-19 16:48:21.458  3985  4000 I HWUI    : Davey! duration=1919ms; Flags=0, FrameTimelineVsyncId=9281, IntendedVsync=120566479495, Vsync=121099812807, InputEventId=0, HandleInputStart=121109789060, AnimationStart=121109789701, PerformTraver
+   11-19 16:48:22.248  3985  4000 I HWUI    : Davey! duration=2052ms; Flags=0, FrameTimelineVsyncId=9297, IntendedVsync=121116479473, Vsync=121749812781, InputEventId=0, HandleInputStart=121752734520, AnimationStart=121752735011, PerformTraver
+   11-19 16:48:22.806  3985  4060 I HWUI    : Davey! duration=2052ms; Flags=0, FrameTimelineVsyncId=9313, IntendedVsync=121766479447, Vsync=122466479419, InputEventId=0, HandleInputStart=122474400692, AnimationStart=122474401102, PerformTraver
+   11-19 16:48:23.324  3985  4060 I HWUI    : Davey! duration=1543ms; Flags=0, FrameTimelineVsyncId=9329, IntendedVsync=122483146085, Vsync=123149812725, InputEventId=0, HandleInputStart=123161945183, AnimationStart=123161945713, PerformTraver
+   11-19 16:48:23.386  3985  4060 I HWUI    : Davey! duration=1225ms; Flags=0, FrameTimelineVsyncId=9344, IntendedVsync=123166479391, Vsync=123949812693, InputEventId=0, HandleInputStart=123961102201, AnimationStart=123961102772, PerformTraver
+   11-19 16:48:34.276  3985  3997 I HWUI    : Davey! duration=715ms; Flags=0, FrameTimelineVsyncId=9965, IntendedVsync=134933145587, Vsync=135183145577, InputEventId=0, HandleInputStart=135196789448, AnimationStart=135196789838, PerformTravers
+   11-19 16:48:36.530  3985  3997 I HWUI    : Davey! duration=2698ms; Flags=0, FrameTimelineVsyncId=9980, IntendedVsync=135199812243, Vsync=135483145565, InputEventId=0, HandleInputStart=135491396332, AnimationStart=135491396933, PerformTraver
+   11-19 16:48:36.811  3985  3997 I HWUI    : Davey! duration=2757ms; Flags=0, FrameTimelineVsyncId=10002, IntendedVsync=135499812231, Vsync=137833145471, InputEventId=0, HandleInputStart=137844716775, AnimationStart=137844717306, PerformTrave
 == NativeLink: 5
-   11-19 16:10:24.128  4011  4448 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
-   11-19 16:11:42.504  5358  5406 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
-   11-19 16:12:10.313  5555  5819 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
-   11-19 16:12:51.255  6139  6182 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
-   11-19 16:13:31.941  6383  6429 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-19 16:48:45.037  3985  4448 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-19 16:50:09.643  5455  5500 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-19 16:50:34.146  5614  5711 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-19 16:51:22.051  6227  6267 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-19 16:52:07.889  6493  6534 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
 == timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
-   11-19 16:09:50.395  4002  4002 I PERFCHECK: section: C0. First launch after install: Home → „Каталог“ the catalogue is fetched and indexed; not representative, then speed-profile
-   11-19 16:10:50.367  4937  4937 I PERFCHECK: w27 first-install-open
-   11-19 16:12:00.795  5532  5532 I PERFCHECK: section: C1. Cold process: Home, then tap „Каталог“ first composition of the tab, the view models, the index ×3
-   11-19 16:12:33.837  6023  6023 I PERFCHECK: w27 cold-open-1
-   11-19 16:13:14.745  6325  6325 I PERFCHECK: w27 cold-open-2
-   11-19 16:13:54.926  6571  6571 I PERFCHECK: w27 cold-open-3
-   11-19 16:14:07.495  6633  6633 I PERFCHECK: section: C2. Warm: leave the tab and come back ×3; to News / More and back
-   11-19 16:14:10.940  6663  6663 I PERFCHECK: w27 leave-home-1
-   11-19 16:14:19.698  6702  6702 I PERFCHECK: w27 warm-open-1
-   11-19 16:14:29.204  6819  6819 I PERFCHECK: w27 leave-home-2
-   11-19 16:14:38.274  6864  6864 I PERFCHECK: w27 warm-open-2
-   11-19 16:14:47.661  6901  6901 I PERFCHECK: w27 leave-home-3
-   11-19 16:14:56.039  6947  6947 I PERFCHECK: w27 warm-open-3
-   11-19 16:15:05.428  6989  6989 I PERFCHECK: w27 leave-news
-   11-19 16:15:14.809  7035  7035 I PERFCHECK: w27 back-from-news
-   11-19 16:15:24.161  7076  7076 I PERFCHECK: w27 leave-more
-   11-19 16:15:32.502  7124  7124 I PERFCHECK: w27 back-from-more
-   11-19 16:15:38.448  7146  7146 I PERFCHECK: section: C3. Fling the list 6 up, 4 down ×3; tab reselect → top ×2
-   11-19 16:15:41.874  7165  7165 I PERFCHECK: w27 fling-list-1
-   11-19 16:16:01.752  7267  7267 I PERFCHECK: w27 fling-list-2
-   11-19 16:16:21.300  7356  7356 I PERFCHECK: w27 fling-list-3
-   11-19 16:16:44.715  7463  7463 I PERFCHECK: w27 reselect-top-1
-   11-19 16:16:57.659  7522  7522 I PERFCHECK: w27 reselect-top-2
-   11-19 16:17:02.552  7543  7543 I PERFCHECK: section: C4. „Покажи още“ load more ×2
-   11-19 16:18:51.649  8199  8199 I PERFCHECK: section: C5. Typing with a test IME Cyrillic, one letter every 350 ms, field chips, clear ×, erasing letter by letter
-   11-19 16:19:44.398  8629  8629 I PERFCHECK: w27 type-1
-   11-19 16:19:57.295  8698  8698 I PERFCHECK: w27 chip-author
-   11-19 16:20:08.498  8736  8736 I PERFCHECK: w27 chip-title
-   11-19 16:20:19.605  8775  8775 I PERFCHECK: w27 chip-all
-   11-19 16:20:28.170  8813  8813 I PERFCHECK: w27 clear-1
-   11-19 16:20:36.815  8849  8849 I PERFCHECK: w27 type-2
-   11-19 16:20:48.839  8916  8916 I PERFCHECK: w27 clear-2
-   11-19 16:20:57.391  8954  8954 I PERFCHECK: w27 type-3
-   11-19 16:21:09.686  9031  9031 I PERFCHECK: w27 erase-3
-   11-19 16:21:20.375  9159  9159 I PERFCHECK: section: C6. The system keyboard com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME: show by tapping the field / hide with Back ×3, digits with it
-   11-19 16:21:39.270  9327  9327 I PERFCHECK: w27 ime-show-1
-   11-19 16:21:49.649  9387  9387 I PERFCHECK: w27 ime-hide-1
-   11-19 16:21:58.265  9423  9423 I PERFCHECK: w27 ime-show-2
-   11-19 16:22:07.261  9467  9467 I PERFCHECK: w27 ime-hide-2
-   11-19 16:22:15.690  9505  9505 I PERFCHECK: w27 ime-show-3
-   11-19 16:22:24.600  9546  9546 I PERFCHECK: w27 ime-hide-3
-   11-19 16:22:33.180  9582  9582 I PERFCHECK: w27 ime-show-4
-   11-19 16:22:42.186  9629  9629 I PERFCHECK: w27 type-digits
-   11-19 16:22:53.879  9706  9706 I PERFCHECK: w27 clear-digits
-   11-19 16:23:02.969  9748  9748 I PERFCHECK: w27 ime-hide-4
-   11-19 16:23:22.228  9869  9869 I PERFCHECK: section: C7. Sort menu ×3: open, „Година нови първо“ / „Най-подходящи“
-   11-19 16:23:25.652  9890  9890 I PERFCHECK: w27 sort-open-1
-   11-19 16:23:36.451  9949  9949 I PERFCHECK: w27 sort-year-1
-   11-19 16:23:45.514  9995  9995 I PERFCHECK: w27 sort-open-2
-   11-19 16:23:56.616 10049 10049 I PERFCHECK: w27 sort-relevance-2
-   11-19 16:24:05.870 10091 10091 I PERFCHECK: w27 sort-open-3
-   11-19 16:24:16.512 10147 10147 I PERFCHECK: w27 sort-year-3
-   11-19 16:24:34.279 10231 10231 I PERFCHECK: section: C8. Filters sheet ×3: open, a filter „Само налични“ / „книга“, close with Back; then „Без филтри“
-   11-19 16:24:37.834 10254 10254 I PERFCHECK: w27 filters-open-1
-   11-19 16:24:49.480 10313 10313 I PERFCHECK: w27 filters-available-1
-   11-19 16:24:58.268 10352 10352 I PERFCHECK: w27 filters-close-1
-   11-19 16:25:06.844 10396 10396 I PERFCHECK: w27 filters-open-2
-   11-19 16:25:18.767 10452 10452 I PERFCHECK: w27 filters-doctype-2
-   11-19 16:25:27.571 10492 10492 I PERFCHECK: w27 filters-close-2
-   11-19 16:25:36.041 10528 10528 I PERFCHECK: w27 filters-open-3
-   11-19 16:25:47.016 10587 10587 I PERFCHECK: w27 filters-available-3
-   11-19 16:25:55.826 10625 10625 I PERFCHECK: w27 filters-close-3
-   11-19 16:26:04.219 10661 10661 I PERFCHECK: w27 filters-open-4
-   11-19 16:26:15.828 10720 10720 I PERFCHECK: w27 filters-clear
-   11-19 16:26:24.645 10758 10758 I PERFCHECK: w27 filters-close-4
-   11-19 16:26:34.100 10812 10812 I PERFCHECK: section: C9. Shelf view ×3: list → shelf, fling, shelf → list
-   11-19 16:26:37.511 10831 10831 I PERFCHECK: w27 shelf-on-1
-   11-19 16:26:46.662 10872 10872 I PERFCHECK: w27 fling-shelf-1
-   11-19 16:27:07.136 10963 10963 I PERFCHECK: w27 shelf-off-1
-   11-19 16:27:18.196 11047 11047 I PERFCHECK: w27 shelf-on-2
-   11-19 16:27:27.169 11084 11084 I PERFCHECK: w27 fling-shelf-2
-   11-19 16:27:47.068 11168 11168 I PERFCHECK: w27 shelf-off-2
-   11-19 16:27:58.136 11213 11213 I PERFCHECK: w27 shelf-on-3
-   11-19 16:28:07.262 11250 11250 I PERFCHECK: w27 fling-shelf-3
-   11-19 16:28:27.443 11334 11334 I PERFCHECK: w27 shelf-off-3
-   11-19 16:28:35.302 11365 11365 I PERFCHECK: section: C10. „Изненадай ме“ top-bar button ×3: open shuffle, „Още една“, close
-   11-19 16:28:38.775 11384 11384 I PERFCHECK: w27 surprise-open-1
-   11-19 16:28:54.332 11451 11451 I PERFCHECK: w27 surprise-again-1
-   11-19 16:29:07.014 11493 11493 I PERFCHECK: w27 surprise-close-1
-   11-19 16:29:17.804 11553 11553 I PERFCHECK: w27 surprise-open-2
-   11-19 16:29:31.119 11597 11597 I PERFCHECK: w27 surprise-again-2
-   11-19 16:29:44.309 11637 11637 I PERFCHECK: w27 surprise-close-2
-   11-19 16:29:55.210 11692 11692 I PERFCHECK: w27 surprise-open-3
-   11-19 16:30:07.847 11731 11731 I PERFCHECK: w27 surprise-again-3
-   11-19 16:30:20.580 11770 11770 I PERFCHECK: w27 surprise-close-3
-   11-19 16:30:27.911 11874 11874 I PERFCHECK: section: C11. Open a book from the list and come back ×3 rows 1–3
-   11-19 16:30:47.664 12002 12002 I PERFCHECK: w27 book-open-1
-   11-19 16:30:57.566 12051 12051 I PERFCHECK: w27 book-back-1
-   11-19 16:31:08.683 12106 12106 I PERFCHECK: w27 book-open-2
-   11-19 16:31:18.531 12145 12145 I PERFCHECK: w27 book-back-2
-   11-19 16:31:29.722 12198 12198 I PERFCHECK: w27 book-open-3
-   11-19 16:31:39.568 12236 12236 I PERFCHECK: w27 book-back-3
-   11-19 16:31:47.198 12281 12281 I PERFCHECK: section: C12. Pull to refresh ×2
-   11-19 16:31:52.660 12309 12309 I PERFCHECK: w27 refresh-1
-   11-19 16:32:07.757 12357 12357 I PERFCHECK: w27 refresh-2
-   11-19 16:32:17.383 12380 12380 I PERFCHECK: section: C13. Back to the app from the launcher catalogue in front ×2
-   11-19 16:32:24.568 12444 12444 I PERFCHECK: w27 resume-1
-   11-19 16:32:39.104 12491 12491 I PERFCHECK: w27 resume-2
-   11-19 16:32:46.526 12515 12515 I PERFCHECK: section: C14. All interactions ui = as JankStats frameDurationUiNanos: vsync → end of the sync; doFrame from the trace
+   11-19 16:48:09.527  3973  3973 I PERFCHECK: section: C0. First launch after install: Home → „Каталог“ the catalogue is fetched and indexed; not representative, then speed-profile
+   11-19 16:49:09.350  4849  4849 I PERFCHECK: w27 first-install-open
+   11-19 16:50:25.802  5565  5565 I PERFCHECK: section: C1. Cold process: Home, then tap „Каталог“ first composition of the tab, the view models, the index ×3
+   11-19 16:51:04.436  6172  6172 I PERFCHECK: w27 cold-open-1
+   11-19 16:51:52.186  6431  6431 I PERFCHECK: w27 cold-open-2
+   11-19 16:52:34.428  6663  6663 I PERFCHECK: w27 cold-open-3
+   11-19 16:52:47.149  6742  6742 I PERFCHECK: section: C2. Warm: leave the tab and come back ×3; to News / More and back
+   11-19 16:52:50.584  6770  6770 I PERFCHECK: w27 leave-home-1
+   11-19 16:52:59.423  6808  6808 I PERFCHECK: w27 warm-open-1
+   11-19 16:53:08.798  6844  6844 I PERFCHECK: w27 leave-home-2
+   11-19 16:53:17.747  6883  6883 I PERFCHECK: w27 warm-open-2
+   11-19 16:53:27.097  6919  6919 I PERFCHECK: w27 leave-home-3
+   11-19 16:53:35.459  6970  6970 I PERFCHECK: w27 warm-open-3
+   11-19 16:53:44.850  7006  7006 I PERFCHECK: w27 leave-news
+   11-19 16:53:54.180  7060  7060 I PERFCHECK: w27 back-from-news
+   11-19 16:54:03.572  7100  7100 I PERFCHECK: w27 leave-more
+   11-19 16:54:11.886  7138  7138 I PERFCHECK: w27 back-from-more
+   11-19 16:54:17.808  7160  7160 I PERFCHECK: section: C3. Fling the list 6 up, 4 down ×3; tab reselect → top ×2
+   11-19 16:54:21.227  7179  7179 I PERFCHECK: w27 fling-list-1
+   11-19 16:54:41.808  7289  7289 I PERFCHECK: w27 fling-list-2
+   11-19 16:55:03.863  7384  7384 I PERFCHECK: w27 fling-list-3
+   11-19 16:55:28.114  7495  7495 I PERFCHECK: w27 reselect-top-1
+   11-19 16:55:40.641  7546  7546 I PERFCHECK: w27 reselect-top-2
+   11-19 16:55:45.531  7567  7567 I PERFCHECK: section: C4. „Покажи още“ load more ×2
+   11-19 16:57:35.208  8231  8231 I PERFCHECK: section: C5. Typing with a test IME Cyrillic, one letter every 350 ms, field chips, clear ×, erasing letter by letter
+   11-19 16:58:08.347  8521  8521 I PERFCHECK: w27 type-1
+   11-19 16:58:24.937  8581  8581 I PERFCHECK: w27 chip-author
+   11-19 16:58:33.309  8634  8634 I PERFCHECK: w27 chip-title
+   11-19 16:58:44.091  8671  8671 I PERFCHECK: w27 chip-all
+   11-19 16:58:54.850  8710  8710 I PERFCHECK: w27 clear-1
+   11-19 16:59:03.591  8747  8747 I PERFCHECK: w27 type-2
+   11-19 16:59:15.716  8815  8815 I PERFCHECK: w27 clear-2
+   11-19 16:59:24.219  8852  8852 I PERFCHECK: w27 type-3
+   11-19 16:59:36.941  8929  8929 I PERFCHECK: w27 erase-3
+   11-19 16:59:47.324  9059  9059 I PERFCHECK: section: C6. The system keyboard com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME: show by tapping the field / hide with Back ×3, digits with it
+   11-19 17:00:08.094  9236  9236 I PERFCHECK: w27 ime-show-1
+   11-19 17:00:17.396  9283  9283 I PERFCHECK: w27 ime-hide-1
+   11-19 17:00:25.837  9320  9320 I PERFCHECK: w27 ime-show-2
+   11-19 17:00:34.785  9361  9361 I PERFCHECK: w27 ime-hide-2
+   11-19 17:00:43.123  9400  9400 I PERFCHECK: w27 ime-show-3
+   11-19 17:00:51.109  9441  9441 I PERFCHECK: w27 ime-hide-3
+   11-19 17:00:59.460  9476  9476 I PERFCHECK: w27 ime-show-4
+   11-19 17:01:08.269  9517  9517 I PERFCHECK: w27 type-digits
+   11-19 17:01:19.632  9593  9593 I PERFCHECK: w27 clear-digits
+   11-19 17:01:28.768  9635  9635 I PERFCHECK: w27 ime-hide-4
+   11-19 17:01:47.927  9749  9749 I PERFCHECK: section: C7. Sort menu ×3: open, „Година нови първо“ / „Най-подходящи“
+   11-19 17:01:51.392  9771  9771 I PERFCHECK: w27 sort-open-1
+   11-19 17:02:02.689  9829  9829 I PERFCHECK: w27 sort-year-1
+   11-19 17:02:11.669  9884  9884 I PERFCHECK: w27 sort-open-2
+   11-19 17:02:22.211  9941  9941 I PERFCHECK: w27 sort-relevance-2
+   11-19 17:02:31.320  9981  9981 I PERFCHECK: w27 sort-open-3
+   11-19 17:02:41.793 10040 10040 I PERFCHECK: w27 sort-year-3
+   11-19 17:02:58.753 10122 10122 I PERFCHECK: section: C8. Filters sheet ×3: open, a filter „Само налични“ / „книга“, close with Back; then „Без филтри“
+   11-19 17:03:02.309 10159 10159 I PERFCHECK: w27 filters-open-1
+   11-19 17:03:14.036 10217 10217 I PERFCHECK: w27 filters-available-1
+   11-19 17:03:22.804 10255 10255 I PERFCHECK: w27 filters-close-1
+   11-19 17:03:31.228 10293 10293 I PERFCHECK: w27 filters-open-2
+   11-19 17:03:44.092 10350 10350 I PERFCHECK: w27 filters-doctype-2
+   11-19 17:03:52.867 10394 10394 I PERFCHECK: w27 filters-close-2
+   11-19 17:04:01.398 10430 10430 I PERFCHECK: w27 filters-open-3
+   11-19 17:04:14.223 10489 10489 I PERFCHECK: w27 filters-available-3
+   11-19 17:04:22.990 10527 10527 I PERFCHECK: w27 filters-close-3
+   11-19 17:04:31.401 10564 10564 I PERFCHECK: w27 filters-open-4
+   11-19 17:04:44.413 10621 10621 I PERFCHECK: w27 filters-clear
+   11-19 17:04:53.200 10659 10659 I PERFCHECK: w27 filters-close-4
+   11-19 17:05:02.517 10707 10707 I PERFCHECK: section: C9. Shelf view ×3: list → shelf, fling, shelf → list
+   11-19 17:05:06.004 10727 10727 I PERFCHECK: w27 shelf-on-1
+   11-19 17:05:14.879 10764 10764 I PERFCHECK: w27 fling-shelf-1
+   11-19 17:05:35.258 10856 10856 I PERFCHECK: w27 shelf-off-1
+   11-19 17:05:46.245 10902 10902 I PERFCHECK: w27 shelf-on-2
+   11-19 17:05:55.343 10939 10939 I PERFCHECK: w27 fling-shelf-2
+   11-19 17:06:15.206 11023 11023 I PERFCHECK: w27 shelf-off-2
+   11-19 17:06:26.173 11068 11068 I PERFCHECK: w27 shelf-on-3
+   11-19 17:06:35.210 11105 11105 I PERFCHECK: w27 fling-shelf-3
+   11-19 17:06:54.533 11202 11202 I PERFCHECK: w27 shelf-off-3
+   11-19 17:07:01.897 11228 11228 I PERFCHECK: section: C10. „Изненадай ме“ top-bar button ×3: open shuffle, „Още една“, close
+   11-19 17:07:05.332 11247 11247 I PERFCHECK: w27 surprise-open-1
+   11-19 17:07:19.727 11306 11306 I PERFCHECK: w27 surprise-close-1
+   11-19 17:07:41.496 11441 11441 I PERFCHECK: w27 surprise-open-2
+   11-19 17:07:53.800 11481 11481 I PERFCHECK: w27 surprise-close-2
+   11-19 17:08:04.162 11535 11535 I PERFCHECK: w27 surprise-open-3
+   11-19 17:08:16.453 11583 11583 I PERFCHECK: w27 surprise-close-3
+   11-19 17:08:23.416 11626 11626 I PERFCHECK: section: C11. Open a book from the list and come back ×3 rows 1–3
+   11-19 17:08:42.224 11749 11749 I PERFCHECK: w27 book-back-1
+   11-19 17:09:04.534 11934 11934 I PERFCHECK: w27 book-back-2
+   11-19 17:09:26.620 12072 12072 I PERFCHECK: w27 book-back-3
+   11-19 17:09:45.240 12188 12188 I PERFCHECK: section: C12. Pull to refresh ×2
+   11-19 17:09:50.701 12220 12220 I PERFCHECK: w27 refresh-1
+   11-19 17:10:05.758 12266 12266 I PERFCHECK: w27 refresh-2
+   11-19 17:10:15.406 12289 12289 I PERFCHECK: section: C13. Back to the app from the launcher catalogue in front ×2
+   11-19 17:10:21.871 12369 12369 I PERFCHECK: w27 resume-1
+   11-19 17:10:35.464 12415 12415 I PERFCHECK: w27 resume-2
+   11-19 17:10:42.425 12439 12439 I PERFCHECK: section: C14. All interactions ui = as JankStats frameDurationUiNanos: vsync → end of the sync; doFrame from the trace

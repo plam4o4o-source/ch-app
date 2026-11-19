@@ -1,1 +1,1 @@
-[{"vsync": 860167017212, "done": 860271550750, "syncq": 860174364440, "flags": 0, "total": 104.5, "delay": 1.8, "input": 0.4, "anim": 0.0, "layout": 0.1, "draw": 5.1, "sync": 0.1, "rt": 95.1, "ui": 9.5}]
+[{"vsync": 966685443327, "done": 966818925750, "syncq": 966688186110, "flags": 0, "total": 133.5, "delay": 2.3, "input": 0.1, "anim": 0.0, "layout": 0.1, "draw": 0.2, "sync": 0.3, "rt": 130.6, "ui": 3.2}]
