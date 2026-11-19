@@ -1,12 +1,13 @@
 diff --git a/app/build.gradle.kts b/app/build.gradle.kts
-index 2c76b93e..977114ec 100644
+index 2c76b93e..17feb3cd 100644
 --- a/app/build.gradle.kts
 +++ b/app/build.gradle.kts
-@@ -340,6 +340,7 @@ dependencies {
+@@ -340,6 +340,8 @@ dependencies {
      implementation(libs.compose.material3)
      implementation(libs.compose.material.icons.extended)
      implementation(libs.compose.animation)
 +    implementation("androidx.compose.runtime:runtime-tracing") // W27 DEBUG ONLY (debug/w27-cat): composable names in traces
++    implementation("androidx.tracing:tracing-perfetto-binary:1.0.1") // W27 DEBUG ONLY: the native lib runtime-tracing loads
      // RoundedPolygon + Morph: избраният раздел „разцъфва“ от хапче в осморъка.
      implementation(libs.androidx.graphics.shapes)
      debugImplementation(libs.compose.ui.tooling)
