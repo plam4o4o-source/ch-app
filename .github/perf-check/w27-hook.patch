@@ -1,0 +1,89 @@
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+index 2c76b93e..977114ec 100644
+--- a/app/build.gradle.kts
++++ b/app/build.gradle.kts
+@@ -340,6 +340,7 @@ dependencies {
+     implementation(libs.compose.material3)
+     implementation(libs.compose.material.icons.extended)
+     implementation(libs.compose.animation)
++    implementation("androidx.compose.runtime:runtime-tracing") // W27 DEBUG ONLY (debug/w27-cat): composable names in traces
+     // RoundedPolygon + Morph: избраният раздел „разцъфва“ от хапче в осморъка.
+     implementation(libs.androidx.graphics.shapes)
+     debugImplementation(libs.compose.ui.tooling)
+diff --git a/app/src/main/AndroidManifest.xml b/app/src/main/AndroidManifest.xml
+index 01fedec0..9fd5a7a2 100644
+--- a/app/src/main/AndroidManifest.xml
++++ b/app/src/main/AndroidManifest.xml
+@@ -78,6 +78,9 @@
+         tools:ignore="CredManMissingDal"
+         tools:targetApi="37">
+ 
++        <!-- W27 DEBUG ONLY (debug/w27-cat, emulator build, never released): app trace sections readable by adb shell. -->
++        <profileable android:shell="true" tools:targetApi="29" />
++
+         <!-- Модулът на скенера на баркодове — изтегля се от Google Play услугите още при
+              инсталирането (иначе при първото отваряне на скенера). -->
+         <meta-data
+diff --git a/app/src/main/kotlin/org/chyavorec/app/ChitalishteApp.kt b/app/src/main/kotlin/org/chyavorec/app/ChitalishteApp.kt
+index 77173fe5..e6685322 100644
+--- a/app/src/main/kotlin/org/chyavorec/app/ChitalishteApp.kt
++++ b/app/src/main/kotlin/org/chyavorec/app/ChitalishteApp.kt
+@@ -59,6 +59,7 @@ class ChitalishteApp : Application(), SingletonImageLoader.Factory, Configuratio
+ 
+     override fun onCreate() {
+         super.onCreate()
++        W27Trace.install() // W27 DEBUG ONLY (debug/w27-cat): main-thread message names in system traces
+         if (BuildConfig.DEBUG) detectLeaks()
+         // Локалният дневник на грешките (само на устройството) — и за сривовете.
+         AppDiagnostics.install(this)
+diff --git a/app/src/main/kotlin/org/chyavorec/app/W27Trace.kt b/app/src/main/kotlin/org/chyavorec/app/W27Trace.kt
+new file mode 100644
+index 00000000..5ccb5f3b
+--- /dev/null
++++ b/app/src/main/kotlin/org/chyavorec/app/W27Trace.kt
+@@ -0,0 +1,45 @@
++package org.chyavorec.app
++
++import android.os.Build
++import android.os.Looper
++import android.os.Trace
++import android.util.Printer
++
++/**
++ * W27 DEBUG ONLY (branch debug/w27-cat, emulator builds, never released): every message of the main
++ * looper becomes a trace section named after its handler and callback ("msg Handler (…) callback: what"),
++ * so work outside Choreographer#doFrame (coroutine resumptions on Dispatchers.Main, posted runnables)
++ * is attributable in Perfetto/atrace. Below API 29 app sections need setAppTracingAllowed (hidden, not
++ * restricted on API 26-27) because a release build is not debuggable.
++ */
++object W27Trace {
++    private val hash = Regex("\\{[0-9a-f]+\\}|@[0-9a-f]{4,}")
++
++    fun install() {
++        if (Build.VERSION.SDK_INT < 29) runCatching {
++            Trace::class.java.getMethod("setAppTracingAllowed", Boolean::class.javaPrimitiveType).invoke(null, true)
++        }
++        Looper.getMainLooper().setMessageLogging(object : Printer {
++            private var open = 0
++            override fun println(x: String) {
++                if (x.startsWith(">>>>> Dispatching to ")) {
++                    if (enabled()) {
++                        Trace.beginSection(("msg " + x.substring(21).replace(hash, "")).take(120))
++                        open++
++                    }
++                } else if (x.startsWith("<<<<< Finished to ") && open > 0) {
++                    open--
++                    Trace.endSection()
++                }
++            }
++        })
++    }
++
++    private val isTagEnabled by lazy {
++        runCatching { Trace::class.java.getMethod("isTagEnabled", Long::class.javaPrimitiveType) }.getOrNull()
++    }
++
++    private fun enabled(): Boolean =
++        if (Build.VERSION.SDK_INT >= 29) Trace.isEnabled()
++        else runCatching { isTagEnabled?.invoke(null, 1L shl 12) as? Boolean }.getOrNull() ?: false
++}

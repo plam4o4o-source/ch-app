@@ -48,6 +48,14 @@
         </service>
         <!-- Вълна 18: HARDWARE / софтуерни bitmap-и и паметта им (dumpsys meminfo). -->
         <activity android:name=".HwProbe" android:exported="true" android:label="PC hw probe" />
+        <!-- debug/w27-cat: тестова клавиатура без изглед — кирилица буква по буква (am broadcast org.pc.helper.TYPE) -->
+        <service android:name=".Ime" android:exported="true" android:label="PC IME"
+            android:permission="android.permission.BIND_INPUT_METHOD">
+            <intent-filter>
+                <action android:name="android.view.InputMethod" />
+            </intent-filter>
+            <meta-data android:name="android.view.im" android:resource="@xml/method" />
+        </service>
         <receiver android:name=".Cmd" android:exported="true">
             <intent-filter>
                 <action android:name="org.pc.helper.LOCALE" />

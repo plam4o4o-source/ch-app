@@ -1,22 +1,22 @@
-name: Emulator check of the v1.2.39 candidate (temporary)
-# ВРЕМЕННО (клон debug/w26-check): проверка на кандидата v1.2.39 (claude/charming-rubin-3lzor2 @ 696e57db)
-# срещу издаденото v1.2.38 (main f57962bd). Резултатите — в клона emulator-results, папка v139/ (нов commit
-# върху върха; без force). Инструментите са от debug/w25-check; новите части са в .github/perf-check/w26.sh.
-# Без промени в кода на приложението. Пуска се САМО при push в debug/w26-check.
-#   app.apk          — prodRelease (minified) x86_64 от NEW_REF, org.chyavorec.app, временен ключ — кандидатът 1.2.39
-#   app-base.apk     — prodRelease x86_64 от BASE_REF, applicationId org.chyavorec.app.b38 (за да стоят едно до друго)
-#   app-base-upd.apk — prodRelease x86_64 от BASE_REF, org.chyavorec.app, същият ключ (обновяване 1.2.38 → 1.2.39)
-# Кои части се пускат: .github/perf-check/w26-parts.txt (празен — само публикуване на бележките).
+name: Emulator diagnosis of the catalogue tab jank in v1.2.39 (temporary)
+# ВРЕМЕННО (клон debug/w27-cat): бавните кадри на раздела „Каталог“ в издаденото v1.2.39 (main ab175e49).
+# Резултатите — в клона emulator-results, папка v139cat/ (нов commit върху върха; без force). Инструментите са от
+# debug/w26-check; новите части са в .github/perf-check/w27.sh, анализът на записите — w27.py.
+# Пуска се САМО при push в debug/w27-cat.
+#   app.apk      — prodRelease (minified) x86_64 от NEW_REF, org.chyavorec.app, временен ключ — 1.2.39 както е издадено
+#   app-hook.apk — същото + .github/perf-check/w27-hook.patch (САМО ЗА ОТЛАДКА, никога не се издава): съобщенията на
+#                  главната нишка като секции в записа, profileable shell, runtime-tracing
+# Кои части се пускат: .github/perf-check/w27-parts.txt (празен — само публикуване на бележките).
 on:
   push:
-    branches: [debug/w26-check]
+    branches: [debug/w27-cat]
     paths: [.github/workflows/perf-check.yml, .github/perf-check/**]
 permissions:
   contents: read
 env:
-  NEW_REF: 696e57dbc122e70537a7199139a5c9315f0238bb
-  BASE_REF: f57962bdeff4a2b3e5548a7e4c4c364165809a90
-  V: v139
+  NEW_REF: ab175e49c82d8d1d8b6624922b7c0baab4042aa6
+  BASE_REF: ab175e49c82d8d1d8b6624922b7c0baab4042aa6
+  V: v139cat
 jobs:
   plan:
     runs-on: ubuntu-latest
@@ -27,9 +27,9 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - id: p
-        name: Parts of this run (from w26-parts.txt)
+        name: Parts of this run (from w27-parts.txt)
         run: |
-          P=$( (grep -v '^#' .github/perf-check/w26-parts.txt || true) | tr -s ' \n\t' ' ' | sed 's/^ //; s/ $//')
+          P=$( (grep -v '^#' .github/perf-check/w27-parts.txt || true) | tr -s ' \n\t' ' ' | sed 's/^ //; s/ $//')
           J=$(python3 -c "import json,sys; print(json.dumps(sys.argv[1].split()))" "$P")
           echo "parts=$J" >> "$GITHUB_OUTPUT"
           if [ -n "$P" ]; then echo "any=true" >> "$GITHUB_OUTPUT"; else echo "any=false" >> "$GITHUB_OUTPUT"; fi
@@ -83,12 +83,20 @@ jobs:
       matrix:
         include:
           - { app: new, vname: "1.2.39", vc: "1990200", suffix: "" }
-          - { app: base, vname: "1.2.38", vc: "1990100", suffix: ".b38" }
-          - { app: baseupd, vname: "1.2.38", vc: "1990100", suffix: "" }
+          - { app: hook, vname: "1.2.39", vc: "1990200", suffix: "" }
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ matrix.app == 'new' && env.NEW_REF || env.BASE_REF }}
+          ref: ${{ env.NEW_REF }}
+      - uses: actions/checkout@v7
+        with:
+          path: harness
+          sparse-checkout: .github/perf-check
+      - name: The debug-only instrumentation (hook build only; never released)
+        if: matrix.app == 'hook'
+        run: |
+          git apply --verbose harness/.github/perf-check/w27-hook.patch
+          git status --short
       - uses: actions/download-artifact@v8
         with:
           name: key
@@ -113,12 +121,18 @@ jobs:
           fi
           K="$RUNNER_TEMP/key"; P=$(cat "$K/pass")
           export SIGNING_STORE_FILE="$K/t.jks" SIGNING_STORE_PASSWORD="$P" SIGNING_KEY_ALIAS=t SIGNING_KEY_PASSWORD="$P" VERSION_CODE=${{ matrix.vc }}
-          ./gradlew --no-daemon assembleProdRelease
+          NOTE=""
+          if ! ./gradlew --no-daemon assembleProdRelease; then
+            # runtime-tracing not resolvable/compatible: the hook build without it
+            [ ${{ matrix.app }} = hook ] && grep -q runtime-tracing app/build.gradle.kts || exit 1
+            sed -i '/runtime-tracing/d' app/build.gradle.kts; NOTE=" (runtime-tracing DROPPED: the build failed with it)"
+            ./gradlew --no-daemon assembleProdRelease
+          fi
           mkdir -p dist
-          case ${{ matrix.app }} in new) O=app.apk; R=apk-ref.txt;; base) O=app-base.apk; R=apk-base-ref.txt;; baseupd) O=app-base-upd.apk; R=apk-base-upd-ref.txt;; esac
+          case ${{ matrix.app }} in new) O=app.apk; R=apk-ref.txt; M=app-mapping.txt; D="";; hook) O=app-hook.apk; R=apk-hook-ref.txt; M=app-hook-mapping.txt; D=" + w27-hook.patch (DEBUG ONLY: looper message trace sections, profileable shell, runtime-tracing$NOTE)";; esac
           cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/$O
-          [ ${{ matrix.app }} = new ] && cp app/build/outputs/mapping/prodRelease/mapping.txt dist/app-mapping.txt || true
-          echo "${{ matrix.vname }} $(git rev-parse --short HEAD) prodRelease (minified), x86_64 added, applicationId org.chyavorec.app${{ matrix.suffix }}, throwaway key, versionCode ${{ matrix.vc }}" > dist/$R
+          cp app/build/outputs/mapping/prodRelease/mapping.txt dist/$M || true
+          echo "${{ matrix.vname }} $(git rev-parse --short HEAD) prodRelease (minified), x86_64 added, applicationId org.chyavorec.app${{ matrix.suffix }}, throwaway key, versionCode ${{ matrix.vc }}$D" > dist/$R
           cat dist/*.txt; ls -l dist
       - uses: actions/upload-artifact@v7
         with:
@@ -155,6 +169,8 @@ jobs:
           ls -l *.apk; cat apk-*.txt
           python3 -c "import PIL, numpy, cv2" 2>/dev/null && command -v ffmpeg || { sudo apt-get update -qq >/dev/null 2>&1; sudo apt-get install -y -qq python3-pil python3-numpy python3-opencv ffmpeg >/dev/null 2>&1; }
           python3 -c "import PIL; print('PIL', PIL.__version__)"; command -v ffmpeg
+          python3 -m pip install --user --break-system-packages -q perfetto==0.59.1 2>&1 | tail -2 || python3 -m pip install --user -q perfetto==0.59.1 2>&1 | tail -2 || true
+          python3 .github/perf-check/w27.py warm || echo "trace_processor_shell: download failed"
       - name: Run on emulator (${{ matrix.part }}, swangle_indirect)
         id: run
         continue-on-error: true
@@ -214,7 +230,7 @@ jobs:
           pattern: apk-*
           path: apks
           merge-multiple: true
-      - name: Push results to emulator-results/v139 (a new commit on top; the rest of the branch is kept)
+      - name: Push results to emulator-results/v139cat (a new commit on top; the rest of the branch is kept)
         run: |
           set -ex
           SRC=$(git rev-parse --short HEAD)
@@ -237,10 +253,10 @@ jobs:
             mkdir -p "$V/size"
             git show "FETCH_HEAD:$V/size/apks.txt" > "$V/size/apks.txt" 2>/dev/null || : > "$V/size/apks.txt"
             if ls "$W"/apks/apk-*ref.txt >/dev/null 2>&1; then
-              { cat "$W"/apks/apk-*ref.txt; for a in app.apk app-base.apk app-base-upd.apk; do [ -f "$W/apks/$a" ] && echo "$a $(stat -c %s "$W/apks/$a") bytes"; done; } > "$V/size/apks.txt" || true
+              { cat "$W"/apks/apk-*ref.txt; for a in app.apk app-hook.apk; do [ -f "$W/apks/$a" ] && echo "$a $(stat -c %s "$W/apks/$a") bytes"; done; } > "$V/size/apks.txt" || true
             fi
             git show FETCH_HEAD:$V/runs.txt > "$V/runs.txt" 2>/dev/null || : > "$V/runs.txt"
-            echo "run $RUN @ $SRC (new ${NEW_REF:0:7}, base ${BASE_REF:0:7}): $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
+            echo "run $RUN @ $SRC (1.2.39 = ${NEW_REF:0:8}): $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
             # Частите от по-ранни изпълнения: summary.txt и job-status.txt обратно на диска — за индекса (не се добавят наново).
             for p in $(git ls-tree --name-only "FETCH_HEAD:$V" 2>/dev/null); do
               [ -d "$W/results/$p" ] && continue
@@ -250,13 +266,13 @@ jobs:
             done
             (
               cd "$V"
-              echo "# Emulator check of the v1.2.39 candidate (${NEW_REF:0:7}) against the released v1.2.38 (${BASE_REF:0:7})"
+              echo "# Catalogue tab: slow UI-thread frames in the released v1.2.39 (${NEW_REF:0:8}), emulator diagnosis"
               echo
-              cat "$W/.github/perf-check/w26-notes.md" 2>/dev/null || true
+              cat "$W/.github/perf-check/w27-notes.md" 2>/dev/null || true
               echo
               echo "## Runs and parts"
               echo
-              echo "debug/w26-check (runs in runs.txt, latest $RUN @ $SRC). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part name ends in 26 (API 26) or 36x (API 36). prodRelease (minified) x86_64 builds with a throwaway key: new = the 1.2.39 candidate (org.chyavorec.app), base = 1.2.38 as released (org.chyavorec.app.b38, side by side for the A/B), base-upd = 1.2.38 as org.chyavorec.app (the update test). No app-code changes on the debug branch. Screenshots are JPEG, scaled down (sheets/ = contact sheets). The earlier checks: [../v138b/index.md](../v138b/index.md), [../v138/index.md](../v138/index.md)."
+              echo "debug/w27-cat (runs in runs.txt, latest $RUN @ $SRC). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part name ends in 26 (API 26) or 36x (API 36). Per-part table of all interactions: <part>/table.md. The earlier check of 1.2.39: [../v139/index.md](../v139/index.md)."
               echo; echo "| part | status |"; echo "|---|---|"
               for p in $(ls -d */ | tr -d /); do [ -f "$p/job-status.txt" ] && echo "| $p | $(grep -c '## COMPLETE' $p/summary.txt 2>/dev/null | sed 's/^1$/COMPLETE/;s/^0$/incomplete/'); $(cat $p/job-status.txt) |"; done
               echo; echo '```'; cat size/apks.txt 2>/dev/null; echo '```'
@@ -268,7 +284,7 @@ jobs:
             ) > "$RUNNER_TEMP/v-index.md"
             mv "$RUNNER_TEMP/v-index.md" "$V/index.md"
             git show FETCH_HEAD:index.md > index.md
-            grep -q "$V/index.md" index.md || { { head -1 index.md; echo; echo "v1.2.39 candidate (696e57d) vs v1.2.38: crash smoke API 26/33/36, frame time A/B, update, screenshots: [$V/index.md]($V/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
+            grep -q "$V/index.md" index.md || { { head -1 index.md; echo; echo "v1.2.39 released (ab175e49): catalogue tab slow frames, framestats + Perfetto per interaction: [$V/index.md]($V/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
             for p in $(ls "$W/results"); do git add -A -- "$V/$p"; done
             git add -A -- "$V/runs.txt" "$V/index.md" "$V/size/apks.txt" index.md
             C=$(git commit-tree "$(git write-tree)" -p "$TIP" -m "Emulator results $V for $SRC (run $RUN)") || { echo "write-tree/commit failed (promisor fetch?); retrying"; sleep $((try * 7)); continue; }

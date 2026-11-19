@@ -257,6 +257,8 @@ setup() {
   if [ "$PART" = scan33keep ]; then cp app-keep.apk app.apk; cp apk-keep-ref.txt apk-ref.txt; log "DIAGNOSTIC APK: $(cat apk-ref.txt)"; fi
   # gfxb36: същото като gfx36, но върху 1.2.35 (app.apk := app-base.apk)
   if [ "$PART" = gfxb36 ]; then cp app-base.apk app.apk; cp apk-base-ref.txt apk-ref.txt; log "BASE APK as the tested app: $(cat apk-ref.txt)"; fi
+  # cath*: the instrumented build of debug/w27-cat (app-hook.apk, same applicationId) instead of the released code
+  case $PART in cath*) if [ -f app-hook.apk ]; then cp app-hook.apk app.apk; cp apk-hook-ref.txt apk-ref.txt; log "HOOK APK as the tested app: $(cat apk-ref.txt)"; else log "HOOK APK MISSING — the plain build is tested"; fi;; esac
   relprobe; log "APK for this part: $(cat apk-ref.txt 2>/dev/null) size $(stat -c %s app.apk) bytes"
   timeout 180 adb install -r app.apk || { sleep 20; a pm path android >/dev/null 2>&1; timeout 180 adb install -r app.apk; } || { sleep 40; timeout 180 adb install -r app.apk; } || { log "RESULT: install failed"; exit 1; }
   log "installed: $(a dumpsys package $PKG | grep -m2 -E 'versionName|versionCode' | tr -s ' ' | tr -d '\r' | tr '\n' ' ')"
@@ -1506,10 +1508,12 @@ EOF
 . $H_/w25.sh
 # Проверката на кандидата v1.2.39 (debug/w26-check, резултати в emulator-results/v139)
 . $H_/w26.sh
+# Каталогът на издаденото v1.2.39: бавните кадри (debug/w27-cat, резултати в emulator-results/v139cat)
+. $H_/w27.sh
 # ================================================================= main
 NEW_VC=${VC_NEW:-1507400}
 setup
-if part_w26; then :; elif part_w25; then :; elif part_w24; then :; elif part_a7; then :; elif part_w22; then :; elif part_a6; then :; elif part_w21; then :; elif part_final; then :; elif part_card; then :; elif part_w20; then :; elif part_w19; then :; elif part_w18; then :; elif part_w16; then :; else
+if part_w27; then :; elif part_w26; then :; elif part_w25; then :; elif part_w24; then :; elif part_a7; then :; elif part_w22; then :; elif part_a6; then :; elif part_w21; then :; elif part_final; then :; elif part_card; then :; elif part_w20; then :; elif part_w19; then :; elif part_w18; then :; elif part_w16; then :; else
 case $PART in
   abstart-*) part_abstart;;
   jank-*) part_jank;;
