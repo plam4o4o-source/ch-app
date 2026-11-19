@@ -13,6 +13,16 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.40
+
+### bg
+- „Каталог“ се отваря по-плавно при смяна на раздела — без кратко засичане.
+- Емблемата в горната лента се зарежда веднъж — всички раздели се отварят малко по-бързо.
+
+### en
+- “Catalogue” opens more smoothly when you switch tabs — no brief stutter.
+- The emblem in the top bar loads once, so every tab opens a little faster.
+
 ## 1.2.39
 
 ### bg
