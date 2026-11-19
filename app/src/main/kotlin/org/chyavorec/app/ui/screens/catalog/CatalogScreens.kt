@@ -97,6 +97,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -165,6 +166,8 @@ import org.chyavorec.app.ui.share.ShareImageHost
 import org.chyavorec.app.ui.share.rememberShareImageState
 import org.chyavorec.app.ui.components.openLibraryCoverUrl
 import org.chyavorec.app.ui.components.LocalOnlineCovers
+import org.chyavorec.app.ui.components.LocalSharedScope
+import org.chyavorec.app.ui.components.LocalSharedTransitionsEnabled
 
 @Composable
 fun fieldLabel(f: SearchField): String = stringResource(
@@ -221,6 +224,17 @@ fun CatalogScreen(navigate: (String) -> Unit) {
     val hasResults = state.results.isNotEmpty()
     LaunchedEffect(hasResults) { if (hasResults) rowsIntroduced = true }
     val staggered = if (rowsIntroduced) 0 else 10
+    // Смяна на раздел: в първия кадър — лентата, търсенето и полетата, редовете — в следващия.
+    // Иначе целият екран (с ~8 реда и корици, мерени двукратно заради споделените преходи) се
+    // строи в един кадър от 40–60 ms. Входящият раздел е невидим в началото на прехода (fadeIn със
+    // закъснение), затова отлагането не се вижда. Назад от книга — без отлагане: корицата в реда
+    // трябва да е там за „прелитането“.
+    val deferRows = LocalSharedScope.current != null && !LocalSharedTransitionsEnabled.current
+    var rowsReady by remember { mutableStateOf(!deferRows) }
+    if (!rowsReady) LaunchedEffect(Unit) {
+        withFrameNanos { }
+        rowsReady = true
+    }
     // Заявка от друг екран (скенера): „Търси в каталога“ с предварително попълнен ISBN/заглавие.
     LaunchedEffect(Unit) {
         CatalogSearchRequests.pending.collect { r ->
@@ -412,7 +426,9 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp).semantics { liveRegion = LiveRegionMode.Polite },
                             )
                         }
-                        if (state.results.isEmpty() && !state.searching) {
+                        if (!rowsReady) {
+                            Box(Modifier.fillMaxSize())
+                        } else if (state.results.isEmpty() && !state.searching) {
                             EmptyView(stringResource(R.string.catalog_no_results), stringResource(R.string.catalog_no_results_hint), icon = Icons.Outlined.SearchOff)
                         } else if (shelf) {
                             CatalogShelfView(

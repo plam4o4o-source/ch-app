@@ -42,6 +42,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.stateDescription
@@ -137,7 +138,7 @@ fun BrandedImageFallback(modifier: Modifier = Modifier) {
     Box(modifier.background(Brush.linearGradient(listOf(Brand.Burgundy, Color(0xFF3A1A18), Brand.Ink)))) {
         // Воден знак с 9% непрозрачност — малкият вариант (256 px) е достатъчен.
         androidx.compose.foundation.Image(
-            painter = androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.logo_chitalishte_small),
+            painter = smallLogoPainter(),
             contentDescription = null,
             contentScale = ContentScale.Fit,
             alpha = 0.09f,
@@ -497,12 +498,27 @@ fun Emblem(size: Dp, modifier: Modifier = Modifier, description: String? = null)
         contentAlignment = Alignment.Center,
     ) {
         androidx.compose.foundation.Image(
-            painter = androidx.compose.ui.res.painterResource(
-                if (size <= 64.dp) org.chyavorec.app.R.drawable.logo_chitalishte_small else org.chyavorec.app.R.drawable.logo_chitalishte,
-            ),
+            painter = if (size <= 64.dp) smallLogoPainter() else androidx.compose.ui.res.painterResource(org.chyavorec.app.R.drawable.logo_chitalishte),
             contentDescription = description,
             modifier = Modifier.fillMaxSize(),
         )
+    }
+}
+
+/**
+ * Малкото лого (256 px), декодирано веднъж за процеса. painterResource го декодира наново при
+ * всяко влизане в екран (емблемата е в лентата на всеки раздел) — 3–9 ms в кадъра на влизането.
+ * Ресурсът е в drawable-nodpi: не зависи от плътността и темата, затова кешът не се обезсилва.
+ */
+@Volatile private var smallLogo: androidx.compose.ui.graphics.ImageBitmap? = null
+
+@Composable
+private fun smallLogoPainter(): androidx.compose.ui.graphics.painter.Painter {
+    val res = androidx.compose.ui.platform.LocalResources.current
+    return remember {
+        val bitmap = smallLogo ?: androidx.compose.ui.graphics.ImageBitmap.imageResource(res, org.chyavorec.app.R.drawable.logo_chitalishte_small)
+            .also { smallLogo = it }
+        androidx.compose.ui.graphics.painter.BitmapPainter(bitmap)
     }
 }
 
