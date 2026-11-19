@@ -1,4 +1,4 @@
-name: Emulator diagnosis of the catalogue tab jank in v1.2.39 (temporary)
+name: Emulator diagnosis of the catalogue tab jank in v1.2.39 and A/B of the fix (temporary)
 # ВРЕМЕННО (клон debug/w27-cat): бавните кадри на раздела „Каталог“ в издаденото v1.2.39 (main ab175e49).
 # Резултатите — в клона emulator-results, папка v139cat/ (нов commit върху върха; без force). Инструментите са от
 # debug/w26-check; новите части са в .github/perf-check/w27.sh, анализът на записите — w27.py.
@@ -14,9 +14,9 @@ on:
 permissions:
   contents: read
 env:
-  NEW_REF: ab175e49c82d8d1d8b6624922b7c0baab4042aa6
+  NEW_REF: ae598c453e76275014b8102829f4c08208106d25
   BASE_REF: ab175e49c82d8d1d8b6624922b7c0baab4042aa6
-  V: v139cat
+  V: v139fix
 jobs:
   plan:
     runs-on: ubuntu-latest
@@ -83,11 +83,11 @@ jobs:
       matrix:
         include:
           - { app: new, vname: "1.2.39", vc: "1990200", suffix: "" }
-          - { app: hook, vname: "1.2.39", vc: "1990200", suffix: "" }
+          - { app: base, vname: "1.2.39", vc: "1990200", suffix: ".b" }
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: ${{ env.NEW_REF }}
+          ref: ${{ matrix.app == 'new' && env.NEW_REF || env.BASE_REF }}
       - uses: actions/checkout@v7
         with:
           path: harness
@@ -129,7 +129,7 @@ jobs:
             ./gradlew --no-daemon assembleProdRelease
           fi
           mkdir -p dist
-          case ${{ matrix.app }} in new) O=app.apk; R=apk-ref.txt; M=app-mapping.txt; D="";; hook) O=app-hook.apk; R=apk-hook-ref.txt; M=app-hook-mapping.txt; D=" + w27-hook.patch (DEBUG ONLY: looper message trace sections, profileable shell, measure sections in the catalogue row/cover, flag plaincover$NOTE)";; esac
+          case ${{ matrix.app }} in new) O=app.apk; R=apk-ref.txt; M=app-mapping.txt; D=" (NEW: the entry-frame fix)";; base) O=app-base.apk; R=apk-base-ref.txt; M=app-base-mapping.txt; D=" (BASE: 1.2.39 as released)";; hook) O=app-hook.apk; R=apk-hook-ref.txt; M=app-hook-mapping.txt; D=" + w27-hook.patch (DEBUG ONLY: looper message trace sections, profileable shell, measure sections in the catalogue row/cover, flag plaincover$NOTE)";; esac
           cp app/build/outputs/apk/prod/release/app-prod-release.apk dist/$O
           cp app/build/outputs/mapping/prodRelease/mapping.txt dist/$M || true
           echo "${{ matrix.vname }} $(git rev-parse --short HEAD) prodRelease (minified), x86_64 added, applicationId org.chyavorec.app${{ matrix.suffix }}, throwaway key, versionCode ${{ matrix.vc }}$D" > dist/$R
@@ -253,10 +253,10 @@ jobs:
             mkdir -p "$V/size"
             git show "FETCH_HEAD:$V/size/apks.txt" > "$V/size/apks.txt" 2>/dev/null || : > "$V/size/apks.txt"
             if ls "$W"/apks/apk-*ref.txt >/dev/null 2>&1; then
-              { cat "$W"/apks/apk-*ref.txt; for a in app.apk app-hook.apk; do [ -f "$W/apks/$a" ] && echo "$a $(stat -c %s "$W/apks/$a") bytes"; done; } > "$V/size/apks.txt" || true
+              { cat "$W"/apks/apk-*ref.txt; for a in app.apk app-base.apk; do [ -f "$W/apks/$a" ] && echo "$a $(stat -c %s "$W/apks/$a") bytes"; done; } > "$V/size/apks.txt" || true
             fi
             git show FETCH_HEAD:$V/runs.txt > "$V/runs.txt" 2>/dev/null || : > "$V/runs.txt"
-            echo "run $RUN @ $SRC (1.2.39 = ${NEW_REF:0:8}): $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
+            echo "run $RUN @ $SRC (NEW ${NEW_REF:0:8}, BASE ${BASE_REF:0:8}): $(ls "$W/results" | tr '\n' ' ')" >> "$V/runs.txt"
             # Частите от по-ранни изпълнения: summary.txt и job-status.txt обратно на диска — за индекса (не се добавят наново).
             for p in $(git ls-tree --name-only "FETCH_HEAD:$V" 2>/dev/null); do
               [ -d "$W/results/$p" ] && continue
@@ -266,13 +266,13 @@ jobs:
             done
             (
               cd "$V"
-              echo "# Catalogue tab: slow UI-thread frames in the released v1.2.39 (${NEW_REF:0:8}), emulator diagnosis"
+              echo "# Catalogue entry-frame fix (${NEW_REF:0:8}) against the released v1.2.39 (${BASE_REF:0:8}), emulator A/B"
               echo
-              cat "$W/.github/perf-check/w27-notes.md" 2>/dev/null || true
+              cat "$W/.github/perf-check/w27fix-notes.md" 2>/dev/null || true
               echo
               echo "## Runs and parts"
               echo
-              echo "debug/w27-cat (runs in runs.txt, latest $RUN @ $SRC). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part name ends in 26 (API 26) or 36x (API 36). Per-part table of all interactions: <part>/table.md. The earlier check of 1.2.39: [../v139/index.md](../v139/index.md)."
+              echo "debug/w27-cat (runs in runs.txt, latest $RUN @ $SRC). API 33 google_apis x86_64, -gpu swangle_indirect (software GPU) unless the part name ends in 26 (API 26) or 36x (API 36). Per-part table: <part>/table.md; screenshots in <part>/shots/fx/, the recorded Back from a book in <part>/frames/fxback-*/ and <part>/sheets/. The diagnosis: [../v139cat/index.md](../v139cat/index.md)."
               echo; echo "| part | status |"; echo "|---|---|"
               for p in $(ls -d */ | tr -d /); do [ -f "$p/job-status.txt" ] && echo "| $p | $(grep -c '## COMPLETE' $p/summary.txt 2>/dev/null | sed 's/^1$/COMPLETE/;s/^0$/incomplete/'); $(cat $p/job-status.txt) |"; done
               echo; echo '```'; cat size/apks.txt 2>/dev/null; echo '```'
@@ -284,7 +284,7 @@ jobs:
             ) > "$RUNNER_TEMP/v-index.md"
             mv "$RUNNER_TEMP/v-index.md" "$V/index.md"
             git show FETCH_HEAD:index.md > index.md
-            grep -q "$V/index.md" index.md || { { head -1 index.md; echo; echo "v1.2.39 released (ab175e49): catalogue tab slow frames, framestats + Perfetto per interaction: [$V/index.md]($V/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
+            grep -q "$V/index.md" index.md || { { head -1 index.md; echo; echo "catalogue entry-frame fix (ae598c45) vs 1.2.39 (ab175e49), main-thread CPU per entry, API 33/36: [$V/index.md]($V/index.md)"; tail -n +2 index.md; } > "$RUNNER_TEMP/idx" && mv "$RUNNER_TEMP/idx" index.md; }
             for p in $(ls "$W/results"); do git add -A -- "$V/$p"; done
             git add -A -- "$V/runs.txt" "$V/index.md" "$V/size/apks.txt" index.md
             C=$(git commit-tree "$(git write-tree)" -p "$TIP" -m "Emulator results $V for $SRC (run $RUN)") || { echo "write-tree/commit failed (promisor fetch?); retrying"; sleep $((try * 7)); continue; }

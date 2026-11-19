@@ -532,6 +532,78 @@ def cmd_ab(trcsv):
         print(f"  {kind}: " + ' | '.join(f"{f} {sum(v) / len(v):.1f} {[round(x) for x in v]}" for f, v in sorted(fl.items())))
 
 
+def cmd_entry(trace, pkg, name, csvp):
+    """One screen entry (tap on a tab / Back): main-thread CPU of every doFrame after the input, the worst one,
+    the sum of the first two frames from the entry frame on (the first doFrame after the input with ≥ 3 ms CPU),
+    and the logo decode (res/*.webp, ImageDecoder) on the main thread."""
+    from perfetto.trace_processor import TraceProcessor
+    tp = TraceProcessor(trace=trace)
+    try:
+        procs = q(tp, f"select upid, pid, name from process where name = '{pkg}'")
+        if not procs:
+            print(f"ENTRY {name}: app process {pkg} not in the trace")
+            return False
+        upid, pid = procs[-1].upid, procs[-1].pid
+        utid = q(tp, f"select utid from thread where upid = {upid} and tid = {pid}")[0].utid
+        b = q(tp, "select start_ts, end_ts from trace_bounds")[0]
+        rows = q(tp, f"select s.ts, s.dur, s.name from slice s join thread_track t on s.track_id = t.id where t.utid = {utid}")
+        st = q(tp, f"select ts, dur, state, blocked_function from thread_state where utid = {utid}")
+        cpu = Cpu([(r.ts, r.dur if r.dur >= 0 else 0, r.state, r.blocked_function) for r in st])
+        sl = [S(r.ts, r.dur if r.dur >= 0 else b.end_ts - r.ts, r.name or '') for r in rows]
+        inputs = [x for x in sl if re.search(r'ACTION_UP|KeyEvent|deliverInputEvent|dispatchInputEvent', x.name)]
+        t_in = max((x.ts for x in inputs), default=b.start_ts)
+        frames = sorted((x for x in sl if is_frame(x) and x.ts >= t_in - 2e6), key=lambda x: x.ts)
+        fc = [cpu(x.ts, x.end) / 1e6 for x in frames]
+        # the entry frame: the first doFrame after the input with ≥ 8 ms CPU (the tap itself is a few ms)
+        k0 = next((i for i, c in enumerate(fc) if c >= 8), None)
+        k3 = next((i for i, c in enumerate(fc) if c >= 3), None)
+        worst = max(fc, default=0)
+        sum2 = sum(fc[k0:k0 + 2]) if k0 is not None else 0
+        sum3 = sum(fc[k3:k3 + 4]) if k3 is not None else 0
+        seq = fc[k0:k0 + 4] if k0 is not None else []
+        dec = [x for x in sl if re.match(r'res/.*\.webp|ImageDecoder#decodeDrawable', x.name)]
+        decms = sum(cpu(x.ts, x.end) for x in dec if x.name.startswith('ImageDecoder')) / 1e6
+        ndec = sum(1 for x in dec if x.name.startswith('res/'))
+        print(f"ENTRY {name}: worst {worst:.1f} ms CPU; entry frame + next {sum2:.1f} ms; first 4 frames with work {sum3:.1f} ms (frames from the entry: "
+              f"{', '.join(f'{c:.1f}' for c in seq)}); doFrames after the input {len(frames)}; logo/webp decodes on the main thread: "
+              f"{ndec} ({decms:.1f} ms){'' if inputs else ' [no input slice found: from the trace start]'}")
+        head = not os.path.exists(csvp)
+        with open(csvp, 'a', encoding='utf-8') as fo:
+            w = csvmod.writer(fo)
+            if head:
+                w.writerow(['name', 'worst', 'sum2', 'f1', 'f2', 'ndec', 'decms', 'sum4'])
+            w.writerow([name, f"{worst:.1f}", f"{sum2:.1f}", f"{seq[0]:.1f}" if seq else '', f"{seq[1]:.1f}" if len(seq) > 1 else '', ndec, f"{decms:.1f}", f"{sum3:.1f}"])
+        return worst > 25
+    finally:
+        tp.close()
+
+
+def cmd_fxagg(csvp):
+    """BASE vs NEW per entry kind: names <kind>-<base|new>-r<round>[-<i>]."""
+    import statistics as stx
+    g = defaultdict(lambda: defaultdict(list))
+    for r in csvmod.DictReader(open(csvp, encoding='utf-8')):
+        m = re.match(r'^(.*?)-(base|new)-r\d+(?:-\d+)?$', r['name'])
+        if m:
+            g[m.group(1)][m.group(2)].append(r)
+    print("entry kind | build | n | worst frame CPU ms: median / mean / max | entry frame + next: median / mean / max | 1st frame median | 2nd frame median | first 4 frames with work, median | logo decodes (total)")
+    print("---|---|---|---|---|---|---|---|---")
+    for kind in g:
+        for ver in ('base', 'new'):
+            rs = g[kind].get(ver, [])
+            if not rs:
+                continue
+            w = [float(r['worst']) for r in rs]
+            s2 = [float(r['sum2']) for r in rs]
+            f1 = [float(r['f1']) for r in rs if r['f1']]
+            f2 = [float(r['f2']) for r in rs if r['f2']]
+            nd = sum(int(r['ndec']) for r in rs)
+            s4 = [float(r.get('sum4') or 0) for r in rs]
+            md = lambda v: stx.median(v) if v else 0
+            print(f"{kind} | {ver.upper()} | {len(rs)} | {md(w):.1f} / {sum(w) / len(w):.1f} / {max(w):.1f} | {md(s2):.1f} / {sum(s2) / len(s2):.1f} / {max(s2):.1f} | "
+                  f"{md(f1):.1f} | {md(f2):.1f} | {md(s4):.1f} | {nd}")
+
+
 def cmd_warm():
     from perfetto.trace_processor.platform import PlatformDelegate
     print('trace_processor_shell:', PlatformDelegate().get_shell_path(None))
@@ -547,6 +619,10 @@ if __name__ == '__main__':
         sys.exit(3 if cmd_at(*a) else 0)
     elif c == 'agg':
         cmd_agg(*a)
+    elif c == 'entry':
+        sys.exit(3 if cmd_entry(*a) else 0)
+    elif c == 'fxagg':
+        cmd_fxagg(*a)
     elif c == 'ab':
         cmd_ab(*a)
     elif c == 'warm':

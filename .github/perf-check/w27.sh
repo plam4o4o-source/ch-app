@@ -9,7 +9,7 @@
 # (Perfetto on API 29+, text atrace on API 26), analysed on the host by w27.py. No uiautomator dump inside a
 # measured window (an accessibility query runs on the app's main thread): the tap positions are found before.
 # Loaded by run.sh after w26.sh.
-W27_PARTS=" cat33 cath33 cat36x cath36x cat26 cath26 "
+W27_PARTS=" cat33 cath33 cat36x cath36x cat26 cath26 fx33 fx36x "
 W20_PARTS="$W20_PARTS $W27_PARTS"
 W27=$H_/w27.py
 TRDIR=/data/misc/perfetto-traces
@@ -35,7 +35,7 @@ tr_init() {
       echo 'data_sources { config { name: "linux.ftrace" target_buffer: 0 ftrace_config {'
       for c in sched/sched_switch sched/sched_waking sched/sched_blocked_reason power/suspend_resume task/task_newtask task/task_rename; do echo "  ftrace_events: \"$c\""; done
       for c in $CATS; do [ $c = sched ] || echo "  atrace_categories: \"$c\""; done
-      echo "  atrace_apps: \"$PKG\""
+      for c in ${TR_APPS:-$PKG}; do echo "  atrace_apps: \"$c\""; done
       echo '  buffer_size_kb: 16384 drain_period_ms: 250'
       echo '} } }'
       echo 'data_sources { config { name: "linux.process_stats" target_buffer: 1 process_stats_config { scan_all_processes_on_start: true } } }'
@@ -331,8 +331,117 @@ part_entry() {
   log "traces kept: $TRKEPT (gzip) in tr/, $(du -sh $OUT/tr | cut -f1); FATAL lines $(grep -c 'FATAL EXCEPTION' $OUT/logcat-live.txt), ANR $(grep -c 'ANR in ' $OUT/logcat-live.txt)"
 }
 
+# ---------------------------------------------------------------- run 4: the fix ae598c45 (NEW) against ab175e49 (BASE)
+# Both plain prodRelease side by side: NEW = org.chyavorec.app (app.apk), BASE = org.chyavorec.app.b (app-base.apk).
+fx_pkg() { case $1 in new) echo org.chyavorec.app;; base) echo org.chyavorec.app.b;; esac; }
+fx_use() { use_pkg $(fx_pkg $1); }
+fx_stop() { a am force-stop org.chyavorec.app; a am force-stop org.chyavorec.app.b; }
+fxm() {  # $1 — name, $2 — s, $3… — action: framestats + trace, analysed per entry (w27.py entry)
+  local name=$1 secs=$2 rc mb; shift 2
+  sleep 1.5
+  tr_start
+  a dumpsys gfxinfo $PKG reset >/dev/null 2>&1; sleep 0.3
+  a dumpsys gfxinfo $PKG framestats > $OUT/fs27/before.txt 2>/dev/null
+  a log -t PERFCHECK "'w27 $name'"
+  "$@"
+  sleep $secs
+  a dumpsys gfxinfo $PKG framestats > $OUT/fs27/$name.txt 2>/dev/null
+  tr_stop $name
+  python3 $W27 fs $OUT/fs27/before.txt $OUT/fs27/$name.txt $name $OUT/fs.csv $OUT/fs27/$name.json 2>&1 | head -1 | cut -c1-260 >> $OUT/fs-lines.txt
+  rm -f $OUT/fs27/$name.txt
+  local f=$OUT/tr/$name.pftrace
+  [ -s $f ] || { log "ENTRY $name: no trace"; return 0; }
+  timeout 300 python3 $W27 entry $f $PKG $name $OUT/entry.csv 2>&1 | cut -c1-400 | tee -a $SUM; rc=${PIPESTATUS[0]}
+  mb=$(( $(du -sm $OUT/tr | cut -f1) ))
+  if [ "$rc" = 3 ] && [ $mb -lt $TRKEEP_MB ]; then gzip -9 -f $f; TRKEPT=$((TRKEPT + 1)); else rm -f $f; fi
+}
+fxt() { if [ -z "$3" ]; then log "SKIP $1: no position"; return 1; fi; fxm $1 $2 tapxy $3; }
+first_row_title() { dump; python3 - "$OUT/ui.xml" "$(results_top)" <<'EOF'
+import re, sys, xml.etree.ElementTree as ET
+root = ET.parse(sys.argv[1]).getroot(); top = int(sys.argv[2])
+best = None
+for n in root.iter('node'):
+    t = n.get('text') or ''
+    m = re.match(r'\[(\d+),(\d+)\]\[(\d+),(\d+)\]', n.get('bounds', ''))
+    if not t or not m: continue
+    x0, y0 = int(m.group(1)), int(m.group(2))
+    # the row title: right of the cover (x > 150 px), below the results header
+    if y0 > top and x0 > 150 and len(t) > 2 and not re.search(r'налична|резултат|·', t):
+        if best is None or y0 < best[0]: best = (y0, t)
+print(best[1][:60] if best else '')
+EOF
+}
+fx_visual() {  # $1 — base | new: rows after a tab switch, scroll position kept, Back from a book (recorded)
+  local K=$1 t1 t2 p
+  sec "V-$K. Visual checks ($K): rows after a tab switch, the scroll position after Home → Каталог, Back from a book (screen recording)"
+  fx_stop; sleep 1; launch >/dev/null; sleep 8; ready >/dev/null; sleep 1
+  a input tap $CAT; sleep 0.35; shot fx/$K-tab-0.35s >/dev/null; sleep 0.5; shot fx/$K-tab-0.85s >/dev/null; sleep 2
+  dump; log "VIS $K after the tab switch: $(rcount) results; rows: $(first_row_title)"; shot fx/$K-tab-3s >/dev/null
+  a input tap $HOME_; sleep 2; a input tap $CAT; sleep 0.25; shot fx/$K-warm-0.25s >/dev/null; sleep 0.4; shot fx/$K-warm-0.65s >/dev/null; sleep 2
+  dump; log "VIS $K warm switch: $(rcount) results; first row: $(first_row_title)"; shot fx/$K-warm-3s >/dev/null
+  sw_up 400; sleep 1; sw_up 400; sleep 2; t1=$(first_row_title); shot fx/$K-scrolled >/dev/null
+  a input tap $HOME_; sleep 3; a input tap $CAT; sleep 3; t2=$(first_row_title); shot fx/$K-scrolled-back >/dev/null
+  log "VIS $K scroll position: before Home '$t1', after Home → Каталог '$t2' → $([ -n "$t1" ] && [ "$t1" = "$t2" ] && echo KEPT || echo 'CHANGED/unknown')"
+  a input tap $NEWS; sleep 3; a input tap $CAT; sleep 3; t2=$(first_row_title)
+  log "VIS $K News → Каталог: first row '$t2' ($([ "$t1" = "$t2" ] && echo kept || echo changed)); $(rcount) results"; shot fx/$K-back-from-news >/dev/null
+  dump; p=$(python3 $H_/find.py $OUT/ui.xml --clickables $(results_top) $((H * 8 / 10)) 100 | sed -n 1p)
+  if [ -n "$p" ]; then
+    a input tap $p; sleep 4; shot fx/$K-book >/dev/null
+    REC_FPS=20 rec_cmd fxback-$K emu 3 a input keyevent 4
+    sleep 1; dump; log "VIS $K Back from a book: on the list $(has "$RX_RESULTS" && echo yes || echo NO); first row '$(first_row_title)'"
+    shot fx/$K-after-book >/dev/null
+  else log "VIS $K: no row to open"; fi
+}
+fx_round() {  # $1 — base | new, $2 — round
+  local K=$1 r=$2 i p
+  fx_use $K; fx_stop; sleep 1
+  launch >/dev/null; sleep 8; ready >/dev/null; sleep 2
+  fxt cold-open-$K-r$r 6 "$CAT"
+  for i in 1 2; do fxt leave-home-$K-r$r-$i 3 "$HOME_"; fxt warm-open-$K-r$r-$i 4 "$CAT"; done
+  fxt leave-news-$K-r$r 4 "$NEWS"; fxt from-news-$K-r$r 4 "$CAT"   # Back from a tab goes to Home (start destination): News → tap Каталог
+  dump; has "$RX_RESULTS" || { log "  (not on the catalogue after News → Каталог: $(texts 6 | cut -c1-160))"; on_catalog; }
+  for i in 1 2; do
+    dump; p=$(python3 $H_/find.py $OUT/ui.xml --clickables $(results_top) $((H * 8 / 10)) 100 | sed -n ${i}p)
+    [ -n "$p" ] || { log "  no row $i"; continue; }
+    a input tap $p; sleep 4.5
+    fxm book-back-$K-r$r-$i 3.5 a input keyevent 4
+    dump; has "$RX_RESULTS" || { log "  (not back on the list: $(texts 6 | cut -c1-160))"; on_catalog; }
+  done
+}
+part_fix() {
+  local K r
+  TR_APPS="org.chyavorec.app org.chyavorec.app.b"
+  anims 1
+  tr_init; MAPF=""
+  sec "X0. NEW (ae598c45, org.chyavorec.app) and BASE (ab175e49, org.chyavorec.app.b) side by side; first launch to the catalogue, speed-profile"
+  [ -f app-base.apk ] && timeout 240 adb install -r app-base.apk 2>&1 | tail -1
+  for K in new base; do
+    fx_use $K
+    a cmd locale set-app-locales $PKG --locales bg-BG >/dev/null 2>&1; a pm grant $PKG android.permission.POST_NOTIFICATIONS >/dev/null 2>&1
+    log "X $K: $(ver)"
+    launch >/dev/null; sleep 8; ready >/dev/null; dims
+    tab catalog >/dev/null; waitfor "$RX_RESULTS" 150 && log "X $K: catalogue after ${WAITED} ms" || log "X $K: NO catalogue results"
+    tab news >/dev/null; sleep 4; tab home >/dev/null; sleep 3
+    x_compile
+  done
+  fx_use new; launch >/dev/null; sleep 6; ready >/dev/null; pos_tabs; gest_init
+  for r in 1 2 3 4 5; do
+    if [ $((r % 2)) = 1 ]; then K="base new"; else K="new base"; fi
+    sec "X$r. Round $r ($K): cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book"
+    for k in $K; do fx_round $k $r; done
+  done
+  sec "X8. Visual checks"
+  for K in new base; do fx_use $K; fx_visual $K; done
+  sec "X9. BASE (ab175e49) vs NEW (ae598c45): main-thread CPU (Running) per entry"
+  python3 $W27 fxagg $OUT/entry.csv 2>&1 | tee $OUT/table.md | tee -a $SUM
+  for K in new base; do log "CRASH $K ($(fx_pkg $K)): FATAL $(grep -A3 'FATAL EXCEPTION' $OUT/logcat-live.txt | grep -c "Process: $(fx_pkg $K),"), ANR $(grep -c "ANR in $(fx_pkg $K) " $OUT/logcat-live.txt)"; done
+  log "all FATAL lines $(grep -c 'FATAL EXCEPTION' $OUT/logcat-live.txt); traces kept: $TRKEPT"
+  all_sheets >/dev/null 2>&1 || true
+  fx_use new
+}
+
 part_w27() {
   case "$W27_PARTS" in *" $PART "*) ;; *) return 1;; esac
-  part_entry
+  case $PART in fx*) part_fix;; *) part_entry;; esac
   return 0
 }
