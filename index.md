@@ -1,5 +1,7 @@
 # Emulator results
 
+catalogue entry-frame fix (ae598c45) vs 1.2.39 (ab175e49), main-thread CPU per entry, API 33/36: [v139fix/index.md](v139fix/index.md)
+
 v1.2.39 released (ab175e49): catalogue tab slow frames, framestats + Perfetto per interaction: [v139cat/index.md](v139cat/index.md)
 
 v1.2.39 candidate (696e57d) vs v1.2.38: crash smoke API 26/33/36, frame time A/B, update, screenshots: [v139/index.md](v139/index.md)

@@ -1,0 +1,144 @@
+app pids seen: ['3941', '6003', '6979', '7649', '9633', '10311', '12284', '12944']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 24
+   skipped-frames events=24 max=125 total=1415
+   11-19 18:31:11.946  3941  3941 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-19 18:31:13.950  3941  3941 I Choreographer: Skipped 108 frames!  The application may be doing too much work on its main thread.
+   11-19 18:31:14.865  3941  3941 I Choreographer: Skipped 30 frames!  The application may be doing too much work on its main thread.
+   11-19 18:31:15.564  3941  3941 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-19 18:31:16.253  3941  3941 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-19 18:31:17.301  3941  3941 I Choreographer: Skipped 62 frames!  The application may be doing too much work on its main thread.
+   11-19 18:31:28.525  3941  3941 I Choreographer: Skipped 87 frames!  The application may be doing too much work on its main thread.
+   11-19 18:31:30.887  3941  3941 I Choreographer: Skipped 41 frames!  The application may be doing too much work on its main thread.
+   11-19 18:31:56.802  3941  3941 I Choreographer: Skipped 38 frames!  The application may be doing too much work on its main thread.
+   11-19 18:32:09.859  3941  3941 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-19 18:33:33.948  6003  6003 I Choreographer: Skipped 78 frames!  The application may be doing too much work on its main thread.
+   11-19 18:36:05.030  6979  6979 I Choreographer: Skipped 107 frames!  The application may be doing too much work on its main thread.
+== Davey: 43
+   davey events=43 max=2419ms median=1077ms
+   11-19 18:31:12.171  3941  3987 I HWUI    : Davey! duration=1104ms; Flags=1, FrameTimelineVsyncId=8995, IntendedVsync=104410025448, Vsync=104610025440, InputEventId=0, HandleInputStart=104626347230, AnimationStart=104626347691, PerformTraver
+   11-19 18:31:13.931  3941  3950 I HWUI    : Davey! duration=1914ms; Flags=0, FrameTimelineVsyncId=9208, IntendedVsync=105560025402, Vsync=105576692068, InputEventId=0, HandleInputStart=105583173037, AnimationStart=105583173468, PerformTraver
+   11-19 18:31:14.768  3941  3949 I HWUI    : Davey! duration=2419ms; Flags=0, FrameTimelineVsyncId=9245, IntendedVsync=105743358728, Vsync=107543358656, InputEventId=0, HandleInputStart=107548632837, AnimationStart=107548633778, PerformTraver
+   11-19 18:31:15.367  3941  3949 I HWUI    : Davey! duration=1099ms; Flags=0, FrameTimelineVsyncId=9464, IntendedVsync=107560025322, Vsync=107610025320, InputEventId=0, HandleInputStart=107622271786, AnimationStart=107622272136, PerformTraver
+   11-19 18:31:16.162  3941  3949 I HWUI    : Davey! duration=1543ms; Flags=0, FrameTimelineVsyncId=9478, IntendedVsync=107626691986, Vsync=107926691974, InputEventId=0, HandleInputStart=107932230552, AnimationStart=107932231043, PerformTraver
+   11-19 18:31:16.707  3941  3949 I HWUI    : Davey! duration=1628ms; Flags=0, FrameTimelineVsyncId=9510, IntendedVsync=107943358640, Vsync=108443358620, InputEventId=0, HandleInputStart=108459402519, AnimationStart=108459402919, PerformTraver
+   11-19 18:31:17.192  3941  4014 I HWUI    : Davey! duration=1644ms; Flags=0, FrameTimelineVsyncId=9533, IntendedVsync=108460025286, Vsync=109143358592, InputEventId=0, HandleInputStart=109158845284, AnimationStart=109158845655, PerformTraver
+   11-19 18:31:17.816  3941  4014 I HWUI    : Davey! duration=1563ms; Flags=0, FrameTimelineVsyncId=9556, IntendedVsync=109160025258, Vsync=109843358564, InputEventId=0, HandleInputStart=109848077118, AnimationStart=109848077489, PerformTraver
+   11-19 18:31:17.943  3941  4014 I HWUI    : Davey! duration=1663ms; Flags=0, FrameTimelineVsyncId=9578, IntendedVsync=109860025230, Vsync=110893358522, InputEventId=0, HandleInputStart=110896147438, AnimationStart=110896148069, PerformTraver
+   11-19 18:31:29.106  3941  4233 I HWUI    : Davey! duration=1933ms; Flags=0, FrameTimelineVsyncId=10296, IntendedVsync=120660024798, Vsync=122110024740, InputEventId=0, HandleInputStart=122120086582, AnimationStart=122120086932, PerformTrave
+   11-19 18:31:29.987  3941  4233 I HWUI    : Davey! duration=770ms; Flags=0, FrameTimelineVsyncId=10591, IntendedVsync=122676691384, Vsync=122760024714, InputEventId=0, HandleInputStart=122766783115, AnimationStart=122766783596, PerformTraver
+   11-19 18:31:30.364  3941  4112 I HWUI    : Davey! duration=1051ms; Flags=0, FrameTimelineVsyncId=10613, IntendedVsync=122776691380, Vsync=123226691362, InputEventId=0, HandleInputStart=123241090689, AnimationStart=123241090950, PerformTrave
+== NativeLink: 8
+   11-19 18:31:34.514  3941  4440 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-19 18:33:33.630  6003  6043 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-19 18:36:06.626  6979  7024 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-19 18:38:10.098  7649  7696 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-19 18:44:29.260  9633  9684 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-19 18:46:36.932 10311 10363 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-19 18:52:56.146 12284 12333 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-19 18:55:03.736 12944 12992 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-19 18:31:03.544  3802  3802 I PERFCHECK: section: X0. NEW ae598c45, org.chyavorec.app and BASE ab175e49, org.chyavorec.app.b side by side; first launch to the catalogue, speed-profile
+   11-19 18:33:52.883  6141  6141 I PERFCHECK: section: X1. Round 1 base new: cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+   11-19 18:34:22.805  6402  6402 I PERFCHECK: w27 cold-open-base-r1
+   11-19 18:34:34.036  6458  6458 I PERFCHECK: w27 leave-home-base-r1-1
+   11-19 18:34:42.545  6503  6503 I PERFCHECK: w27 warm-open-base-r1-1
+   11-19 18:34:51.703  6549  6549 I PERFCHECK: w27 leave-home-base-r1-2
+   11-19 18:35:00.316  6590  6590 I PERFCHECK: w27 warm-open-base-r1-2
+   11-19 18:35:09.443  6633  6633 I PERFCHECK: w27 leave-news-base-r1
+   11-19 18:35:18.518  6679  6679 I PERFCHECK: w27 from-news-base-r1
+   11-19 18:35:36.361  6811  6811 I PERFCHECK: w27 book-back-base-r1-1
+   11-19 18:35:53.599  6914  6914 I PERFCHECK: w27 book-back-base-r1-2
+   11-19 18:36:28.324  7154  7154 I PERFCHECK: w27 cold-open-new-r1
+   11-19 18:36:39.803  7203  7203 I PERFCHECK: w27 leave-home-new-r1-1
+   11-19 18:36:48.461  7243  7243 I PERFCHECK: w27 warm-open-new-r1-1
+   11-19 18:36:57.530  7280  7280 I PERFCHECK: w27 leave-home-new-r1-2
+   11-19 18:37:06.058  7318  7318 I PERFCHECK: w27 warm-open-new-r1-2
+   11-19 18:37:15.149  7355  7355 I PERFCHECK: w27 leave-news-new-r1
+   11-19 18:37:24.205  7409  7409 I PERFCHECK: w27 from-news-new-r1
+   11-19 18:37:41.874  7499  7499 I PERFCHECK: w27 book-back-new-r1-1
+   11-19 18:37:59.153  7586  7586 I PERFCHECK: w27 book-back-new-r1-2
+   11-19 18:38:06.512  7628  7628 I PERFCHECK: section: X2. Round 2 new base: cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+   11-19 18:38:32.715  7834  7834 I PERFCHECK: w27 cold-open-new-r2
+   11-19 18:38:44.079  7875  7875 I PERFCHECK: w27 leave-home-new-r2-1
+   11-19 18:38:52.767  7915  7915 I PERFCHECK: w27 warm-open-new-r2-1
+   11-19 18:39:01.824  7951  7951 I PERFCHECK: w27 leave-home-new-r2-2
+   11-19 18:39:10.269  7990  7990 I PERFCHECK: w27 warm-open-new-r2-2
+   11-19 18:39:19.377  8027  8027 I PERFCHECK: w27 leave-news-new-r2
+   11-19 18:39:28.434  8072  8072 I PERFCHECK: w27 from-news-new-r2
+   11-19 18:39:46.150  8168  8168 I PERFCHECK: w27 book-back-new-r2-1
+   11-19 18:40:03.528  8250  8250 I PERFCHECK: w27 book-back-new-r2-2
+   11-19 18:40:38.196  8512  8512 I PERFCHECK: w27 cold-open-base-r2
+   11-19 18:40:49.343  8554  8554 I PERFCHECK: w27 leave-home-base-r2-1
+   11-19 18:40:57.892  8593  8593 I PERFCHECK: w27 warm-open-base-r2-1
+   11-19 18:41:07.023  8637  8637 I PERFCHECK: w27 leave-home-base-r2-2
+   11-19 18:41:15.390  8678  8678 I PERFCHECK: w27 warm-open-base-r2-2
+   11-19 18:41:24.490  8715  8715 I PERFCHECK: w27 leave-news-base-r2
+   11-19 18:41:33.554  8760  8760 I PERFCHECK: w27 from-news-base-r2
+   11-19 18:41:51.373  8849  8849 I PERFCHECK: w27 book-back-base-r2-1
+   11-19 18:42:08.825  8937  8937 I PERFCHECK: w27 book-back-base-r2-2
+   11-19 18:42:16.060  8975  8975 I PERFCHECK: section: X3. Round 3 base new: cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+   11-19 18:42:46.413  9163  9163 I PERFCHECK: w27 cold-open-base-r3
+   11-19 18:42:57.562  9204  9204 I PERFCHECK: w27 leave-home-base-r3-1
+   11-19 18:43:06.102  9242  9242 I PERFCHECK: w27 warm-open-base-r3-1
+   11-19 18:43:15.255  9278  9278 I PERFCHECK: w27 leave-home-base-r3-2
+   11-19 18:43:23.746  9316  9316 I PERFCHECK: w27 warm-open-base-r3-2
+   11-19 18:43:32.855  9353  9353 I PERFCHECK: w27 leave-news-base-r3
+   11-19 18:43:41.919  9398  9398 I PERFCHECK: w27 from-news-base-r3
+   11-19 18:43:59.713  9487  9487 I PERFCHECK: w27 book-back-base-r3-1
+   11-19 18:44:17.022  9570  9570 I PERFCHECK: w27 book-back-base-r3-2
+   11-19 18:44:53.763  9821  9821 I PERFCHECK: w27 cold-open-new-r3
+   11-19 18:45:04.972  9862  9862 I PERFCHECK: w27 leave-home-new-r3-1
+   11-19 18:45:13.494  9900  9900 I PERFCHECK: w27 warm-open-new-r3-1
+   11-19 18:45:22.561  9937  9937 I PERFCHECK: w27 leave-home-new-r3-2
+   11-19 18:45:31.217  9977  9977 I PERFCHECK: w27 warm-open-new-r3-2
+   11-19 18:45:40.355 10014 10014 I PERFCHECK: w27 leave-news-new-r3
+   11-19 18:45:49.415 10060 10060 I PERFCHECK: w27 from-news-new-r3
+   11-19 18:46:07.155 10148 10148 I PERFCHECK: w27 book-back-new-r3-1
+   11-19 18:46:24.549 10236 10236 I PERFCHECK: w27 book-back-new-r3-2
+   11-19 18:46:31.846 10285 10285 I PERFCHECK: section: X4. Round 4 new base: cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+   11-19 18:46:59.510 10473 10473 I PERFCHECK: w27 cold-open-new-r4
+   11-19 18:47:10.827 10515 10515 I PERFCHECK: w27 leave-home-new-r4-1
+   11-19 18:47:19.319 10553 10553 I PERFCHECK: w27 warm-open-new-r4-1
+   11-19 18:47:28.472 10589 10589 I PERFCHECK: w27 leave-home-new-r4-2
+   11-19 18:47:36.893 10627 10627 I PERFCHECK: w27 warm-open-new-r4-2
+   11-19 18:47:45.995 10665 10665 I PERFCHECK: w27 leave-news-new-r4
+   11-19 18:47:55.110 10710 10710 I PERFCHECK: w27 from-news-new-r4
+   11-19 18:48:12.954 10797 10797 I PERFCHECK: w27 book-back-new-r4-1
+   11-19 18:48:30.358 10880 10880 I PERFCHECK: w27 book-back-new-r4-2
+   11-19 18:49:06.643 11159 11159 I PERFCHECK: w27 cold-open-base-r4
+   11-19 18:49:18.064 11200 11200 I PERFCHECK: w27 leave-home-base-r4-1
+   11-19 18:49:26.761 11238 11238 I PERFCHECK: w27 warm-open-base-r4-1
+   11-19 18:49:35.914 11274 11274 I PERFCHECK: w27 leave-home-base-r4-2
+   11-19 18:49:44.399 11312 11312 I PERFCHECK: w27 warm-open-base-r4-2
+   11-19 18:49:53.523 11348 11348 I PERFCHECK: w27 leave-news-base-r4
+   11-19 18:50:02.601 11394 11394 I PERFCHECK: w27 from-news-base-r4
+   11-19 18:50:20.396 11479 11479 I PERFCHECK: w27 book-back-base-r4-1
+   11-19 18:50:37.692 11563 11563 I PERFCHECK: w27 book-back-base-r4-2
+   11-19 18:50:45.086 11606 11606 I PERFCHECK: section: X5. Round 5 base new: cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+   11-19 18:51:12.486 11823 11823 I PERFCHECK: w27 cold-open-base-r5
+   11-19 18:51:23.811 11865 11865 I PERFCHECK: w27 leave-home-base-r5-1
+   11-19 18:51:32.460 11903 11903 I PERFCHECK: w27 warm-open-base-r5-1
+   11-19 18:51:41.611 11939 11939 I PERFCHECK: w27 leave-home-base-r5-2
+   11-19 18:51:50.185 11980 11980 I PERFCHECK: w27 warm-open-base-r5-2
+   11-19 18:51:59.291 12016 12016 I PERFCHECK: w27 leave-news-base-r5
+   11-19 18:52:08.356 12061 12061 I PERFCHECK: w27 from-news-base-r5
+   11-19 18:52:26.126 12145 12145 I PERFCHECK: w27 book-back-base-r5-1
+   11-19 18:52:43.476 12231 12231 I PERFCHECK: w27 book-back-base-r5-2
+   11-19 18:53:20.219 12458 12458 I PERFCHECK: w27 cold-open-new-r5
+   11-19 18:53:31.546 12499 12499 I PERFCHECK: w27 leave-home-new-r5-1
+   11-19 18:53:40.064 12537 12537 I PERFCHECK: w27 warm-open-new-r5-1
+   11-19 18:53:49.139 12573 12573 I PERFCHECK: w27 leave-home-new-r5-2
+   11-19 18:53:57.527 12612 12612 I PERFCHECK: w27 warm-open-new-r5-2
+   11-19 18:54:06.584 12648 12648 I PERFCHECK: w27 leave-news-new-r5
+   11-19 18:54:15.644 12693 12693 I PERFCHECK: w27 from-news-new-r5
+   11-19 18:54:33.421 12778 12778 I PERFCHECK: w27 book-back-new-r5-1
+   11-19 18:54:50.730 12865 12865 I PERFCHECK: w27 book-back-new-r5-2
+   11-19 18:54:57.981 12909 12909 I PERFCHECK: section: X8. Visual checks
+   11-19 18:54:58.012 12914 12914 I PERFCHECK: section: V-new. Visual checks new: rows after a tab switch, the scroll position after Home → Каталог, Back from a book screen recording
+   11-19 18:56:16.415 13378 13378 I PERFCHECK: fxback-new
+   11-19 18:56:29.080 13467 13467 I PERFCHECK: section: V-base. Visual checks base: rows after a tab switch, the scroll position after Home → Каталог, Back from a book screen recording
+   11-19 18:57:45.375 13918 13918 I PERFCHECK: fxback-base
+   11-19 18:57:57.807 13979 13979 I PERFCHECK: section: X9. BASE ab175e49 vs NEW ae598c45: main-thread CPU Running per entry

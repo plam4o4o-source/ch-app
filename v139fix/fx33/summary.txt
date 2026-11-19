@@ -1,0 +1,166 @@
+part fx33; APK: 1.2.39 ae598c4 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200 (NEW: the entry-frame fix) size 4680894 bytes
+base APK: 1.2.39 ab175e4 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b, throwaway key, versionCode 1990200 (BASE: 1.2.39 as released) size 4680470 bytes
+host: 4 cpu, 15983 MB RAM
+android 13 sdk 33; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.39 ae598c4 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200 (NEW: the entry-frame fix) size 4680894 bytes
+installed:  versionCode=1990200 minSdk=26 targetSdk=37  versionName=1.2.39 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+trace analysis: trace_processor_shell: /home/runner/.local/share/perfetto/prebuilts/trace_processor_shell-2434129a3af4dc9e
+TRACE MODE perfetto; atrace categories: gfx view am dalvik input wm res binder_driver aidl sched; mapping app-mapping.txt; android 33
+## X0. NEW (ae598c45, org.chyavorec.app) and BASE (ab175e49, org.chyavorec.app.b) side by side; first launch to the catalogue, speed-profile
+X new:  versionCode=1990200 minSdk=26 targetSdk=37  versionName=1.2.39 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X new: catalogue after 3685 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~HIx6_SZXGopu9L7enqOoSw==/org.chyavorec.app-SpqrBlL8rXI6hdxNZlVOeA==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/ProxyHandler/ProxyHandler.apk| x86_64: [status=verify] [reason=prebuilt]|
+X base:  versionCode=1990200 minSdk=26 targetSdk=37  versionName=1.2.39 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+X base: catalogue after 3609 ms
+X compile org.chyavorec.app.b: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~BC5EUuowlX7hOvUKEiT0hg==/org.chyavorec.app.b-1Ek3zqGP6FVTY1v9yvI8-Q==/base.apk| x86_64: [status=speed-profile] [reason=cmdline]| path: /system/priv-app/LiveWallpapersPicker/LiveWallpapersPicker.apk| x86_64: [status=verify] [reason=prebuilt]|
+tabs: catalog [320 2274] home [99 2274] news [760 2274] more [980 2274]
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+## X1. Round 1 (base new): cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+ENTRY cold-open-base-r1: worst 57.4 ms CPU; entry frame + next 38.6 ms; first 4 frames with work 51.2 ms (frames from the entry: 11.1, 27.5, 3.0, 9.7); doFrames after the input 14; logo/webp decodes on the main thread: 1 (2.5 ms)
+ENTRY leave-home-base-r1-1: worst 22.2 ms CPU; entry frame + next 24.5 ms; first 4 frames with work 26.2 ms (frames from the entry: 22.2, 2.4, 0.9, 0.8); doFrames after the input 31; logo/webp decodes on the main thread: 1 (4.3 ms)
+ENTRY warm-open-base-r1-1: worst 26.9 ms CPU; entry frame + next 29.8 ms; first 4 frames with work 34.2 ms (frames from the entry: 26.9, 2.8, 0.9, 5.9); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-base-r1-2: worst 21.9 ms CPU; entry frame + next 24.0 ms; first 4 frames with work 25.8 ms (frames from the entry: 21.9, 2.1, 1.0, 0.8); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-base-r1-2: worst 45.8 ms CPU; entry frame + next 48.3 ms; first 4 frames with work 52.6 ms (frames from the entry: 45.8, 2.5, 1.0, 0.6); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-news-base-r1: worst 14.4 ms CPU; entry frame + next 15.1 ms; first 4 frames with work 31.0 ms (frames from the entry: 13.6, 1.5, 1.5, 14.4); doFrames after the input 12; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY from-news-base-r1: worst 49.3 ms CPU; entry frame + next 51.2 ms; first 4 frames with work 52.9 ms (frames from the entry: 49.3, 1.9, 0.9, 0.8); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-base-r1-1: worst 38.9 ms CPU; entry frame + next 44.1 ms; first 4 frames with work 50.9 ms (frames from the entry: 38.9, 5.2, 2.9, 6.6); doFrames after the input 8; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-base-r1-2: worst 42.4 ms CPU; entry frame + next 45.9 ms; first 4 frames with work 51.9 ms (frames from the entry: 42.4, 3.5, 2.3, 7.7); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY cold-open-new-r1: worst 16.3 ms CPU; entry frame + next 19.9 ms; first 4 frames with work 28.0 ms (frames from the entry: 16.3, 3.6, 4.1, 16.1); doFrames after the input 13; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-new-r1-1: worst 35.2 ms CPU; entry frame + next 37.0 ms; first 4 frames with work 57.1 ms (frames from the entry: 35.2, 1.8, 15.0, 5.0); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-new-r1-1: worst 24.3 ms CPU; entry frame + next 21.2 ms; first 4 frames with work 48.5 ms (frames from the entry: 18.6, 2.6, 24.3, 2.5); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-new-r1-2: worst 17.6 ms CPU; entry frame + next 20.4 ms; first 4 frames with work 22.3 ms (frames from the entry: 17.6, 2.8, 1.4, 0.5); doFrames after the input 11; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-new-r1-2: worst 22.0 ms CPU; entry frame + next 20.6 ms; first 4 frames with work 46.2 ms (frames from the entry: 18.5, 2.1, 22.0, 0.6); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-news-new-r1: worst 13.5 ms CPU; entry frame + next 14.9 ms; first 4 frames with work 28.4 ms (frames from the entry: 13.5, 1.4, 12.2, 1.3); doFrames after the input 12; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY from-news-new-r1: worst 17.3 ms CPU; entry frame + next 14.6 ms; first 4 frames with work 33.1 ms (frames from the entry: 11.8, 2.7, 17.3, 1.3); doFrames after the input 11; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-new-r1-1: worst 47.4 ms CPU; entry frame + next 51.4 ms; first 4 frames with work 62.2 ms (frames from the entry: 47.4, 4.1, 6.6, 5.7); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-new-r1-2: worst 36.6 ms CPU; entry frame + next 39.6 ms; first 4 frames with work 46.7 ms (frames from the entry: 36.6, 3.0, 3.2, 8.7); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+## X2. Round 2 (new base): cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+ENTRY cold-open-new-r2: worst 38.7 ms CPU; entry frame + next 17.4 ms; first 4 frames with work 32.8 ms (frames from the entry: 14.7, 2.7, 8.3, 1.5); doFrames after the input 14; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-new-r2-1: worst 17.9 ms CPU; entry frame + next 20.1 ms; first 4 frames with work 24.0 ms (frames from the entry: 17.9, 2.2, 0.9, 0.7); doFrames after the input 29; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-new-r2-1: worst 25.9 ms CPU; entry frame + next 28.5 ms; first 4 frames with work 42.9 ms (frames from the entry: 25.9, 2.5, 10.8, 3.0); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-new-r2-2: worst 17.7 ms CPU; entry frame + next 19.5 ms; first 4 frames with work 21.0 ms (frames from the entry: 17.7, 1.8, 0.9, 0.6); doFrames after the input 11; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-new-r2-2: worst 17.7 ms CPU; entry frame + next 18.6 ms; first 4 frames with work 36.9 ms (frames from the entry: 16.1, 2.5, 17.7, 0.6); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-news-new-r2: worst 16.0 ms CPU; entry frame + next 17.8 ms; first 4 frames with work 32.4 ms (frames from the entry: 16.0, 1.8, 1.2, 13.5); doFrames after the input 13; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY from-news-new-r2: worst 26.9 ms CPU; entry frame + next 29.6 ms; first 4 frames with work 53.5 ms (frames from the entry: 26.9, 2.7, 22.8, 1.1); doFrames after the input 11; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-new-r2-1: worst 41.8 ms CPU; entry frame + next 45.4 ms; first 4 frames with work 51.3 ms (frames from the entry: 41.8, 3.6, 2.3, 9.6); doFrames after the input 8; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-new-r2-2: worst 30.8 ms CPU; entry frame + next 34.3 ms; first 4 frames with work 42.3 ms (frames from the entry: 30.8, 3.5, 4.4, 8.4); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY cold-open-base-r2: worst 46.5 ms CPU; entry frame + next 20.5 ms; first 4 frames with work 29.8 ms (frames from the entry: 18.3, 2.3, 5.0, 1.5); doFrames after the input 15; logo/webp decodes on the main thread: 1 (3.3 ms)
+ENTRY leave-home-base-r2-1: worst 25.9 ms CPU; entry frame + next 28.1 ms; first 4 frames with work 35.9 ms (frames from the entry: 25.9, 2.2, 1.2, 6.6); doFrames after the input 25; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-base-r2-1: worst 48.2 ms CPU; entry frame + next 51.2 ms; first 4 frames with work 55.1 ms (frames from the entry: 48.2, 3.0, 0.9, 0.6); doFrames after the input 9; logo/webp decodes on the main thread: 1 (19.8 ms)
+ENTRY leave-home-base-r2-2: worst 20.6 ms CPU; entry frame + next 22.7 ms; first 4 frames with work 27.1 ms (frames from the entry: 20.6, 2.1, 3.9, 0.5); doFrames after the input 11; logo/webp decodes on the main thread: 1 (2.6 ms)
+ENTRY warm-open-base-r2-2: worst 23.1 ms CPU; entry frame + next 26.0 ms; first 4 frames with work 33.9 ms (frames from the entry: 23.1, 3.0, 0.8, 7.5); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-news-base-r2: worst 14.5 ms CPU; entry frame + next 15.2 ms; first 4 frames with work 30.8 ms (frames from the entry: 13.2, 1.9, 14.5, 1.1); doFrames after the input 12; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY from-news-base-r2: worst 46.4 ms CPU; entry frame + next 49.4 ms; first 4 frames with work 50.8 ms (frames from the entry: 46.4, 3.0, 0.6, 0.7); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-base-r2-1: worst 42.2 ms CPU; entry frame + next 46.3 ms; first 4 frames with work 52.8 ms (frames from the entry: 42.2, 4.1, 2.7, 3.1); doFrames after the input 8; logo/webp decodes on the main thread: 1 (3.8 ms)
+ENTRY book-back-base-r2-2: worst 41.7 ms CPU; entry frame + next 45.1 ms; first 4 frames with work 51.4 ms (frames from the entry: 41.7, 3.3, 2.9, 3.0); doFrames after the input 9; logo/webp decodes on the main thread: 1 (4.8 ms)
+## X3. Round 3 (base new): cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+ENTRY cold-open-base-r3: worst 32.2 ms CPU; entry frame + next 43.4 ms; first 4 frames with work 67.7 ms (frames from the entry: 32.2, 11.2, 20.1, 5.3); doFrames after the input 11; logo/webp decodes on the main thread: 1 (8.5 ms)
+ENTRY leave-home-base-r3-1: worst 27.0 ms CPU; entry frame + next 28.9 ms; first 4 frames with work 30.4 ms (frames from the entry: 27.0, 1.9, 1.0, 0.5); doFrames after the input 30; logo/webp decodes on the main thread: 1 (2.5 ms)
+ENTRY warm-open-base-r3-1: worst 62.9 ms CPU; entry frame + next 65.8 ms; first 4 frames with work 69.4 ms (frames from the entry: 62.9, 2.8, 0.6, 0.5); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-base-r3-2: worst 20.9 ms CPU; entry frame + next 22.8 ms; first 4 frames with work 24.1 ms (frames from the entry: 20.9, 1.9, 0.6, 0.8); doFrames after the input 10; logo/webp decodes on the main thread: 1 (2.7 ms)
+ENTRY warm-open-base-r3-2: worst 20.7 ms CPU; entry frame + next 29.6 ms; first 4 frames with work 32.9 ms (frames from the entry: 8.9, 20.7, 2.0, 1.3); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-news-base-r3: worst 14.1 ms CPU; entry frame + next 14.0 ms; first 4 frames with work 29.5 ms (frames from the entry: 12.2, 1.8, 14.1, 1.4); doFrames after the input 12; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY from-news-base-r3: worst 43.6 ms CPU; entry frame + next 45.7 ms; first 4 frames with work 47.7 ms (frames from the entry: 43.6, 2.2, 1.2, 0.8); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-base-r3-1: worst 41.1 ms CPU; entry frame + next 44.8 ms; first 4 frames with work 54.9 ms (frames from the entry: 41.1, 3.8, 6.3, 5.8); doFrames after the input 8; logo/webp decodes on the main thread: 1 (5.6 ms)
+ENTRY book-back-base-r3-2: worst 43.9 ms CPU; entry frame + next 47.9 ms; first 4 frames with work 54.4 ms (frames from the entry: 43.9, 4.0, 2.7, 5.7); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY cold-open-new-r3: worst 20.6 ms CPU; entry frame + next 20.1 ms; first 4 frames with work 36.5 ms (frames from the entry: 17.1, 3.0, 11.7, 1.2); doFrames after the input 14; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-new-r3-1: worst 28.7 ms CPU; entry frame + next 34.1 ms; first 4 frames with work 42.9 ms (frames from the entry: 28.7, 5.4, 6.3, 2.5); doFrames after the input 25; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-new-r3-1: worst 21.3 ms CPU; entry frame + next 11.6 ms; first 4 frames with work 33.7 ms (frames from the entry: 9.8, 1.8, 21.3, 0.8); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-new-r3-2: worst 18.0 ms CPU; entry frame + next 19.7 ms; first 4 frames with work 20.8 ms (frames from the entry: 18.0, 1.7, 0.6, 0.5); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-new-r3-2: worst 21.9 ms CPU; entry frame + next 21.8 ms; first 4 frames with work 47.3 ms (frames from the entry: 19.1, 2.8, 21.9, 0.5); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-news-new-r3: worst 15.1 ms CPU; entry frame + next 16.8 ms; first 4 frames with work 32.3 ms (frames from the entry: 15.1, 1.7, 1.2, 14.2); doFrames after the input 13; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY from-news-new-r3: worst 21.9 ms CPU; entry frame + next 24.6 ms; first 4 frames with work 47.2 ms (frames from the entry: 21.9, 2.7, 21.8, 0.8); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-new-r3-1: worst 41.3 ms CPU; entry frame + next 45.9 ms; first 4 frames with work 53.4 ms (frames from the entry: 41.3, 4.6, 2.8, 3.4); doFrames after the input 8; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-new-r3-2: worst 37.1 ms CPU; entry frame + next 41.3 ms; first 4 frames with work 47.9 ms (frames from the entry: 37.1, 4.1, 2.8, 6.1); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+## X4. Round 4 (new base): cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+ENTRY cold-open-new-r4: worst 20.3 ms CPU; entry frame + next 17.7 ms; first 4 frames with work 41.1 ms (frames from the entry: 14.2, 3.5, 20.3, 2.3); doFrames after the input 12; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-new-r4-1: worst 18.5 ms CPU; entry frame + next 20.5 ms; first 4 frames with work 22.0 ms (frames from the entry: 18.5, 2.1, 0.9, 0.6); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-new-r4-1: worst 21.0 ms CPU; entry frame + next 20.5 ms; first 4 frames with work 45.1 ms (frames from the entry: 18.0, 2.5, 21.0, 0.5); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-new-r4-2: worst 19.7 ms CPU; entry frame + next 21.9 ms; first 4 frames with work 24.2 ms (frames from the entry: 19.7, 2.2, 1.2, 1.1); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-new-r4-2: worst 28.8 ms CPU; entry frame + next 30.6 ms; first 4 frames with work 53.7 ms (frames from the entry: 28.8, 1.7, 22.3, 0.8); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-news-new-r4: worst 12.9 ms CPU; entry frame + next 17.9 ms; first 4 frames with work 31.2 ms (frames from the entry: 12.9, 5.0, 8.7, 4.6); doFrames after the input 13; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY from-news-new-r4: worst 24.6 ms CPU; entry frame + next 19.8 ms; first 4 frames with work 45.8 ms (frames from the entry: 17.9, 1.9, 24.6, 1.4); doFrames after the input 11; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-new-r4-1: worst 37.7 ms CPU; entry frame + next 41.8 ms; first 4 frames with work 50.1 ms (frames from the entry: 37.7, 4.1, 4.8, 2.2); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-new-r4-2: worst 44.0 ms CPU; entry frame + next 49.9 ms; first 4 frames with work 56.1 ms (frames from the entry: 44.0, 5.9, 2.6, 3.7); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY cold-open-base-r4: worst 35.7 ms CPU; entry frame + next 20.7 ms; first 4 frames with work 34.0 ms (frames from the entry: 17.0, 3.7, 6.1, 1.5); doFrames after the input 14; logo/webp decodes on the main thread: 1 (2.4 ms)
+ENTRY leave-home-base-r4-1: worst 27.9 ms CPU; entry frame + next 30.1 ms; first 4 frames with work 39.0 ms (frames from the entry: 27.9, 2.2, 6.7, 2.2); doFrames after the input 17; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-base-r4-1: worst 24.1 ms CPU; entry frame + next 27.0 ms; first 4 frames with work 31.5 ms (frames from the entry: 24.1, 2.9, 0.7, 4.1); doFrames after the input 9; logo/webp decodes on the main thread: 1 (2.6 ms)
+ENTRY leave-home-base-r4-2: worst 20.4 ms CPU; entry frame + next 22.8 ms; first 4 frames with work 24.3 ms (frames from the entry: 20.4, 2.4, 0.9, 0.6); doFrames after the input 10; logo/webp decodes on the main thread: 1 (2.7 ms)
+ENTRY warm-open-base-r4-2: worst 40.1 ms CPU; entry frame + next 43.5 ms; first 4 frames with work 47.7 ms (frames from the entry: 40.1, 3.4, 0.8, 0.5); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-news-base-r4: worst 12.3 ms CPU; entry frame + next 14.2 ms; first 4 frames with work 27.2 ms (frames from the entry: 12.3, 1.9, 11.4, 1.6); doFrames after the input 11; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY from-news-base-r4: worst 39.1 ms CPU; entry frame + next 42.1 ms; first 4 frames with work 46.9 ms (frames from the entry: 39.1, 3.0, 4.0, 0.7); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-base-r4-1: worst 43.3 ms CPU; entry frame + next 50.9 ms; first 4 frames with work 58.3 ms (frames from the entry: 43.3, 7.6, 3.1, 2.6); doFrames after the input 9; logo/webp decodes on the main thread: 1 (5.6 ms)
+ENTRY book-back-base-r4-2: worst 32.2 ms CPU; entry frame + next 38.7 ms; first 4 frames with work 48.8 ms (frames from the entry: 32.2, 6.5, 6.0, 6.0); doFrames after the input 9; logo/webp decodes on the main thread: 1 (2.6 ms)
+## X5. Round 5 (base new): cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+ENTRY cold-open-base-r5: worst 19.3 ms CPU; entry frame + next 28.3 ms; first 4 frames with work 51.8 ms (frames from the entry: 16.6, 11.7, 19.3, 2.8); doFrames after the input 12; logo/webp decodes on the main thread: 1 (2.5 ms)
+ENTRY leave-home-base-r5-1: worst 20.6 ms CPU; entry frame + next 24.8 ms; first 4 frames with work 26.9 ms (frames from the entry: 20.6, 4.2, 1.2, 0.8); doFrames after the input 10; logo/webp decodes on the main thread: 1 (2.9 ms)
+ENTRY warm-open-base-r5-1: worst 69.6 ms CPU; entry frame + next 72.5 ms; first 4 frames with work 74.6 ms (frames from the entry: 69.6, 2.9, 1.6, 0.5); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-base-r5-2: worst 26.9 ms CPU; entry frame + next 28.8 ms; first 4 frames with work 32.6 ms (frames from the entry: 26.9, 1.8, 0.4, 7.0); doFrames after the input 9; logo/webp decodes on the main thread: 1 (2.8 ms)
+ENTRY warm-open-base-r5-2: worst 40.1 ms CPU; entry frame + next 42.8 ms; first 4 frames with work 47.1 ms (frames from the entry: 40.1, 2.7, 1.0, 0.6); doFrames after the input 11; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-news-base-r5: worst 13.9 ms CPU; entry frame + next 15.9 ms; first 4 frames with work 25.0 ms (frames from the entry: 13.9, 2.0, 8.1, 1.0); doFrames after the input 11; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY from-news-base-r5: worst 43.1 ms CPU; entry frame + next 49.0 ms; first 4 frames with work 50.9 ms (frames from the entry: 43.1, 5.9, 1.0, 0.8); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-base-r5-1: worst 43.7 ms CPU; entry frame + next 47.8 ms; first 4 frames with work 57.4 ms (frames from the entry: 43.7, 4.1, 5.8, 4.5); doFrames after the input 8; logo/webp decodes on the main thread: 1 (3.6 ms)
+ENTRY book-back-base-r5-2: worst 53.3 ms CPU; entry frame + next 59.2 ms; first 4 frames with work 69.1 ms (frames from the entry: 53.3, 6.0, 5.9, 2.9); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY cold-open-new-r5: worst 35.1 ms CPU; entry frame + next 21.5 ms; first 4 frames with work 35.6 ms (frames from the entry: 18.4, 3.1, 7.1, 4.0); doFrames after the input 14; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-new-r5-1: worst 29.5 ms CPU; entry frame + next 31.8 ms; first 4 frames with work 41.4 ms (frames from the entry: 29.5, 2.3, 4.4, 5.2); doFrames after the input 31; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-new-r5-1: worst 15.4 ms CPU; entry frame + next 13.4 ms; first 4 frames with work 32.3 ms (frames from the entry: 10.4, 3.0, 15.4, 0.6); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-home-new-r5-2: worst 18.5 ms CPU; entry frame + next 20.5 ms; first 4 frames with work 22.2 ms (frames from the entry: 18.5, 2.0, 0.9, 0.8); doFrames after the input 11; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY warm-open-new-r5-2: worst 15.9 ms CPU; entry frame + next 24.9 ms; first 4 frames with work 44.0 ms (frames from the entry: 9.9, 15.0, 3.2, 15.9); doFrames after the input 10; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY leave-news-new-r5: worst 15.0 ms CPU; entry frame + next 14.1 ms; first 4 frames with work 31.2 ms (frames from the entry: 12.3, 1.8, 15.0, 2.1); doFrames after the input 12; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY from-news-new-r5: worst 16.0 ms CPU; entry frame + next 18.3 ms; first 4 frames with work 38.4 ms (frames from the entry: 16.0, 2.4, 15.7, 4.3); doFrames after the input 11; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-new-r5-1: worst 33.8 ms CPU; entry frame + next 39.5 ms; first 4 frames with work 47.8 ms (frames from the entry: 33.8, 5.7, 4.3, 4.7); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+ENTRY book-back-new-r5-2: worst 30.7 ms CPU; entry frame + next 37.6 ms; first 4 frames with work 46.4 ms (frames from the entry: 30.7, 6.9, 5.1, 6.2); doFrames after the input 9; logo/webp decodes on the main thread: 0 (0.0 ms)
+## X8. Visual checks
+## V-new. Visual checks (new): rows after a tab switch, the scroll position after Home → Каталог, Back from a book (screen recording)
+VIS new after the tab switch: 2446 results; rows: "Ох..."
+VIS new warm switch: 2446 results; first row: "Ох..."
+VIS new scroll position: before Home 'Анатомът', after Home → Каталог 'Анатомът' → KEPT
+VIS new News → Каталог: first row 'Анатомът' (kept);  results
+REC fxback-new (emu): marker 1552 ms after the recording start; 70 frames at 20/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+VIS new Back from a book: on the list NO; first row 'Анатомът'
+## V-base. Visual checks (base): rows after a tab switch, the scroll position after Home → Каталог, Back from a book (screen recording)
+VIS base after the tab switch: 2446 results; rows: "Ох..."
+VIS base warm switch: 2446 results; first row: "Ох..."
+VIS base scroll position: before Home 'Анатомът', after Home → Каталог 'Анатомът' → KEPT
+VIS base News → Каталог: first row 'Анатомът' (kept);  results
+REC fxback-base (emu): marker 1550 ms after the recording start; 66 frames at 20/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+VIS base Back from a book: on the list NO; first row 'Анатомът'
+## X9. BASE (ab175e49) vs NEW (ae598c45): main-thread CPU (Running) per entry
+entry kind | build | n | worst frame CPU ms: median / mean / max | entry frame + next: median / mean / max | 1st frame median | 2nd frame median | first 4 frames with work, median | logo decodes (total)
+---|---|---|---|---|---|---|---|---
+cold-open | BASE | 5 | 35.7 / 38.2 / 57.4 | 28.3 / 30.3 / 43.4 | 17.0 | 11.2 | 51.2 | 5
+cold-open | NEW | 5 | 20.6 / 26.2 / 38.7 | 19.9 / 19.3 / 21.5 | 16.3 | 3.1 | 35.6 | 0
+leave-home | BASE | 10 | 22.0 / 23.4 / 27.9 | 24.6 / 25.8 / 30.1 | 22.0 | 2.2 | 27.0 | 7
+leave-home | NEW | 10 | 18.5 / 22.1 / 35.2 | 20.5 / 24.6 / 37.0 | 18.5 | 2.2 | 23.1 | 0
+warm-open | BASE | 10 | 40.1 / 40.1 / 69.6 | 43.1 / 43.6 / 72.5 | 40.1 | 2.9 | 47.4 | 2
+warm-open | NEW | 10 | 21.6 / 21.4 / 28.8 | 20.9 / 21.2 / 30.6 | 18.2 | 2.5 | 44.5 | 0
+leave-news | BASE | 5 | 14.1 / 13.8 / 14.5 | 15.1 / 14.9 / 15.9 | 13.2 | 1.9 | 29.5 | 0
+leave-news | NEW | 5 | 15.0 / 14.5 / 16.0 | 16.8 / 16.3 / 17.9 | 13.5 | 1.8 | 31.2 | 0
+from-news | BASE | 5 | 43.6 / 44.3 / 49.3 | 49.0 / 47.5 / 51.2 | 43.6 | 3.0 | 50.8 | 0
+from-news | NEW | 5 | 21.9 / 21.3 / 26.9 | 19.8 / 21.4 / 29.6 | 17.9 | 2.7 | 45.8 | 0
+book-back | BASE | 10 | 42.3 / 42.3 / 53.3 | 46.1 / 47.1 / 59.2 | 42.3 | 4.1 | 53.6 | 6
+book-back | NEW | 10 | 37.4 / 38.1 / 47.4 | 41.5 / 42.7 / 51.4 | 37.4 | 4.1 | 49.0 | 0
+CRASH new (org.chyavorec.app): FATAL 0, ANR 0
+CRASH base (org.chyavorec.app.b): FATAL 0, ANR 0
+all FATAL lines 1; traces kept: 48
+contact sheets: 13 in sheets/
+contact sheets: 13 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['5211', '7967', '8717', '9466', '11293', '11887', '13686', '14269']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 35
+   skipped-frames events=35 max=112 total=2156
+== Davey: 61
+   davey events=61 max=3016ms median=1187ms
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 1 block(s) {'FATAL': 1} → crashes.txt

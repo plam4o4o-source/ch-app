@@ -1,0 +1,4 @@
+1.2.39 ab175e4 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b, throwaway key, versionCode 1990200 (BASE: 1.2.39 as released)
+1.2.39 ae598c4 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 1990200 (NEW: the entry-frame fix)
+app.apk 4680894 bytes
+app-base.apk 4680470 bytes

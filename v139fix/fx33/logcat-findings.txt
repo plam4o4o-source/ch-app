@@ -1,0 +1,136 @@
+app pids seen: ['5211', '7967', '8717', '9466', '11293', '11887', '13686', '14269']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 35
+   skipped-frames events=35 max=112 total=2156
+   11-19 18:32:00.657  5211  5211 I Choreographer: Skipped 104 frames!  The application may be doing too much work on its main thread.
+   11-19 18:32:01.384  5211  5211 I Choreographer: Skipped 42 frames!  The application may be doing too much work on its main thread.
+   11-19 18:32:02.194  5211  5211 I Choreographer: Skipped 35 frames!  The application may be doing too much work on its main thread.
+   11-19 18:32:03.860  5211  5211 I Choreographer: Skipped 88 frames!  The application may be doing too much work on its main thread.
+   11-19 18:32:04.654  5211  5211 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-19 18:32:06.533  5211  5211 I Choreographer: Skipped 73 frames!  The application may be doing too much work on its main thread.
+   11-19 18:32:07.630  5211  5211 I Choreographer: Skipped 56 frames!  The application may be doing too much work on its main thread.
+   11-19 18:32:18.081  5211  5211 I Choreographer: Skipped 59 frames!  The application may be doing too much work on its main thread.
+   11-19 18:32:18.934  5211  5211 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+   11-19 18:32:20.605  5211  5211 I Choreographer: Skipped 65 frames!  The application may be doing too much work on its main thread.
+   11-19 18:32:36.604  5211  5211 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-19 18:32:43.444  5211  5211 I Choreographer: Skipped 48 frames!  The application may be doing too much work on its main thread.
+== Davey: 61
+   davey events=61 max=3016ms median=1187ms
+   11-19 18:32:03.842  5211  5231 I OpenGLRenderer: Davey! duration=1975ms; Flags=1, FrameTimelineVsyncId=6557, IntendedVsync=102791873801, Vsync=103491873773, InputEventId=0, HandleInputStart=103504913324, AnimationStart=103504914126, Perform
+   11-19 18:32:04.576  5211  5231 I OpenGLRenderer: Davey! duration=2000ms; Flags=0, FrameTimelineVsyncId=6751, IntendedVsync=104325207073, Vsync=104425207069, InputEventId=0, HandleInputStart=104438163806, AnimationStart=104438164438, Perform
+   11-19 18:32:04.721  5211  5222 I OpenGLRenderer: Davey! duration=769ms; Flags=0, FrameTimelineVsyncId=6779, IntendedVsync=104441873735, Vsync=104475207067, InputEventId=0, HandleInputStart=104486169554, AnimationStart=104486169835, PerformT
+   11-19 18:32:05.282  5211  5222 I OpenGLRenderer: Davey! duration=2035ms; Flags=0, FrameTimelineVsyncId=6807, IntendedVsync=104508540399, Vsync=105975207007, InputEventId=0, HandleInputStart=105977819445, AnimationStart=105977819836, Perform
+   11-19 18:32:06.496  5211  5330 I OpenGLRenderer: Davey! duration=1988ms; Flags=0, FrameTimelineVsyncId=7020, IntendedVsync=105991873673, Vsync=106758540309, InputEventId=0, HandleInputStart=106771754182, AnimationStart=106771754663, Perform
+   11-19 18:32:06.664  5211  5330 I OpenGLRenderer: Davey! duration=1227ms; Flags=0, FrameTimelineVsyncId=7071, IntendedVsync=106941873635, Vsync=106941873635, InputEventId=0, HandleInputStart=106945242155, AnimationStart=106945242746, Perform
+   11-19 18:32:07.628  5211  5330 I OpenGLRenderer: Davey! duration=1294ms; Flags=0, FrameTimelineVsyncId=7078, IntendedVsync=106958540301, Vsync=107408540283, InputEventId=0, HandleInputStart=107409404526, AnimationStart=107409404896, Perform
+   11-19 18:32:07.809  5211  5330 I OpenGLRenderer: Davey! duration=2184ms; Flags=0, FrameTimelineVsyncId=7087, IntendedVsync=107425206949, Vsync=108641873567, InputEventId=0, HandleInputStart=108651820527, AnimationStart=108651821258, Perform
+   11-19 18:32:18.849  5211  5330 I OpenGLRenderer: Davey! duration=1782ms; Flags=0, FrameTimelineVsyncId=7936, IntendedVsync=118908539823, Vsync=119191873145, InputEventId=0, HandleInputStart=119203458213, AnimationStart=119203458493, Perform
+   11-19 18:32:19.183  5211  5330 I OpenGLRenderer: Davey! duration=1291ms; Flags=0, FrameTimelineVsyncId=7961, IntendedVsync=119208539811, Vsync=120191873105, InputEventId=0, HandleInputStart=120198459345, AnimationStart=120198459746, Perform
+   11-19 18:32:19.476  5211  5330 I OpenGLRenderer: Davey! duration=1179ms; Flags=0, FrameTimelineVsyncId=8062, IntendedVsync=120208539771, Vsync=121041873071, InputEventId=0, HandleInputStart=121051677171, AnimationStart=121051677782, Perform
+   11-19 18:32:20.958  5211  5330 I OpenGLRenderer: Davey! duration=1539ms; Flags=0, FrameTimelineVsyncId=8182, IntendedVsync=121091873069, Vsync=121358539725, InputEventId=0, HandleInputStart=121359339870, AnimationStart=121359340421, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-19 18:31:55.390  5079  5079 I PERFCHECK: section: X0. NEW ae598c45, org.chyavorec.app and BASE ab175e49, org.chyavorec.app.b side by side; first launch to the catalogue, speed-profile
+   11-19 18:35:14.881  8072  8072 I PERFCHECK: section: X1. Round 1 base new: cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+   11-19 18:35:43.572  8230  8230 I PERFCHECK: w27 cold-open-base-r1
+   11-19 18:35:55.375  8279  8279 I PERFCHECK: w27 leave-home-base-r1-1
+   11-19 18:36:04.220  8317  8317 I PERFCHECK: w27 warm-open-base-r1-1
+   11-19 18:36:13.647  8375  8375 I PERFCHECK: w27 leave-home-base-r1-2
+   11-19 18:36:22.340  8415  8415 I PERFCHECK: w27 warm-open-base-r1-2
+   11-19 18:36:31.697  8451  8451 I PERFCHECK: w27 leave-news-base-r1
+   11-19 18:36:40.814  8489  8489 I PERFCHECK: w27 from-news-base-r1
+   11-19 18:36:58.724  8577  8577 I PERFCHECK: w27 book-back-base-r1-1
+   11-19 18:37:16.074  8658  8658 I PERFCHECK: w27 book-back-base-r1-2
+   11-19 18:37:54.894  8835  8835 I PERFCHECK: w27 cold-open-new-r1
+   11-19 18:38:06.014  8878  8878 I PERFCHECK: w27 leave-home-new-r1-1
+   11-19 18:38:14.632  8916  8916 I PERFCHECK: w27 warm-open-new-r1-1
+   11-19 18:38:23.753  8953  8953 I PERFCHECK: w27 leave-home-new-r1-2
+   11-19 18:38:32.589  9137  9137 I PERFCHECK: w27 warm-open-new-r1-2
+   11-19 18:38:41.747  9186  9186 I PERFCHECK: w27 leave-news-new-r1
+   11-19 18:38:50.866  9223  9223 I PERFCHECK: w27 from-news-new-r1
+   11-19 18:39:08.961  9311  9311 I PERFCHECK: w27 book-back-new-r1-1
+   11-19 18:39:26.373  9404  9404 I PERFCHECK: w27 book-back-new-r1-2
+   11-19 18:39:33.719  9446  9446 I PERFCHECK: section: X2. Round 2 new base: cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+   11-19 18:40:01.309  9567  9567 I PERFCHECK: w27 cold-open-new-r2
+   11-19 18:40:12.902  9608  9608 I PERFCHECK: w27 leave-home-new-r2-1
+   11-19 18:40:21.659  9646  9646 I PERFCHECK: w27 warm-open-new-r2-1
+   11-19 18:40:31.069  9706  9706 I PERFCHECK: w27 leave-home-new-r2-2
+   11-19 18:40:39.662  9744  9744 I PERFCHECK: w27 warm-open-new-r2-2
+   11-19 18:40:48.793  9781  9781 I PERFCHECK: w27 leave-news-new-r2
+   11-19 18:40:57.902  9818  9818 I PERFCHECK: w27 from-news-new-r2
+   11-19 18:41:15.830  9903  9903 I PERFCHECK: w27 book-back-new-r2-1
+   11-19 18:41:33.202  9985  9985 I PERFCHECK: w27 book-back-new-r2-2
+   11-19 18:42:08.266 10158 10158 I PERFCHECK: w27 cold-open-base-r2
+   11-19 18:42:19.865 10199 10199 I PERFCHECK: w27 leave-home-base-r2-1
+   11-19 18:42:28.522 10240 10240 I PERFCHECK: w27 warm-open-base-r2-1
+   11-19 18:42:37.945 10276 10276 I PERFCHECK: w27 leave-home-base-r2-2
+   11-19 18:42:46.741 10314 10314 I PERFCHECK: w27 warm-open-base-r2-2
+   11-19 18:42:55.886 10350 10350 I PERFCHECK: w27 leave-news-base-r2
+   11-19 18:43:04.979 10387 10387 I PERFCHECK: w27 from-news-base-r2
+   11-19 18:43:22.897 10472 10472 I PERFCHECK: w27 book-back-base-r2-1
+   11-19 18:43:40.247 10554 10554 I PERFCHECK: w27 book-back-base-r2-2
+   11-19 18:43:47.632 10594 10594 I PERFCHECK: section: X3. Round 3 base new: cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+   11-19 18:44:15.499 10788 10788 I PERFCHECK: w27 cold-open-base-r3
+   11-19 18:44:27.146 10829 10829 I PERFCHECK: w27 leave-home-base-r3-1
+   11-19 18:44:35.913 10867 10867 I PERFCHECK: w27 warm-open-base-r3-1
+   11-19 18:44:45.278 10903 10903 I PERFCHECK: w27 leave-home-base-r3-2
+   11-19 18:44:54.005 10993 10993 I PERFCHECK: w27 warm-open-base-r3-2
+   11-19 18:45:03.156 11031 11031 I PERFCHECK: w27 leave-news-base-r3
+   11-19 18:45:12.262 11071 11071 I PERFCHECK: w27 from-news-base-r3
+   11-19 18:45:30.190 11156 11156 I PERFCHECK: w27 book-back-base-r3-1
+   11-19 18:45:47.502 11237 11237 I PERFCHECK: w27 book-back-base-r3-2
+   11-19 18:46:22.339 11400 11400 I PERFCHECK: w27 cold-open-new-r3
+   11-19 18:46:33.810 11441 11441 I PERFCHECK: w27 leave-home-new-r3-1
+   11-19 18:46:42.538 11480 11480 I PERFCHECK: w27 warm-open-new-r3-1
+   11-19 18:46:51.663 11516 11516 I PERFCHECK: w27 leave-home-new-r3-2
+   11-19 18:47:00.223 11554 11554 I PERFCHECK: w27 warm-open-new-r3-2
+   11-19 18:47:09.383 11591 11591 I PERFCHECK: w27 leave-news-new-r3
+   11-19 18:47:18.497 11628 11628 I PERFCHECK: w27 from-news-new-r3
+   11-19 18:47:36.213 11715 11715 I PERFCHECK: w27 book-back-new-r3-1
+   11-19 18:47:53.506 11795 11795 I PERFCHECK: w27 book-back-new-r3-2
+   11-19 18:48:00.872 11834 11834 I PERFCHECK: section: X4. Round 4 new base: cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+   11-19 18:48:36.829 12036 12036 I PERFCHECK: w27 cold-open-new-r4
+   11-19 18:48:47.956 12092 12092 I PERFCHECK: w27 leave-home-new-r4-1
+   11-19 18:48:56.513 12131 12131 I PERFCHECK: w27 warm-open-new-r4-1
+   11-19 18:49:05.679 12167 12167 I PERFCHECK: w27 leave-home-new-r4-2
+   11-19 18:49:13.779 12204 12204 I PERFCHECK: w27 warm-open-new-r4-2
+   11-19 18:49:23.015 12240 12240 I PERFCHECK: w27 leave-news-new-r4
+   11-19 18:49:32.119 12278 12278 I PERFCHECK: w27 from-news-new-r4
+   11-19 18:49:49.844 12365 12365 I PERFCHECK: w27 book-back-new-r4-1
+   11-19 18:50:07.198 12446 12446 I PERFCHECK: w27 book-back-new-r4-2
+   11-19 18:50:41.978 12613 12613 I PERFCHECK: w27 cold-open-base-r4
+   11-19 18:50:53.573 12654 12654 I PERFCHECK: w27 leave-home-base-r4-1
+   11-19 18:51:02.249 12693 12693 I PERFCHECK: w27 warm-open-base-r4-1
+   11-19 18:51:11.418 12730 12730 I PERFCHECK: w27 leave-home-base-r4-2
+   11-19 18:51:20.030 12770 12770 I PERFCHECK: w27 warm-open-base-r4-2
+   11-19 18:51:29.369 12806 12806 I PERFCHECK: w27 leave-news-base-r4
+   11-19 18:51:38.474 12843 12843 I PERFCHECK: w27 from-news-base-r4
+   11-19 18:51:56.435 12930 12930 I PERFCHECK: w27 book-back-base-r4-1
+   11-19 18:52:13.822 13010 13010 I PERFCHECK: w27 book-back-base-r4-2
+   11-19 18:52:21.168 13050 13050 I PERFCHECK: section: X5. Round 5 base new: cold first entry, 2 × warm tab switch Home → Каталог, News → Каталог, 2 × Back from a book
+   11-19 18:53:02.649 13217 13217 I PERFCHECK: w27 cold-open-base-r5
+   11-19 18:53:13.807 13258 13258 I PERFCHECK: w27 leave-home-base-r5-1
+   11-19 18:53:21.947 13296 13296 I PERFCHECK: w27 warm-open-base-r5-1
+   11-19 18:53:31.287 13333 13333 I PERFCHECK: w27 leave-home-base-r5-2
+   11-19 18:53:39.538 13370 13370 I PERFCHECK: w27 warm-open-base-r5-2
+   11-19 18:53:48.826 13406 13406 I PERFCHECK: w27 leave-news-base-r5
+   11-19 18:53:57.961 13444 13444 I PERFCHECK: w27 from-news-base-r5
+   11-19 18:54:16.017 13549 13549 I PERFCHECK: w27 book-back-base-r5-1
+   11-19 18:54:33.363 13629 13629 I PERFCHECK: w27 book-back-base-r5-2
+   11-19 18:55:07.510 13804 13804 I PERFCHECK: w27 cold-open-new-r5
+   11-19 18:55:19.160 13845 13845 I PERFCHECK: w27 leave-home-new-r5-1
+   11-19 18:55:27.959 13883 13883 I PERFCHECK: w27 warm-open-new-r5-1
+   11-19 18:55:37.109 13919 13919 I PERFCHECK: w27 leave-home-new-r5-2
+   11-19 18:55:45.655 13957 13957 I PERFCHECK: w27 warm-open-new-r5-2
+   11-19 18:55:54.893 13994 13994 I PERFCHECK: w27 leave-news-new-r5
+   11-19 18:56:04.022 14031 14031 I PERFCHECK: w27 from-news-new-r5
+   11-19 18:56:21.785 14117 14117 I PERFCHECK: w27 book-back-new-r5-1
+   11-19 18:56:39.143 14200 14200 I PERFCHECK: w27 book-back-new-r5-2
+   11-19 18:56:46.520 14241 14241 I PERFCHECK: section: X8. Visual checks
+   11-19 18:56:46.549 14246 14246 I PERFCHECK: section: V-new. Visual checks new: rows after a tab switch, the scroll position after Home → Каталог, Back from a book screen recording
+   11-19 18:58:03.834 14685 14685 I PERFCHECK: fxback-new
+   11-19 18:58:17.185 14793 14793 I PERFCHECK: section: V-base. Visual checks base: rows after a tab switch, the scroll position after Home → Каталог, Back from a book screen recording
+   11-19 18:59:33.661 15238 15238 I PERFCHECK: fxback-base
+   11-19 18:59:46.308 15300 15300 I PERFCHECK: section: X9. BASE ab175e49 vs NEW ae598c45: main-thread CPU Running per entry
