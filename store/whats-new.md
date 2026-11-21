@@ -13,6 +13,14 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.41
+
+### bg
+- Приложението вече може да се инсталира и на таблети, компютри с Android и XR устройства, които не се държат вертикално.
+
+### en
+- The app can now be installed on tablets, Android computers and XR devices that are not held upright.
+
 ## 1.2.40
 
 ### bg
