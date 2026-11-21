@@ -13,6 +13,14 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.42
+
+### bg
+- „Познай Яворец“: ако снимката към въпрос липсва на сайта или не се зареди, въпросът се сменя с друг — без черно поле.
+
+### en
+- “Know Yavorets”: if a question's photo is missing from the website or fails to load, you get another question instead of a black box.
+
 ## 1.2.41
 
 ### bg

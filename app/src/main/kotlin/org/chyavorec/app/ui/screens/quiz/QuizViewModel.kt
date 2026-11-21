@@ -5,7 +5,14 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import org.chyavorec.core.AppClock
 import org.chyavorec.core.Outcome
 import org.chyavorec.data.repository.CatalogRepository
@@ -19,6 +26,7 @@ import org.chyavorec.domain.quiz.QuizGenerator
 import org.chyavorec.domain.quiz.QuizPhoto
 import org.chyavorec.domain.quiz.QuizSources
 import org.chyavorec.domain.quiz.QuizStreak
+import java.util.concurrent.TimeUnit
 
 /** Къде се пазят напредъкът и серията (в приложението — [QuizStore]). */
 interface QuizPersistence {
@@ -31,6 +39,12 @@ interface QuizPersistence {
 /** Събира данните, от които се съставя викторината (без да чака мрежа, когато има кеш). */
 fun interface QuizSourceLoader {
     suspend fun load(): QuizSources
+
+    /**
+     * Дали снимката на [url] със сигурност я няма (сайтът връща 404/410) — тогава въпросът с нея
+     * се сменя още преди да се покаже. Без мрежа или при друга грешка — `false` (може да е в кеша).
+     */
+    suspend fun photoMissing(url: String): Boolean = false
 }
 
 /** Данните от приложението: хронология (кеш → мрежа → вградената), каталог и снимки само от кеша, ръчни въпроси. */
@@ -39,6 +53,7 @@ class AppQuizSources(
     private val catalog: CatalogRepository,
     private val site: SiteRepository,
     private val custom: QuizQuestionsRepository,
+    private val http: OkHttpClient? = null,
 ) : QuizSourceLoader {
     override suspend fun load(): QuizSources {
         val entries = (timeline.timeline(false) as? Outcome.Success)?.value?.data
@@ -53,9 +68,23 @@ class AppQuizSources(
         return QuizSources(entries, books, photos, questions)
     }
 
+    override suspend fun photoMissing(url: String): Boolean {
+        val client = http ?: return false
+        return withContext(Dispatchers.IO) {
+            runCatching {
+                client.newBuilder().callTimeout(PROBE_SECONDS, TimeUnit.SECONDS).build()
+                    .newCall(Request.Builder().url(url).head().build()).execute()
+                    .use { it.code == 404 || it.code == 410 }
+            }.getOrDefault(false)
+        }
+    }
+
     private companion object {
         /** Албумът на фотодокументалната изложба (името е от chyavorec.org — виж ChyavorecSiteService.galleryPages). */
         const val EXHIBITION_ALBUM = "Фотодокументална изложба"
+
+        /** Проверката дали снимката я има — кратка, за да не задържа зареждането на викторината. */
+        const val PROBE_SECONDS = 4L
     }
 }
 
@@ -81,6 +110,9 @@ class QuizViewModel(
     val state: StateFlow<QuizUi> = _state.asStateFlow()
     private val answers = ArrayList<Int>()
     private var quiz: Quiz? = null
+    private var loaded: QuizSources? = null
+
+    private suspend fun allSources(): QuizSources = loaded ?: sources.load().also { loaded = it }
 
     init { load() }
 
@@ -89,16 +121,53 @@ class QuizViewModel(
         viewModelScope.launch {
             val today = clock.today()
             val saved = store.progress()?.takeIf { it.date == today.toString() && it.quiz.questions.size >= QuizGenerator.MIN_QUESTIONS }
-            val q = saved?.quiz ?: QuizGenerator.generate(today, sources.load())
-            if (q == null) {
+            val generated = saved?.quiz ?: QuizGenerator.generate(today, allSources())
+            if (generated == null) {
                 _state.value = QuizUi.Unavailable
                 return@launch
             }
-            quiz = q
             answers.clear()
-            saved?.answers?.take(q.questions.size)?.let { answers.addAll(it) }
-            if (saved == null) store.saveProgress(QuizProgress(q.date, q, emptyList()))
+            saved?.answers?.take(generated.questions.size)?.let { answers.addAll(it) }
+            // Снимки, изтрити от сайта: въпросите с тях се сменят, преди да се покажат (и в запазената викторина).
+            val q = withoutMissingPhotos(generated, answers.size)
+            quiz = q
+            if (saved == null || q != generated) store.saveProgress(QuizProgress(q.date, q, answers.toList()))
             _state.value = if (answers.size >= q.questions.size) finished(q, record = false) else QuizUi.Playing(q, answers.size, null, results(q))
+        }
+    }
+
+    /** Неотговорените въпроси със снимка, която я няма на сайта, се заменят (виж [QuizGenerator.withoutQuestion]). */
+    private suspend fun withoutMissingPhotos(q: Quiz, answered: Int): Quiz {
+        val withPhoto = q.questions.drop(answered).filter { it.imageUrl != null }
+        if (withPhoto.isEmpty()) return q
+        val missing = coroutineScope {
+            withPhoto.map { question ->
+                async { question.id.takeIf { sources.photoMissing(question.imageUrl.orEmpty()) } }
+            }.awaitAll()
+        }.filterNotNull()
+        var out = q
+        for (id in missing) {
+            val i = out.questions.indexOfFirst { it.id == id }
+            if (i < answered) continue
+            out = QuizGenerator.withoutQuestion(out, i, allSources()) ?: break
+        }
+        return out
+    }
+
+    /**
+     * Снимката на текущия въпрос не се зареди (няма я, няма мрежа) — въпрос „Какво е на снимката?“
+     * без снимка не може да се отговори, затова се сменя с друг; отговорените не се пипат.
+     */
+    fun photoFailed(index: Int) {
+        val s = _state.value as? QuizUi.Playing ?: return
+        if (s.index != index || s.chosen != null || s.quiz.questions.getOrNull(index)?.imageUrl == null) return
+        viewModelScope.launch {
+            val next = QuizGenerator.withoutQuestion(s.quiz, index, allSources()) ?: return@launch
+            // Междувременно е избран отговор или е сменен въпросът — нищо.
+            if (_state.value != s) return@launch
+            quiz = next
+            store.saveProgress(QuizProgress(next.date, next, answers.toList()))
+            _state.value = QuizUi.Playing(next, index, null, results(next))
         }
     }
 

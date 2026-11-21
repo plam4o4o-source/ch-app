@@ -219,4 +219,31 @@ class QuizGeneratorTest {
         assertEquals(9_999, QuizStreak("2026-01-01", 9_999, 9_999, 9_999).record(LocalDate.of(2026, 1, 2)).length)
         assertEquals(0, QuizStreak("не-дата", 5, 5, 5).current(today))
     }
+
+    @Test fun aQuestionWithAMissingPhotoIsReplacedByOneWithoutAPhoto() {
+        val quiz = QuizGenerator.generate(today, full())!!
+        val i = quiz.questions.indexOfFirst { it.kind == QuizKind.PHOTO }
+        assertTrue(i >= 0, "днешната викторина има въпрос със снимка")
+        val next = assertNotNull(QuizGenerator.withoutQuestion(quiz, i, full()))
+        assertEquals(quiz.questions.size, next.questions.size)
+        assertNull(next.questions[i].imageUrl)
+        assertTrue(next.questions.none { it.kind == QuizKind.PHOTO })
+        // Другите въпроси са същите и на същите места; новият не повтаря тема.
+        quiz.questions.indices.filter { it != i }.forEach { assertEquals(quiz.questions[it], next.questions[it]) }
+        assertEquals(next.questions.size, next.questions.map { it.subject }.toSet().size)
+        assertWellFormed(next.questions[i])
+        // Детерминирано за деня.
+        assertEquals(next, QuizGenerator.withoutQuestion(quiz, i, full()))
+    }
+
+    @Test fun withoutAlternativesTheQuestionIsDroppedButNotBelowTheMinimum() {
+        val quiz = QuizGenerator.generate(today, full())!!
+        val i = quiz.questions.indexOfFirst { it.kind == QuizKind.PHOTO }
+        val dropped = assertNotNull(QuizGenerator.withoutQuestion(quiz, i, QuizSources()))
+        assertEquals(quiz.questions.size - 1, dropped.questions.size)
+        assertTrue(dropped.questions.none { it.kind == QuizKind.PHOTO })
+        val small = quiz.copy(questions = quiz.questions.take(QuizGenerator.MIN_QUESTIONS))
+        assertNull(QuizGenerator.withoutQuestion(small, 0, QuizSources()))
+        assertNull(QuizGenerator.withoutQuestion(quiz, quiz.questions.size, full()))
+    }
 }

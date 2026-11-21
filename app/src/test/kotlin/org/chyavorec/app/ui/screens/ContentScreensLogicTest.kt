@@ -32,6 +32,7 @@ import org.chyavorec.core.Outcome
 import org.chyavorec.domain.model.DocumentKind
 import org.chyavorec.domain.model.SiteDocument
 import org.chyavorec.domain.quiz.QuizDefaults
+import org.chyavorec.domain.quiz.QuizPhoto
 import org.chyavorec.domain.quiz.QuizSources
 import org.chyavorec.domain.quiz.QuizStreak
 import org.junit.Rule
@@ -334,5 +335,57 @@ class ContentScreensLogicTest {
         val p = assertIs<QuizUi.Playing>(vm.state.value)
         assertEquals("2026-11-13", p.quiz.date)
         assertTrue(p.quiz.questions.map { it.id } != yesterday.quiz.questions.map { it.id })
+    }
+
+    private val photoSources = QuizSources(
+        timeline = QuizDefaults.timeline,
+        photos = listOf("Жътва", "Харманът", "Бригадите", "Пастири и стада", "Складове и хамбари", "Площадът")
+            .map { QuizPhoto(it, "https://chyavorec.org/files/${it.hashCode()}.jpg") },
+    )
+
+    @Test fun photosMissingOnTheSiteAreReplacedBeforeTheQuizIsShown() = runTest(dispatcher) {
+        val store = FakeStore()
+        val missing = object : QuizSourceLoader {
+            override suspend fun load() = photoSources
+            override suspend fun photoMissing(url: String) = true
+        }
+        // Без проверка днешната викторина има въпрос със снимка.
+        val plain = QuizViewModel({ photoSources }, FakeStore(), clock)
+        advanceUntilIdle()
+        assertTrue(assertIs<QuizUi.Playing>(plain.state.value).quiz.questions.any { it.imageUrl != null })
+
+        val vm = QuizViewModel(missing, store, clock)
+        advanceUntilIdle()
+        val p = assertIs<QuizUi.Playing>(vm.state.value)
+        assertEquals(5, p.quiz.questions.size)
+        assertTrue(p.quiz.questions.none { it.imageUrl != null })
+        assertEquals(p.quiz, store.progress!!.quiz)
+    }
+
+    @Test fun aPhotoThatFailsToLoadSwapsTheCurrentQuestionOnly() = runTest(dispatcher) {
+        val store = FakeStore()
+        val vm = QuizViewModel({ photoSources }, store, clock)
+        advanceUntilIdle()
+        var s = assertIs<QuizUi.Playing>(vm.state.value)
+        val photoAt = s.quiz.questions.indexOfFirst { it.imageUrl != null }
+        // До въпроса със снимката — с отговори.
+        while (s.index < photoAt) {
+            vm.choose(0); advanceUntilIdle(); vm.next(); advanceUntilIdle()
+            s = assertIs<QuizUi.Playing>(vm.state.value)
+        }
+        val before = s.quiz
+        vm.photoFailed(photoAt + 1) // не текущият — нищо
+        advanceUntilIdle()
+        assertEquals(before, assertIs<QuizUi.Playing>(vm.state.value).quiz)
+
+        vm.photoFailed(photoAt)
+        advanceUntilIdle()
+        val after = assertIs<QuizUi.Playing>(vm.state.value)
+        assertEquals(photoAt, after.index)
+        assertEquals(null, after.chosen)
+        assertEquals(null, after.quiz.questions[photoAt].imageUrl)
+        assertEquals(before.questions.take(photoAt), after.quiz.questions.take(photoAt))
+        assertEquals(photoAt, after.results.size)
+        assertEquals(after.quiz, store.progress!!.quiz)
     }
 }

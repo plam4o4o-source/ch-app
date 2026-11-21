@@ -92,7 +92,7 @@ fun QuizScreen(onBack: () -> Unit) {
     val container = LocalAppContainer.current
     val vm = appViewModel {
         QuizViewModel(
-            AppQuizSources(it.timelineRepository, it.catalogRepository, it.siteRepository, it.quizQuestionsRepository),
+            AppQuizSources(it.timelineRepository, it.catalogRepository, it.siteRepository, it.quizQuestionsRepository, it.okHttp),
             it.quizStore, it.clock,
         )
     }
@@ -104,7 +104,7 @@ fun QuizScreen(onBack: () -> Unit) {
         ShareImageHost(share)
         Box(Modifier.padding(padding).fillMaxSize()) {
             QuizContent(
-                state, onChoose = vm::choose, onNext = vm::next, onRetry = vm::load,
+                state, onChoose = vm::choose, onNext = vm::next, onRetry = vm::load, onPhotoFailed = vm::photoFailed,
                 onShare = { f ->
                     val text = resources.getString(R.string.quiz_share_text, f.results.count { it }, f.results.size, container.config.siteBaseUrl)
                     share.share(
@@ -129,6 +129,7 @@ fun QuizContent(
     onRetry: () -> Unit,
     onShare: (QuizUi.Finished) -> Unit,
     onBack: () -> Unit,
+    onPhotoFailed: (Int) -> Unit = {},
 ) {
     when (state) {
         QuizUi.Loading -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { ChLoadingIndicator() }
@@ -136,7 +137,7 @@ fun QuizContent(
             Icons.Outlined.Quiz, stringResource(R.string.quiz_unavailable_title), stringResource(R.string.quiz_unavailable),
             actionLabel = stringResource(R.string.action_retry), onAction = onRetry, modifier = Modifier.fillMaxSize(),
         )
-        is QuizUi.Playing -> QuestionContent(state, onChoose, onNext)
+        is QuizUi.Playing -> QuestionContent(state, onChoose, onNext, onPhotoFailed)
         is QuizUi.Finished -> ResultContent(state, onShare = { onShare(state) }, onBack = onBack)
     }
 }
@@ -149,7 +150,7 @@ private val BandCompactWidth = 260.dp
 private val CompactQuiz = 620.dp
 
 @Composable
-private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: () -> Unit) {
+private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: () -> Unit, onPhotoFailed: (Int) -> Unit) {
     val q = s.quiz.questions[s.index]
     val haptic = LocalHapticFeedback.current
     val correct = s.chosen == q.correctIndex
@@ -167,7 +168,7 @@ private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: 
                 Column(
                     Modifier.weight(1.15f).fillMaxHeight().verticalScroll(scroll).padding(start = ScreenGutter, end = 12.dp, top = 8.dp, bottom = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp),
-                ) { QuestionPart(s, onChoose) }
+                ) { QuestionPart(s, onChoose, onPhotoFailed) }
                 Column(
                     Modifier.weight(1f).fillMaxHeight().padding(start = 12.dp, end = ScreenGutter, top = 8.dp, bottom = 16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -184,7 +185,7 @@ private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: 
                 Column(
                     Modifier.weight(1f).fillMaxWidth().verticalScroll(scroll).padding(horizontal = ScreenGutter, vertical = 8.dp),
                     verticalArrangement = Arrangement.spacedBy(14.dp),
-                ) { QuestionPart(s, onChoose) }
+                ) { QuestionPart(s, onChoose, onPhotoFailed) }
                 // Долната част е неподвижна: отговорът, лентата и „Напред“ винаги на едно място.
                 Column(
                     Modifier.fillMaxWidth().padding(start = ScreenGutter, end = ScreenGutter, top = 8.dp, bottom = 16.dp),
@@ -200,7 +201,7 @@ private fun QuestionContent(s: QuizUi.Playing, onChoose: (Int) -> Unit, onNext: 
 
 /** Номерът, снимката, въпросът и отговорите. */
 @Composable
-private fun QuestionPart(s: QuizUi.Playing, onChoose: (Int) -> Unit) {
+private fun QuestionPart(s: QuizUi.Playing, onChoose: (Int) -> Unit, onPhotoFailed: (Int) -> Unit) {
     val q = s.quiz.questions[s.index]
     Text(
         stringResource(R.string.quiz_question_of, s.index + 1, s.quiz.questions.size), style = MaterialTheme.typography.labelMedium,
@@ -210,6 +211,8 @@ private fun QuestionPart(s: QuizUi.Playing, onChoose: (Int) -> Unit) {
         SiteImage(
             url, 640.dp, stringResource(R.string.quiz_photo_desc),
             Modifier.fillMaxWidth().aspectRatio(16f / 10f).clip(MaterialTheme.shapes.medium), ContentScale.Crop,
+            // Без снимка въпросът не може да се отговори — сменя се с друг (виж QuizViewModel.photoFailed).
+            onFailure = { onPhotoFailed(s.index) },
         )
     }
     Text(questionText(q), style = MaterialTheme.typography.headlineSmall, modifier = Modifier.semantics { heading() })

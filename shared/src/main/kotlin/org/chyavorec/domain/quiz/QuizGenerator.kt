@@ -52,6 +52,29 @@ object QuizGenerator {
         return Quiz(date.toString(), chosen.shuffled(rng))
     }
 
+    /**
+     * Викторината без въпроса [index], чиято снимка липсва (изтрита от сайта, без мрежа): на мястото
+     * му — друг въпрос без снимка от същите източници (детерминиран за деня), а ако няма такъв —
+     * въпросът отпада, стига да остават поне [MIN_QUESTIONS]. `null` — не може без него.
+     */
+    fun withoutQuestion(quiz: Quiz, index: Int, sources: QuizSources): Quiz? {
+        val current = quiz.questions
+        if (index !in current.indices) return null
+        val pool = generate(quiz.localDate, sources.copy(photos = emptyList()), count = REPLACEMENT_POOL)?.questions.orEmpty()
+        val alt = pool.firstOrNull { c -> c.imageUrl == null && current.none { it.id == c.id || it.subject == c.subject } }
+        val next = current.toMutableList()
+        if (alt != null) {
+            next[index] = alt
+        } else {
+            if (current.size - 1 < MIN_QUESTIONS) return null
+            next.removeAt(index)
+        }
+        return quiz.copy(questions = next)
+    }
+
+    /** Колко въпроса без снимка се съставят, за да има от какво да се замени липсваща снимка. */
+    private const val REPLACEMENT_POOL = 40
+
     /** Зърното на деня — една и съща дата дава един и същ ред на нещата на всяко устройство. */
     internal fun seedOf(date: LocalDate): Long = date.toEpochDay() * -7046029254386353131L xor 0x5DEECE66DL
 
