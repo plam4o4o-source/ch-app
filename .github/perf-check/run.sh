@@ -1510,10 +1510,12 @@ EOF
 . $H_/w26.sh
 # Каталогът на издаденото v1.2.39: бавните кадри (debug/w27-cat, резултати в emulator-results/v139cat)
 . $H_/w27.sh
+# Кадрите след 1.2.40: назад от книга, разделите, писането, „Покажи още“ (debug/w27-cat, резултати в emulator-results/v142perf)
+. $H_/w28.sh
 # ================================================================= main
 NEW_VC=${VC_NEW:-1507400}
 setup
-if part_w27; then :; elif part_w26; then :; elif part_w25; then :; elif part_w24; then :; elif part_a7; then :; elif part_w22; then :; elif part_a6; then :; elif part_w21; then :; elif part_final; then :; elif part_card; then :; elif part_w20; then :; elif part_w19; then :; elif part_w18; then :; elif part_w16; then :; else
+if part_w28; then :; elif part_w27; then :; elif part_w26; then :; elif part_w25; then :; elif part_w24; then :; elif part_a7; then :; elif part_w22; then :; elif part_a6; then :; elif part_w21; then :; elif part_final; then :; elif part_card; then :; elif part_w20; then :; elif part_w19; then :; elif part_w18; then :; elif part_w16; then :; else
 case $PART in
   abstart-*) part_abstart;;
   jank-*) part_jank;;

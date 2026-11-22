@@ -1,0 +1,218 @@
+diff --git a/app/src/main/kotlin/org/chyavorec/app/MainActivity.kt b/app/src/main/kotlin/org/chyavorec/app/MainActivity.kt
+index 311d439b..22934b7d 100644
+--- a/app/src/main/kotlin/org/chyavorec/app/MainActivity.kt
++++ b/app/src/main/kotlin/org/chyavorec/app/MainActivity.kt
+@@ -49,6 +49,7 @@ class MainActivity : ComponentActivity() {
+     }
+ 
+     override fun onCreate(savedInstanceState: Bundle?) {
++        W28.flags = intent?.getStringExtra("w28").orEmpty() // W28 DEBUG ONLY (debug/w27-cat)
+         val splash = installSplashScreen()
+         super.onCreate(savedInstanceState)
+         // Кратък splash: държим го само докато настройките се заредят (милисекунди).
+diff --git a/app/src/main/kotlin/org/chyavorec/app/W28.kt b/app/src/main/kotlin/org/chyavorec/app/W28.kt
+new file mode 100644
+index 00000000..9af6d2c8
+--- /dev/null
++++ b/app/src/main/kotlin/org/chyavorec/app/W28.kt
+@@ -0,0 +1,14 @@
++package org.chyavorec.app
++
++/**
++ * W28 DEBUG ONLY (branch debug/w27-cat, emulator builds, never released): test switches from the launch
++ * intent (`am start --es w28 bk1,one`), read in MainActivity.onCreate; A/B of variants in one APK.
++ */
++object W28 {
++    @Volatile @JvmField var flags: String = ""
++
++    fun has(flag: String): Boolean = flags.split(',').contains(flag)
++}
++
++/** W28 DEBUG ONLY: where the catalogue list was when a book was opened from it. */
++class W28Return(val opened: Long, val width: Int, val density: Float, val fontScale: Float, val heights: Map<Any, Int>)
+diff --git a/app/src/main/kotlin/org/chyavorec/app/ui/components/Images.kt b/app/src/main/kotlin/org/chyavorec/app/ui/components/Images.kt
+index c4d2ce08..2085a282 100644
+--- a/app/src/main/kotlin/org/chyavorec/app/ui/components/Images.kt
++++ b/app/src/main/kotlin/org/chyavorec/app/ui/components/Images.kt
+@@ -286,6 +286,10 @@ fun BookCover(
+      * екранният четец не чете корицата, за да не ги каже два пъти.
+      */
+     decorative: Boolean = false,
++    /** W28 DEBUG ONLY: only the cover's colour (one frame after the return from a book). */
++    placeholder: Boolean = false,
++    /** W28 DEBUG ONLY: false — without the shadow layer. */
++    shadow: Boolean = true,
+ ) {
+     val style = LocalThemeStyle.current
+     val ext = LocalExtendedColors.current
+@@ -303,6 +307,10 @@ fun BookCover(
+         Brush.linearGradient(listOf(lerp(base, Color.White, 0.08f), base, base.darken()), Offset.Zero, Offset(0f, Float.POSITIVE_INFINITY))
+     }
+     val clothTint = remember(base) { linenTintFilter(base) }
++    if (placeholder) {
++        Box(modifier.size(width, height).clip(CoverShape).background(background))
++        return
++    }
+ 
+     val context = LocalContext.current
+     val online = LocalOnlineCovers.current
+@@ -338,7 +346,7 @@ fun BookCover(
+     Box(
+         modifier
+             .size(width, height)
+-            .shadow(6.dp, CoverShape)
++            .then(if (shadow) Modifier.shadow(6.dp, CoverShape) else Modifier)
+             .clip(CoverShape)
+             .background(background)
+             .drawWithCache {
+diff --git a/app/src/main/kotlin/org/chyavorec/app/ui/screens/catalog/CatalogScreens.kt b/app/src/main/kotlin/org/chyavorec/app/ui/screens/catalog/CatalogScreens.kt
+index f51243c8..4e7d5fe4 100644
+--- a/app/src/main/kotlin/org/chyavorec/app/ui/screens/catalog/CatalogScreens.kt
++++ b/app/src/main/kotlin/org/chyavorec/app/ui/screens/catalog/CatalogScreens.kt
+@@ -168,6 +168,12 @@ import org.chyavorec.app.ui.components.openLibraryCoverUrl
+ import org.chyavorec.app.ui.components.LocalOnlineCovers
+ import org.chyavorec.app.ui.components.LocalSharedScope
+ import org.chyavorec.app.ui.components.LocalSharedTransitionsEnabled
++import org.chyavorec.app.ui.components.LocalNavAnimatedScope
++import androidx.compose.animation.EnterExitState
++import androidx.compose.ui.platform.LocalDensity
++import androidx.compose.ui.platform.LocalWindowInfo
++import org.chyavorec.app.W28
++import org.chyavorec.app.W28Return
+ 
+ @Composable
+ fun fieldLabel(f: SearchField): String = stringResource(
+@@ -235,6 +241,24 @@ fun CatalogScreen(navigate: (String) -> Unit) {
+         withFrameNanos { }
+         rowsReady = true
+     }
++    // W28 DEBUG ONLY (debug/w27-cat): variants of the first frame after the return from a book.
++    val w28Back = W28.has("bk1") || W28.has("bk2")
++    val w28One = W28.has("one")
++    var opened by rememberSaveable { mutableStateOf<Long?>(null) }
++    val navScope = LocalNavAnimatedScope.current
++    val sharedOn = LocalSharedTransitionsEnabled.current
++    val density = LocalDensity.current
++    val winW = LocalWindowInfo.current.containerSize.width
++    var light by remember {
++        mutableStateOf(
++            w28Back && sharedOn && navScope != null && navScope.transition.currentState != EnterExitState.Visible &&
++                vm.w28Return?.let { it.width == winW && it.density == density.density && it.fontScale == density.fontScale } == true,
++        )
++    }
++    if (light) LaunchedEffect(Unit) {
++        withFrameNanos { }
++        light = false
++    }
+     // Заявка от друг екран (скенера): „Търси в каталога“ с предварително попълнен ISBN/заглавие.
+     LaunchedEffect(Unit) {
+         CatalogSearchRequests.pending.collect { r ->
+@@ -395,17 +419,22 @@ fun CatalogScreen(navigate: (String) -> Unit) {
+                         searchField(Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 4.dp))
+                         fieldChips(Modifier)
+                     }
+-                    AnimatedVisibility(
+-                        state.suggestions.isNotEmpty() && q.text.length >= 2,
+-                        enter = if (reduced) EnterTransition.None else fadeIn() + expandVertically(),
+-                        exit = if (reduced) ExitTransition.None else fadeOut() + shrinkVertically(),
+-                    ) {
++                    val sugRow: @Composable () -> Unit = {
+                         LazyRow(contentPadding = PaddingValues(horizontal = 16.dp, vertical = 4.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                             items(state.suggestions) { s ->
+                                 SuggestionChip(onClick = { vm.setText(s) }, label = { Text(s, maxLines = 1, overflow = TextOverflow.Ellipsis) })
+                             }
+                         }
+                     }
++                    if (W28.has("sug")) {
++                        if (state.suggestions.isNotEmpty() && q.text.length >= 2) sugRow()
++                    } else AnimatedVisibility(
++                        state.suggestions.isNotEmpty() && q.text.length >= 2,
++                        enter = if (reduced) EnterTransition.None else fadeIn() + expandVertically(),
++                        exit = if (reduced) ExitTransition.None else fadeOut() + shrinkVertically(),
++                    ) {
++                        sugRow()
++                    }
+                     SyncBanner(state.engine.fromCache, state.engine.syncedAt, state.engine.refreshError)
+                     StateContent(
+                         state = state.engine,
+@@ -444,7 +473,31 @@ fun CatalogScreen(navigate: (String) -> Unit) {
+                             LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
+                                 item(contentType = "header") { header() }
+                                 itemsIndexed(state.page, key = { _, b -> b.inv }, contentType = { _, _ -> "book" }) { i, b ->
+-                                    BookListItem(b, onClick = { navigate(Routes.book(b.inv)) }, modifier = Modifier.animateItem().animateEntrance(i, maxStaggered = staggered))
++                                    // W28 DEBUG ONLY: item animation variants (ta/tb/tc), return-frame variants (bk1/bk2), one shared cover (one), no shadow (nosh)
++                                    val itemMod = when {
++                                        W28.has("tb") -> Modifier
++                                        W28.has("ta") -> Modifier.animateItem(fadeInSpec = null, fadeOutSpec = null)
++                                        W28.has("tc") -> Modifier.animateItem(fadeOutSpec = null)
++                                        else -> Modifier.animateItem()
++                                    }.animateEntrance(i, maxStaggered = staggered)
++                                    val ret = if (light) vm.w28Return else null
++                                    val h = if (ret != null && b.inv != ret.opened) ret.heights[b.inv] else null
++                                    val open = {
++                                        if (w28Back || w28One) {
++                                            val info = listState.layoutInfo
++                                            vm.w28Return = W28Return(b.inv, winW, density.density, density.fontScale, info.visibleItemsInfo.associate { it.key to it.size })
++                                            opened = b.inv
++                                        }
++                                        navigate(Routes.book(b.inv))
++                                    }
++                                    if (h != null && W28.has("bk1")) {
++                                        Spacer(itemMod.fillMaxWidth().height(with(density) { h.toDp() }))
++                                    } else {
++                                        BookListItem(
++                                            b, onClick = open, modifier = itemMod, coverPlaceholder = h != null && W28.has("bk2"),
++                                            shared = !w28One || b.inv == opened, shadow = !W28.has("nosh"),
++                                        )
++                                    }
+                                 }
+                                 if (state.canLoadMore) {
+                                     item(contentType = "more") {
+@@ -487,13 +540,24 @@ fun CatalogScreen(navigate: (String) -> Unit) {
+  * Статусът е и текст, затова цветната лента под корицата тук не е нужна.
+  */
+ @Composable
+-fun BookListItem(b: CatalogBook, onClick: () -> Unit, modifier: Modifier = Modifier) {
++fun BookListItem(
++    b: CatalogBook,
++    onClick: () -> Unit,
++    modifier: Modifier = Modifier,
++    coverPlaceholder: Boolean = false,
++    shared: Boolean = true,
++    shadow: Boolean = true,
++) {
++    android.os.Trace.beginSection("w28 row") // W28 DEBUG ONLY
+     val available = b.status == BookStatus.AVAILABLE
+     Row(
+         modifier.fillMaxWidth().clickable(onClick = onClick).padding(horizontal = 16.dp, vertical = 6.dp),
+         verticalAlignment = Alignment.CenterVertically,
+     ) {
+-        BookCover(b, width = 50.dp, showStatusDot = false, modifier = Modifier.bookCoverShared(b.inv), decorative = true)
++        BookCover(
++            b, width = 50.dp, showStatusDot = false, modifier = if (shared) Modifier.bookCoverShared(b.inv) else Modifier, decorative = true,
++            placeholder = coverPlaceholder, shadow = shadow,
++        )
+         Spacer(Modifier.width(14.dp))
+         Column(Modifier.weight(1f)) {
+             Text(b.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
+@@ -514,6 +578,7 @@ fun BookListItem(b: CatalogBook, onClick: () -> Unit, modifier: Modifier = Modif
+             if (!available) BookStatusPill(b.status, Modifier.padding(top = 4.dp))
+         }
+     }
++    android.os.Trace.endSection() // W28 DEBUG ONLY
+ }
+ 
+ @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+diff --git a/app/src/main/kotlin/org/chyavorec/app/ui/screens/catalog/CatalogViewModel.kt b/app/src/main/kotlin/org/chyavorec/app/ui/screens/catalog/CatalogViewModel.kt
+index 6119891a..d709a2cf 100644
+--- a/app/src/main/kotlin/org/chyavorec/app/ui/screens/catalog/CatalogViewModel.kt
++++ b/app/src/main/kotlin/org/chyavorec/app/ui/screens/catalog/CatalogViewModel.kt
+@@ -114,6 +114,8 @@ class CatalogViewModel(
+     private val _state = MutableStateFlow(CatalogUiState(query = restored))
+     val state: StateFlow<CatalogUiState> = _state.asStateFlow()
+     private val queryFlow = MutableStateFlow(restored)
++    /** W28 DEBUG ONLY: the list when a book was opened (return-frame variants). */
++    @JvmField var w28Return: org.chyavorec.app.W28Return? = null
+     /** Последното изпълнено търсене: същата търсачка със същата заявка не се търси повторно. */
+     @Volatile private var lastSearch: Pair<CatalogSearcher, CatalogQuery>? = null
+ 
