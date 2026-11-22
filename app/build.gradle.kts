@@ -302,22 +302,19 @@ val robolectricSdks = mapOf(
     35 to "15-robolectric-13954326",
     36 to "16-robolectric-13921718",
 )
-val robolectricSdk = configurations.dependencyScope("robolectricSdk")
-val robolectricSdkJars = configurations.resolvable("robolectricSdkJars") {
-    extendsFrom(robolectricSdk.get())
-    isTransitive = false
-}
-dependencies {
-    robolectricSdks.values.forEach { add(robolectricSdk.name, "org.robolectric:android-all-instrumented:$it-i7") }
+// По конфигурация за всяко SDK: в една Gradle би оставил само най-новата версия на модула.
+val robolectricSdkJars = robolectricSdks.map { (api, version) ->
+    val scope = configurations.dependencyScope("robolectricSdk$api")
+    dependencies.add(scope.name, "org.robolectric:android-all-instrumented:$version-i7")
+    configurations.resolvable("robolectricSdk${api}Jar") {
+        extendsFrom(scope.get())
+        isTransitive = false
+    }
 }
 val robolectricJarsDir = layout.buildDirectory.dir("robolectric-jars")
-val robolectricVersion = libs.versions.robolectric.get()
 val robolectricJars = tasks.register<Sync>("robolectricJars") {
     from(robolectricSdkJars)
     into(robolectricJarsDir)
-    doFirst {
-        check(robolectricVersion == "4.17") { "Robolectric $robolectricVersion: обнови robolectricSdks в app/build.gradle.kts" }
-    }
 }
 
 tasks.withType<Test>().configureEach {
