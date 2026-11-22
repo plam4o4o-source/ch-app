@@ -5,7 +5,7 @@
 # A variant label: base | x (NEW without flags) | x-<flag>+<flag>.
 # Measured as in part_fix (w27.sh): a Perfetto trace of one interaction, CPU (Running) per doFrame (w28.py meas).
 # Loaded by run.sh after w27.sh.
-W28_PARTS=" bk33 bk36x ty33 ty36x tb33 tb36x fbk33 fbk36x fty33 fty36x ftb33 ftb36x "
+W28_PARTS=" bk33 bk36x ty33 ty36x tb33 tb36x fbk33 fbk36x fty33 fty36x ftb33 ftb36x gtb33 gtb36x "
 W20_PARTS="$W20_PARTS $W28_PARTS"
 W28PY=$H_/w28.py
 W28VARS_BK=${W28VARS_BK:-"base x x-bk1 x-bk2 x-one x-nosh x-bk1+one"}
@@ -205,7 +205,7 @@ part_tb() {
 part_w28() {
   case "$W28_PARTS" in *" $PART "*) ;; *) return 1;; esac
   # f* — the final A/B: BASE against NEW without flags, more rounds
-  case $PART in f*) W28VARS_BK="base x"; W28VARS_TY="base x"; W28VARS_TB="base x"; W28R_BK=5; W28R_TY=3; W28R_TB=5;; esac
-  case $PART in bk*|fbk*) part_bk;; ty*|fty*) part_ty;; tb*|ftb*) part_tb;; esac
+  case $PART in f*|g*) W28VARS_BK="base x"; W28VARS_TY="base x"; W28VARS_TB="base x"; W28R_BK=5; W28R_TY=3; W28R_TB=5;; esac
+  case $PART in bk*|fbk*) part_bk;; ty*|fty*) part_ty;; tb*|ftb*|gtb*) part_tb;; esac
   return 0
 }

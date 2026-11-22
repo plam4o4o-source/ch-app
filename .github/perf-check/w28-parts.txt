@@ -1,2 +1,2 @@
 # Parts of the next run (one emulator job each); empty = publish the notes only.
-fbk33 fbk36x fty33 fty36x ftb33 ftb36x
+gtb33 gtb36x

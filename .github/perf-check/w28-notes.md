@@ -22,3 +22,6 @@ doFrame from a Perfetto trace of each interaction (as in [../v139fix/index.md](.
   Run 2, the final A/B (parts `fbk*`, `fty*`, `ftb*`): BASE 5a145786 against NEW = wave25/perf (no patch, no flags),
   more rounds; recordings at 8 frames/s over the whole transition (the emulator draws a frame in 0.2–0.5 s).
 - Host CPUs of the runners differ (a part can be 2× slower than another): compare BASE and NEW within one part.
+- Run 3 (parts `gtb*`): the tab entries again with wave25/perf 7abd0937 (Home: the carousel moved into the first frame).
+- Run 1 parts `tb33`/`tb36x` stopped at the recording step (a fractional recording length) before the table: their
+  numbers are the `M` lines in summary.txt.
