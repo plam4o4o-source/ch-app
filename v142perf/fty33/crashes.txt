@@ -1,0 +1,14 @@
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: FATAL EXCEPTION: main
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: PID: 7554
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: java.lang.NullPointerException: Attempt to invoke virtual method 'java.lang.CharSequence android.view.accessibility.AccessibilityNodeInfo.getContentDescription()' on a null object reference
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.childNafCheck(AccessibilityNodeInfoDumper.java:296)
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.childNafCheck(AccessibilityNodeInfoDumper.java:300)
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.nafCheck(AccessibilityNodeInfoDumper.java:276)
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.dumpNodeRec(AccessibilityNodeInfoDumper.java:200)
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.dumpNodeRec(AccessibilityNodeInfoDumper.java:225)
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: 	at com.android.uiautomator.core.AccessibilityNodeInfoDumper.dumpWindowToFile(AccessibilityNodeInfoDumper.java:96)
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: 	at com.android.commands.uiautomator.DumpCommand.run(DumpCommand.java:111)
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: 	at com.android.commands.uiautomator.Launcher.main(Launcher.java:83)
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit.nativeFinishInit(Native Method)
+11-22 18:32:32.353  7554  7554 E AndroidRuntime: 	at com.android.internal.os.RuntimeInit.main(RuntimeInit.java:355)
+

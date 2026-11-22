@@ -1,0 +1,76 @@
+app pids seen: ['5354', '8146', '8721', '9105', '10642', '11080', '12293', '12933']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 37
+   skipped-frames events=37 max=141 total=2343
+   11-22 18:30:04.686  5354  5354 I Choreographer: Skipped 91 frames!  The application may be doing too much work on its main thread.
+   11-22 18:30:05.489  5354  5354 I Choreographer: Skipped 46 frames!  The application may be doing too much work on its main thread.
+   11-22 18:30:07.568  5354  5354 I Choreographer: Skipped 113 frames!  The application may be doing too much work on its main thread.
+   11-22 18:30:08.553  5354  5354 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-22 18:30:09.106  5354  5354 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-22 18:30:11.486  5354  5354 I Choreographer: Skipped 125 frames!  The application may be doing too much work on its main thread.
+   11-22 18:30:13.114  5354  5354 I Choreographer: Skipped 78 frames!  The application may be doing too much work on its main thread.
+   11-22 18:30:14.024  5354  5354 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-22 18:30:14.684  5354  5354 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-22 18:30:25.440  5354  5354 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-22 18:30:26.192  5354  5354 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-22 18:30:27.187  5354  5354 I Choreographer: Skipped 34 frames!  The application may be doing too much work on its main thread.
+== Davey: 63
+   davey events=63 max=3397ms median=1195ms
+   11-22 18:30:08.393  5354  5368 I OpenGLRenderer: Davey! duration=2382ms; Flags=1, FrameTimelineVsyncId=7852, IntendedVsync=105360414111, Vsync=105360414111, InputEventId=0, HandleInputStart=105363343317, AnimationStart=105363343739, Perform
+   11-22 18:30:09.094  5354  5368 I OpenGLRenderer: Davey! duration=1036ms; Flags=0, FrameTimelineVsyncId=8137, IntendedVsync=107443747361, Vsync=107493747359, InputEventId=0, HandleInputStart=107506562973, AnimationStart=107506563433, Perform
+   11-22 18:30:11.465  5354  5368 I OpenGLRenderer: Davey! duration=929ms; Flags=0, FrameTimelineVsyncId=8145, IntendedVsync=107510414025, Vsync=107727080683, InputEventId=0, HandleInputStart=107731089279, AnimationStart=107731089730, PerformT
+   11-22 18:30:11.475  5354  5368 I OpenGLRenderer: Davey! duration=1237ms; Flags=0, FrameTimelineVsyncId=8159, IntendedVsync=107743747349, Vsync=108410413989, InputEventId=0, HandleInputStart=108417862003, AnimationStart=108417862484, Perform
+   11-22 18:30:11.771  5354  5498 I OpenGLRenderer: Davey! duration=2726ms; Flags=0, FrameTimelineVsyncId=8203, IntendedVsync=108427080655, Vsync=108960413967, InputEventId=0, HandleInputStart=108971431319, AnimationStart=108971431670, Perform
+   11-22 18:30:13.113  5354  5498 I OpenGLRenderer: Davey! duration=1120ms; Flags=0, FrameTimelineVsyncId=8221, IntendedVsync=109127080627, Vsync=109227080617, InputEventId=0, HandleInputStart=109239431157, AnimationStart=109239431457, Perform
+   11-22 18:30:13.278  5354  5368 I OpenGLRenderer: Davey! duration=3397ms; Flags=0, FrameTimelineVsyncId=8250, IntendedVsync=109260425050, Vsync=111343758175, InputEventId=0, HandleInputStart=111351085607, AnimationStart=111351086008, Perform
+   11-22 18:30:13.994  5354  5368 I OpenGLRenderer: Davey! duration=1067ms; Flags=0, FrameTimelineVsyncId=8522, IntendedVsync=111360413871, Vsync=111660413859, InputEventId=0, HandleInputStart=111673820180, AnimationStart=111673820531, Perform
+   11-22 18:30:14.600  5354  5365 I OpenGLRenderer: Davey! duration=2543ms; Flags=0, FrameTimelineVsyncId=8552, IntendedVsync=111677086073, Vsync=112977085943, InputEventId=0, HandleInputStart=112979801619, AnimationStart=112979801969, Perform
+   11-22 18:30:15.030  5354  5365 I OpenGLRenderer: Davey! duration=921ms; Flags=0, FrameTimelineVsyncId=8602, IntendedVsync=113010413805, Vsync=113143747133, InputEventId=0, HandleInputStart=113155704395, AnimationStart=113155704776, PerformT
+   11-22 18:30:15.307  5354  5365 I OpenGLRenderer: Davey! duration=1160ms; Flags=0, FrameTimelineVsyncId=8613, IntendedVsync=113160413799, Vsync=113877080437, InputEventId=0, HandleInputStart=113890573087, AnimationStart=113890573778, Perform
+   11-22 18:30:26.080  5354  5365 I OpenGLRenderer: Davey! duration=1343ms; Flags=0, FrameTimelineVsyncId=9447, IntendedVsync=124593746675, Vsync=124593746675, InputEventId=-25274069, HandleInputStart=124593954239, AnimationStart=124593954619,
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-22 18:29:59.708  5255  5255 I PERFCHECK: section: S0. NEW org.chyavorec.app and BASE org.chyavorec.app.b side by side; first launch to the catalogue, speed-profile
+   11-22 18:33:37.834  8286  8286 I PERFCHECK: section: B1. Round 1: per variant a new process, Каталог, then rows 1-3: open, Back measured
+   11-22 18:34:22.941  8510  8510 I PERFCHECK: w28 book-back@base@r1-1
+   11-22 18:34:39.937  8593  8593 I PERFCHECK: w28 book-back@base@r1-2
+   11-22 18:34:56.900  8665  8665 I PERFCHECK: w28 book-back@base@r1-3
+   11-22 18:35:41.689  8892  8892 I PERFCHECK: w28 book-back@x@r1-1
+   11-22 18:35:58.723  8975  8975 I PERFCHECK: w28 book-back@x@r1-2
+   11-22 18:36:15.633  9043  9043 I PERFCHECK: w28 book-back@x@r1-3
+   11-22 18:36:22.951  9080  9080 I PERFCHECK: section: B2. Round 2: per variant a new process, Каталог, then rows 1-3: open, Back measured
+   11-22 18:37:07.936  9475  9475 I PERFCHECK: w28 book-back@x@r2-1
+   11-22 18:37:24.956  9547  9547 I PERFCHECK: w28 book-back@x@r2-2
+   11-22 18:37:41.964  9627  9627 I PERFCHECK: w28 book-back@x@r2-3
+   11-22 18:38:29.343  9877  9877 I PERFCHECK: w28 book-back@base@r2-1
+   11-22 18:38:46.299  9956  9956 I PERFCHECK: w28 book-back@base@r2-2
+   11-22 18:39:03.223 10024 10024 I PERFCHECK: w28 book-back@base@r2-3
+   11-22 18:39:10.617 10060 10060 I PERFCHECK: section: B3. Round 3: per variant a new process, Каталог, then rows 1-3: open, Back measured
+   11-22 18:39:57.139 10435 10435 I PERFCHECK: w28 book-back@base@r3-1
+   11-22 18:40:14.213 10514 10514 I PERFCHECK: w28 book-back@base@r3-2
+   11-22 18:40:31.214 10588 10588 I PERFCHECK: w28 book-back@base@r3-3
+   11-22 18:41:22.355 10831 10831 I PERFCHECK: w28 book-back@x@r3-1
+   11-22 18:41:39.320 10951 10951 I PERFCHECK: w28 book-back@x@r3-2
+   11-22 18:41:56.236 11020 11020 I PERFCHECK: w28 book-back@x@r3-3
+   11-22 18:42:03.611 11056 11056 I PERFCHECK: section: B4. Round 4: per variant a new process, Каталог, then rows 1-3: open, Back measured
+   11-22 18:42:43.483 11258 11258 I PERFCHECK: w28 book-back@x@r4-1
+   11-22 18:43:00.538 11330 11330 I PERFCHECK: w28 book-back@x@r4-2
+   11-22 18:43:17.397 11403 11403 I PERFCHECK: w28 book-back@x@r4-3
+   11-22 18:44:02.924 11643 11643 I PERFCHECK: w28 book-back@base@r4-1
+   11-22 18:44:19.865 11715 11715 I PERFCHECK: w28 book-back@base@r4-2
+   11-22 18:44:36.789 11784 11784 I PERFCHECK: w28 book-back@base@r4-3
+   11-22 18:44:44.076 11821 11821 I PERFCHECK: section: B5. Round 5: per variant a new process, Каталог, then rows 1-3: open, Back measured
+   11-22 18:45:24.240 12013 12013 I PERFCHECK: w28 book-back@base@r5-1
+   11-22 18:45:41.163 12163 12163 I PERFCHECK: w28 book-back@base@r5-2
+   11-22 18:45:58.289 12238 12238 I PERFCHECK: w28 book-back@base@r5-3
+   11-22 18:46:48.745 12481 12481 I PERFCHECK: w28 book-back@x@r5-1
+   11-22 18:47:05.689 12551 12551 I PERFCHECK: w28 book-back@x@r5-2
+   11-22 18:47:22.544 12619 12619 I PERFCHECK: w28 book-back@x@r5-3
+   11-22 18:47:29.838 12656 12656 I PERFCHECK: section: BV. Visual: open a book and Back, screen recording at 8 frames/s
+   11-22 18:47:59.848 12807 12807 I PERFCHECK: open-base
+   11-22 18:48:15.381 12836 12836 I PERFCHECK: back-base
+   11-22 18:49:02.081 13080 13080 I PERFCHECK: open-x
+   11-22 18:49:17.641 13104 13104 I PERFCHECK: back-x
+   11-22 18:49:32.486 13148 13148 I PERFCHECK: section: Z. The table: main-thread CPU Running per doFrame, by interaction and variant

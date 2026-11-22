@@ -1,0 +1,214 @@
+part ftb36x; APK: 1.2.40 ed441ba prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 2000200 (NEW) size 4687414 bytes
+base APK: 1.2.40 5a14578 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b, throwaway key, versionCode 2000200 (BASE) size 4682814 bytes
+host: 4 cpu, 15983 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.40 ed441ba prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 2000200 (NEW) size 4687414 bytes
+installed:  versionCode=2000200 minSdk=26 targetSdk=37  versionName=1.2.40 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+trace analysis: trace_processor_shell: /home/runner/.local/share/perfetto/prebuilts/trace_processor_shell-2434129a3af4dc9e
+TRACE MODE perfetto; atrace categories: gfx view am dalvik input wm res binder_driver aidl sched; mapping app-mapping.txt; android 36
+host cpu:  AMD EPYC 9V45 96-Core Processor
+## S0. NEW (org.chyavorec.app) and BASE (org.chyavorec.app.b) side by side; first launch to the catalogue, speed-profile
+S x:  versionCode=2000200 minSdk=26 targetSdk=37  versionName=1.2.40 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+S x: catalogue after 4035 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~IGCESSfrgl_Z6e6RUTafuA==/org.chyavorec.app-53hkGw1eN-fFJXJrC4utHg==/base.apk| x86_64: [status=speed-profile] [reason=cmdline] [primary-abi]| path: /data/app/~~XtY1YCObh8NkpAPOhzvllA==/org.chyavorec.app.b-55fel6u9h5r8viX7_LtHtw==/base.apk| x86_64: [status=verify] [reason=install] [primary-abi]|
+S base:  versionCode=2000200 minSdk=26 targetSdk=37  versionName=1.2.40 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+S base: catalogue after 2772 ms
+X compile org.chyavorec.app.b: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~XtY1YCObh8NkpAPOhzvllA==/org.chyavorec.app.b-55fel6u9h5r8viX7_LtHtw==/base.apk| x86_64: [status=speed-profile] [reason=cmdline] [primary-abi]|
+tabs: catalog [320 2274] home [100 2274] news [760 2274] more [980 2274]
+tab my [540 2274]
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+## E1. Round 1: per variant a new process on Home; News, Моето, Още, Каталог, Home (first entries), then warm entries
+M tab-news-cold@base@r1: worst 7.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 30 (8 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-my-cold@base@r1: worst 19.2 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 55 (6 with >= 3 ms); entry frame 19.2 + next 2.6 (from the entry: 19.2, 2.6, 2.5, 4.4); rows composed per frame max 0
+M tab-more-cold@base@r1: worst 18.1 ms CPU (rows composed in it 0); frames >16 2, >25 0, >30 0 of 32 (6 with >= 3 ms); entry frame 18.1 + next 18.0 (from the entry: 18.1, 18.0, 1.8, 1.7); rows composed per frame max 0
+M tab-catalog-cold@base@r1: worst 17.9 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 26 (4 with >= 3 ms); entry frame 8.8 + next 2.6 (from the entry: 8.8, 2.6, 2.5, 17.9); rows composed per frame max 0
+M tab-home@base@r1-1: worst 11.2 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 41 (3 with >= 3 ms); entry frame 11.2 + next 1.9 (from the entry: 11.2, 1.9, 1.8, 0.3); rows composed per frame max 0
+M tab-more@base@r1-1: worst 14.0 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 20 (6 with >= 3 ms); entry frame 14.0 + next 13.9 (from the entry: 14.0, 13.9, 1.8, 1.7); rows composed per frame max 0
+M tab-my@base@r1-1: worst 10.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 24 (3 with >= 3 ms); entry frame 10.7 + next 3.7 (from the entry: 10.7, 3.7, 3.7, 1.3); rows composed per frame max 0
+M tab-news@base@r1-1: worst 10.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 17 (3 with >= 3 ms); entry frame 10.6 + next 1.6 (from the entry: 10.6, 1.6, 1.5, 0.8); rows composed per frame max 0
+M tab-home@base@r1-2: worst 18.4 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 20 (5 with >= 3 ms); entry frame 18.4 + next 3.3 (from the entry: 18.4, 3.3, 3.2, 1.2); rows composed per frame max 0
+M tab-news@base@r1-2: worst 10.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 20 (7 with >= 3 ms); entry frame 10.7 + next 10.7 (from the entry: 10.7, 10.7, 3.1, 3.0); rows composed per frame max 0
+M tab-my@base@r1-2: worst 10.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 18 (3 with >= 3 ms); entry frame 10.7 + next 1.4 (from the entry: 10.7, 1.4, 1.2, 1.1); rows composed per frame max 0
+M tab-more@base@r1-2: worst 15.1 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 20 (1 with >= 3 ms); entry frame 15.1 + next 0.9 (from the entry: 15.1, 0.9, 1.3, 1.2); rows composed per frame max 0
+M tab-catalog@base@r1: worst 7.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 20 (4 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-home@base@r1-3: worst 10.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (3 with >= 3 ms); entry frame 10.5 + next 0.8 (from the entry: 10.5, 0.8, 3.5, 3.5); rows composed per frame max 0
+M tab-news-cold@x@r1: worst 7.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 28 (7 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-my-cold@x@r1: worst 12.0 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 57 (1 with >= 3 ms); entry frame 12.0 + next 2.4 (from the entry: 12.0, 2.4, 2.3, 1.5); rows composed per frame max 0
+M tab-more-cold@x@r1: worst 11.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 36 (8 with >= 3 ms); entry frame 10.0 + next 10.0 (from the entry: 10.0, 10.0, 1.8, 1.7); rows composed per frame max 0
+M tab-catalog-cold@x@r1: worst 17.2 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 26 (6 with >= 3 ms); entry frame 17.2 + next 2.7 (from the entry: 17.2, 2.7, 2.7, 12.5); rows composed per frame max 0
+M tab-home@x@r1-1: worst 8.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 64 (4 with >= 3 ms); entry frame 8.4 + next 1.7 (from the entry: 8.4, 1.7, 1.6, 5.2); rows composed per frame max 0
+M tab-more@x@r1-1: worst 9.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 17 (7 with >= 3 ms); entry frame 9.4 + next 9.4 (from the entry: 9.4, 9.4, 0.8, 0.7); rows composed per frame max 0
+M tab-my@x@r1-1: worst 6.8 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 27 (3 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-news@x@r1-1: worst 11.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 16 (3 with >= 3 ms); entry frame 11.6 + next 1.7 (from the entry: 11.6, 1.7, 1.7, 10.3); rows composed per frame max 0
+M tab-home@x@r1-2: worst 10.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 67 (5 with >= 3 ms); entry frame 10.5 + next 10.5 (from the entry: 10.5, 10.5, 1.8, 1.7); rows composed per frame max 0
+M tab-news@x@r1-2: worst 17.6 ms CPU (rows composed in it 0); frames >16 2, >25 0, >30 0 of 17 (7 with >= 3 ms); entry frame 17.6 + next 17.6 (from the entry: 17.6, 17.6, 2.0, 2.0); rows composed per frame max 0
+M tab-my@x@r1-2: worst 6.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-more@x@r1-2: worst 13.2 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (5 with >= 3 ms); entry frame 13.2 + next 1.6 (from the entry: 13.2, 1.6, 1.5, 7.7); rows composed per frame max 0
+M tab-catalog@x@r1: worst 13.2 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 20 (5 with >= 3 ms); entry frame 13.2 + next 1.6 (from the entry: 13.2, 1.6, 7.7, 7.6); rows composed per frame max 0
+M tab-home@x@r1-3: worst 18.4 ms CPU (rows composed in it 0); frames >16 2, >25 0, >30 0 of 59 (7 with >= 3 ms); entry frame 18.4 + next 18.3 (from the entry: 18.4, 18.3, 1.2, 1.1); rows composed per frame max 0
+## E2. Round 2: per variant a new process on Home; News, Моето, Още, Каталог, Home (first entries), then warm entries
+M tab-news-cold@x@r2: worst 11.2 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 27 (10 with >= 3 ms); entry frame 11.2 + next 11.1 (from the entry: 11.2, 11.1, 4.3, 4.2); rows composed per frame max 0
+M tab-my-cold@x@r2: worst 13.2 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 58 (3 with >= 3 ms); entry frame 13.2 + next 3.0 (from the entry: 13.2, 3.0, 2.9, 1.5); rows composed per frame max 0
+M tab-more-cold@x@r2: worst 9.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 38 (3 with >= 3 ms); entry frame 9.5 + next 9.4 (from the entry: 9.5, 9.4, 1.4, 1.3); rows composed per frame max 0
+M tab-catalog-cold@x@r2: worst 18.5 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 25 (6 with >= 3 ms); entry frame 18.5 + next 5.3 (from the entry: 18.5, 5.3, 5.2, 12.3); rows composed per frame max 0
+M tab-home@x@r2-1: worst 10.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 59 (4 with >= 3 ms); entry frame 10.5 + next 1.9 (from the entry: 10.5, 1.9, 1.8, 7.9); rows composed per frame max 0
+M tab-more@x@r2-1: worst 7.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 18 (6 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-my@x@r2-1: worst 10.0 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 23 (1 with >= 3 ms); entry frame 10.0 + next 1.1 (from the entry: 10.0, 1.1, 1.1, 1.1); rows composed per frame max 0
+M tab-news@x@r2-1: worst 10.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (5 with >= 3 ms); entry frame 10.5 + next 4.6 (from the entry: 10.5, 4.6, 4.5, 4.7); rows composed per frame max 0
+M tab-home@x@r2-2: worst 10.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 67 (6 with >= 3 ms); entry frame 10.1 + next 2.0 (from the entry: 10.1, 2.0, 2.0, 10.7); rows composed per frame max 0
+M tab-news@x@r2-2: worst 8.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 17 (7 with >= 3 ms); entry frame 8.5 + next 8.4 (from the entry: 8.5, 8.4, 2.7, 2.6); rows composed per frame max 0
+M tab-my@x@r2-2: worst 8.2 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 20 (3 with >= 3 ms); entry frame 8.2 + next 7.0 (from the entry: 8.2, 7.0, 7.0, 1.6); rows composed per frame max 0
+M tab-more@x@r2-2: worst 8.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (3 with >= 3 ms); entry frame 8.6 + next 0.9 (from the entry: 8.6, 0.9, 5.3, 5.3); rows composed per frame max 0
+M tab-catalog@x@r2: worst 16.6 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 19 (5 with >= 3 ms); entry frame 16.6 + next 1.8 (from the entry: 16.6, 1.8, 10.9, 10.8); rows composed per frame max 0
+M tab-home@x@r2-3: worst 8.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 65 (7 with >= 3 ms); entry frame 8.4 + next 8.3 (from the entry: 8.4, 8.3, 1.0, 0.9); rows composed per frame max 0
+M tab-news-cold@base@r2: worst 9.2 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 31 (9 with >= 3 ms); entry frame 9.2 + next 9.1 (from the entry: 9.2, 9.1, 4.3, 4.2); rows composed per frame max 0
+M tab-my-cold@base@r2: worst 14.8 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 60 (3 with >= 3 ms); entry frame 14.8 + next 2.9 (from the entry: 14.8, 2.9, 2.8, 1.6); rows composed per frame max 0
+M tab-more-cold@base@r2: worst 17.4 ms CPU (rows composed in it 0); frames >16 2, >25 0, >30 0 of 31 (3 with >= 3 ms); entry frame 17.4 + next 17.4 (from the entry: 17.4, 17.4, 1.9, 1.8); rows composed per frame max 0
+M tab-catalog-cold@base@r2: worst 12.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 29 (5 with >= 3 ms); entry frame 9.3 + next 2.6 (from the entry: 9.3, 2.6, 2.6, 2.8); rows composed per frame max 0
+M tab-home@base@r2-1: worst 12.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 65 (3 with >= 3 ms); entry frame 12.3 + next 2.7 (from the entry: 12.3, 2.7, 2.7, 1.5); rows composed per frame max 0
+M tab-more@base@r2-1: worst 10.1 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 21 (6 with >= 3 ms); entry frame 10.1 + next 10.0 (from the entry: 10.1, 10.0, 5.1, 5.1); rows composed per frame max 0
+M tab-my@base@r2-1: worst 5.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 29 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-news@base@r2-1: worst 8.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (3 with >= 3 ms); entry frame 8.5 + next 4.6 (from the entry: 8.5, 4.6, 4.6, 1.1); rows composed per frame max 0
+M tab-home@base@r2-2: worst 11.2 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 68 (3 with >= 3 ms); entry frame 11.2 + next 1.6 (from the entry: 11.2, 1.6, 1.5, 0.9); rows composed per frame max 0
+M tab-news@base@r2-2: worst 11.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 18 (5 with >= 3 ms); entry frame 10.3 + next 10.2 (from the entry: 10.3, 10.2, 1.9, 1.8); rows composed per frame max 0
+M tab-my@base@r2-2: worst 11.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (2 with >= 3 ms); entry frame 11.4 + next 1.9 (from the entry: 11.4, 1.9, 1.9, 0.6); rows composed per frame max 0
+M tab-more@base@r2-2: worst 24.5 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 16 (3 with >= 3 ms); entry frame 24.5 + next 1.6 (from the entry: 24.5, 1.6, 1.6, 1.1); rows composed per frame max 0
+M tab-catalog@base@r2: worst 15.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 17 (8 with >= 3 ms); entry frame 11.1 + next 2.6 (from the entry: 11.1, 2.6, 15.6, 15.4); rows composed per frame max 0
+M tab-home@base@r2-3: worst 10.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 61 (4 with >= 3 ms); entry frame 10.9 + next 1.1 (from the entry: 10.9, 1.1, 1.5, 1.4); rows composed per frame max 0
+## E3. Round 3: per variant a new process on Home; News, Моето, Още, Каталог, Home (first entries), then warm entries
+M tab-news-cold@base@r3: worst 13.8 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 34 (8 with >= 3 ms); entry frame 12.3 + next 12.2 (from the entry: 12.3, 12.2, 2.2, 2.1); rows composed per frame max 0
+M tab-my-cold@base@r3: worst 20.4 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 56 (1 with >= 3 ms); entry frame 20.4 + next 2.8 (from the entry: 20.4, 2.8, 2.7, 1.6); rows composed per frame max 0
+M tab-more-cold@base@r3: worst 15.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 34 (5 with >= 3 ms); entry frame 15.5 + next 15.4 (from the entry: 15.5, 15.4, 1.8, 1.7); rows composed per frame max 0
+M tab-catalog-cold@base@r3: worst 17.5 ms CPU (rows composed in it 0); frames >16 2, >25 0, >30 0 of 27 (5 with >= 3 ms); entry frame 9.1 + next 2.5 (from the entry: 9.1, 2.5, 2.4, 17.5); rows composed per frame max 0
+M tab-home@base@r3-1: worst 11.8 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 60 (3 with >= 3 ms); entry frame 11.8 + next 2.0 (from the entry: 11.8, 2.0, 2.0, 1.1); rows composed per frame max 0
+M tab-more@base@r3-1: worst 23.0 ms CPU (rows composed in it 0); frames >16 2, >25 0, >30 0 of 19 (7 with >= 3 ms); entry frame 23.0 + next 22.9 (from the entry: 23.0, 22.9, 3.9, 3.8); rows composed per frame max 0
+M tab-my@base@r3-1: worst 8.2 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 23 (3 with >= 3 ms); entry frame 8.2 + next 1.3 (from the entry: 8.2, 1.3, 1.0, 1.0); rows composed per frame max 0
+M tab-news@base@r3-1: worst 13.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 17 (1 with >= 3 ms); entry frame 13.9 + next 1.6 (from the entry: 13.9, 1.6, 1.6, 1.0); rows composed per frame max 0
+M tab-home@base@r3-2: worst 17.7 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 62 (1 with >= 3 ms); entry frame 17.7 + next 1.8 (from the entry: 17.7, 1.8, 1.8, 1.2); rows composed per frame max 0
+M tab-news@base@r3-2: worst 11.0 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 21 (6 with >= 3 ms); entry frame 11.0 + next 10.9 (from the entry: 11.0, 10.9, 2.1, 2.0); rows composed per frame max 0
+M tab-my@base@r3-2: worst 6.8 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 22 (5 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-more@base@r3-2: worst 12.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (1 with >= 3 ms); entry frame 12.7 + next 0.8 (from the entry: 12.7, 0.8, 1.3, 1.3); rows composed per frame max 0
+M tab-catalog@base@r3: worst 14.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (4 with >= 3 ms); entry frame 14.7 + next 1.9 (from the entry: 14.7, 1.9, 11.0, 11.0); rows composed per frame max 0
+M tab-home@base@r3-3: worst 12.1 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 64 (3 with >= 3 ms); entry frame 12.1 + next 1.1 (from the entry: 12.1, 1.1, 1.6, 1.6); rows composed per frame max 0
+M tab-news-cold@x@r3: worst 15.1 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 27 (8 with >= 3 ms); entry frame 15.1 + next 15.1 (from the entry: 15.1, 15.1, 1.5, 1.5); rows composed per frame max 0
+M tab-my-cold@x@r3: worst 13.8 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 52 (1 with >= 3 ms); entry frame 13.8 + next 2.8 (from the entry: 13.8, 2.8, 2.8, 1.8); rows composed per frame max 0
+M tab-more-cold@x@r3: worst 10.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 37 (7 with >= 3 ms); entry frame 10.7 + next 10.6 (from the entry: 10.7, 10.6, 1.0, 0.9); rows composed per frame max 0
+M tab-catalog-cold@x@r3: worst 19.2 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 26 (6 with >= 3 ms); entry frame 10.5 + next 2.2 (from the entry: 10.5, 2.2, 2.2, 19.2); rows composed per frame max 0
+M tab-home@x@r3-1: worst 8.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 58 (3 with >= 3 ms); entry frame 8.5 + next 1.8 (from the entry: 8.5, 1.8, 1.7, 8.5); rows composed per frame max 0
+M tab-more@x@r3-1: worst 19.7 ms CPU (rows composed in it 0); frames >16 2, >25 0, >30 0 of 19 (7 with >= 3 ms); entry frame 19.7 + next 19.7 (from the entry: 19.7, 19.7, 1.6, 1.5); rows composed per frame max 0
+M tab-my@x@r3-1: worst 6.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (3 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-news@x@r3-1: worst 8.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (3 with >= 3 ms); entry frame 8.9 + next 1.6 (from the entry: 8.9, 1.6, 1.5, 4.4); rows composed per frame max 0
+M tab-home@x@r3-2: worst 15.0 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 70 (4 with >= 3 ms); entry frame 15.0 + next 1.3 (from the entry: 15.0, 1.3, 1.2, 0.5); rows composed per frame max 0
+M tab-news@x@r3-2: worst 7.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (6 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-my@x@r3-2: worst 7.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (5 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-more@x@r3-2: worst 8.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (3 with >= 3 ms); entry frame 8.4 + next 8.3 (from the entry: 8.4, 8.3, 0.9, 0.8); rows composed per frame max 0
+M tab-catalog@x@r3: worst 9.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (3 with >= 3 ms); entry frame 9.5 + next 2.0 (from the entry: 9.5, 2.0, 8.1, 8.1); rows composed per frame max 0
+M tab-home@x@r3-3: worst 9.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 68 (5 with >= 3 ms); entry frame 9.9 + next 9.9 (from the entry: 9.9, 9.9, 1.3, 1.2); rows composed per frame max 0
+## E4. Round 4: per variant a new process on Home; News, Моето, Още, Каталог, Home (first entries), then warm entries
+M tab-news-cold@x@r4: worst 23.1 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 25 (5 with >= 3 ms); entry frame 9.6 + next 9.5 (from the entry: 9.6, 9.5, 2.0, 1.9); rows composed per frame max 0
+M tab-my-cold@x@r4: worst 14.1 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 58 (1 with >= 3 ms); entry frame 14.1 + next 2.4 (from the entry: 14.1, 2.4, 2.4, 1.4); rows composed per frame max 0
+M tab-more-cold@x@r4: worst 7.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 36 (6 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-catalog-cold@x@r4: worst 45.2 ms CPU (rows composed in it 0); frames >16 1, >25 1, >30 1 of 26 (4 with >= 3 ms); entry frame 14.2 + next 2.7 (from the entry: 14.2, 2.7, 2.7, 45.2); rows composed per frame max 0
+M tab-home@x@r4-1: worst 8.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 55 (4 with >= 3 ms); entry frame 8.3 + next 1.4 (from the entry: 8.3, 1.4, 1.4, 6.8); rows composed per frame max 0
+M tab-more@x@r4-1: worst 7.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (8 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-my@x@r4-1: worst 13.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 25 (3 with >= 3 ms); entry frame 13.3 + next 1.1 (from the entry: 13.3, 1.1, 1.1, 1.1); rows composed per frame max 0
+M tab-news@x@r4-1: worst 11.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (4 with >= 3 ms); entry frame 10.4 + next 1.8 (from the entry: 10.4, 1.8, 1.7, 11.9); rows composed per frame max 0
+M tab-home@x@r4-2: worst 20.6 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 64 (8 with >= 3 ms); entry frame 9.3 + next 1.6 (from the entry: 9.3, 1.6, 1.5, 20.6); rows composed per frame max 0
+M tab-news@x@r4-2: worst 8.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (7 with >= 3 ms); entry frame 8.6 + next 8.5 (from the entry: 8.6, 8.5, 1.9, 1.8); rows composed per frame max 0
+M tab-my@x@r4-2: worst 12.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 21 (3 with >= 3 ms); entry frame 12.4 + next 1.2 (from the entry: 12.4, 1.2, 1.0, 0.9); rows composed per frame max 0
+M tab-more@x@r4-2: worst 11.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 17 (5 with >= 3 ms); entry frame 11.7 + next 0.9 (from the entry: 11.7, 0.9, 6.0, 6.0); rows composed per frame max 0
+M tab-catalog@x@r4: worst 9.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 20 (3 with >= 3 ms); entry frame 8.7 + next 2.1 (from the entry: 8.7, 2.1, 2.1, 9.4); rows composed per frame max 0
+M tab-home@x@r4-3: worst 8.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 60 (5 with >= 3 ms); entry frame 8.4 + next 8.3 (from the entry: 8.4, 8.3, 1.2, 1.1); rows composed per frame max 0
+M tab-news-cold@base@r4: worst 15.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 34 (7 with >= 3 ms); entry frame 15.7 + next 15.7 (from the entry: 15.7, 15.7, 1.8, 1.7); rows composed per frame max 0
+M tab-my-cold@base@r4: worst 7.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 56 (4 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-more-cold@base@r4: worst 10.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 31 (7 with >= 3 ms); entry frame 10.9 + next 10.8 (from the entry: 10.9, 10.8, 1.8, 1.7); rows composed per frame max 0
+M tab-catalog-cold@base@r4: worst 20.0 ms CPU (rows composed in it 0); frames >16 2, >25 0, >30 0 of 31 (8 with >= 3 ms); entry frame 10.0 + next 2.7 (from the entry: 10.0, 2.7, 2.6, 3.3); rows composed per frame max 0
+M tab-home@base@r4-1: worst 11.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 62 (3 with >= 3 ms); entry frame 11.5 + next 1.8 (from the entry: 11.5, 1.8, 1.7, 0.7); rows composed per frame max 0
+M tab-more@base@r4-1: worst 11.2 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (5 with >= 3 ms); entry frame 11.2 + next 11.1 (from the entry: 11.2, 11.1, 1.9, 1.8); rows composed per frame max 0
+M tab-my@base@r4-1: worst 10.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 25 (1 with >= 3 ms); entry frame 10.3 + next 2.4 (from the entry: 10.3, 2.4, 2.3, 0.5); rows composed per frame max 0
+M tab-news@base@r4-1: worst 15.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 18 (1 with >= 3 ms); entry frame 15.6 + next 3.0 (from the entry: 15.6, 3.0, 2.9, 1.1); rows composed per frame max 0
+M tab-home@base@r4-2: worst 17.1 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 67 (5 with >= 3 ms); entry frame 17.1 + next 1.1 (from the entry: 17.1, 1.1, 1.8, 1.8); rows composed per frame max 0
+M tab-news@base@r4-2: worst 9.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 18 (6 with >= 3 ms); entry frame 9.7 + next 9.5 (from the entry: 9.7, 9.5, 1.8, 1.7); rows composed per frame max 0
+M tab-my@base@r4-2: worst 10.1 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 20 (3 with >= 3 ms); entry frame 10.1 + next 1.0 (from the entry: 10.1, 1.0, 1.6, 1.6); rows composed per frame max 0
+M tab-more@base@r4-2: worst 17.2 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 20 (2 with >= 3 ms); entry frame 17.2 + next 5.1 (from the entry: 17.2, 5.1, 1.4, 1.3); rows composed per frame max 0
+M tab-catalog@base@r4: worst 13.1 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 18 (4 with >= 3 ms); entry frame 13.1 + next 1.7 (from the entry: 13.1, 1.7, 7.8, 1.9); rows composed per frame max 0
+M tab-home@base@r4-3: worst 11.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 59 (4 with >= 3 ms); entry frame 11.9 + next 1.1 (from the entry: 11.9, 1.1, 1.4, 1.3); rows composed per frame max 0
+## E5. Round 5: per variant a new process on Home; News, Моето, Още, Каталог, Home (first entries), then warm entries
+M tab-news-cold@base@r5: worst 20.1 ms CPU (rows composed in it 0); frames >16 2, >25 0, >30 0 of 31 (13 with >= 3 ms); entry frame 10.2 + next 10.2 (from the entry: 10.2, 10.2, 20.1, 20.0); rows composed per frame max 0
+M tab-my-cold@base@r5: worst 15.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 55 (5 with >= 3 ms); entry frame 15.5 + next 2.4 (from the entry: 15.5, 2.4, 2.4, 1.4); rows composed per frame max 0
+M tab-more-cold@base@r5: worst 9.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 32 (2 with >= 3 ms); entry frame 9.6 + next 9.5 (from the entry: 9.6, 9.5, 1.7, 1.7); rows composed per frame max 0
+M tab-catalog-cold@base@r5: worst 27.4 ms CPU (rows composed in it 0); frames >16 2, >25 2, >30 0 of 28 (5 with >= 3 ms); entry frame 9.3 + next 3.0 (from the entry: 9.3, 3.0, 2.9, 27.4); rows composed per frame max 0
+M tab-home@base@r5-1: worst 13.8 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 62 (5 with >= 3 ms); entry frame 13.8 + next 2.1 (from the entry: 13.8, 2.1, 2.0, 0.8); rows composed per frame max 0
+M tab-more@base@r5-1: worst 13.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 20 (5 with >= 3 ms); entry frame 13.5 + next 13.4 (from the entry: 13.5, 13.4, 2.1, 2.1); rows composed per frame max 0
+M tab-my@base@r5-1: worst 9.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 31 (3 with >= 3 ms); entry frame 9.5 + next 1.8 (from the entry: 9.5, 1.8, 1.8, 0.7); rows composed per frame max 0
+M tab-news@base@r5-1: worst 14.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (1 with >= 3 ms); entry frame 14.5 + next 2.3 (from the entry: 14.5, 2.3, 2.2, 0.8); rows composed per frame max 0
+M tab-home@base@r5-2: worst 13.0 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 66 (3 with >= 3 ms); entry frame 13.0 + next 1.1 (from the entry: 13.0, 1.1, 1.3, 1.2); rows composed per frame max 0
+M tab-news@base@r5-2: worst 14.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 16 (6 with >= 3 ms); entry frame 14.6 + next 14.5 (from the entry: 14.6, 14.5, 1.8, 1.7); rows composed per frame max 0
+M tab-my@base@r5-2: worst 7.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 18 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-more@base@r5-2: worst 15.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 20 (1 with >= 3 ms); entry frame 15.6 + next 1.4 (from the entry: 15.6, 1.4, 1.4, 1.2); rows composed per frame max 0
+M tab-catalog@base@r5: worst 11.8 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 18 (3 with >= 3 ms); entry frame 11.8 + next 11.8 (from the entry: 11.8, 11.8, 1.5, 1.4); rows composed per frame max 0
+M tab-home@base@r5-3: worst 11.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 56 (5 with >= 3 ms); entry frame 11.7 + next 4.1 (from the entry: 11.7, 4.1, 4.0, 1.5); rows composed per frame max 0
+M tab-news-cold@x@r5: worst 18.6 ms CPU (rows composed in it 0); frames >16 2, >25 0, >30 0 of 23 (6 with >= 3 ms); entry frame 18.6 + next 18.5 (from the entry: 18.6, 18.5, 1.7, 1.5); rows composed per frame max 0
+M tab-my-cold@x@r5: worst 15.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 55 (3 with >= 3 ms); entry frame 15.3 + next 3.3 (from the entry: 15.3, 3.3, 3.3, 1.5); rows composed per frame max 0
+M tab-more-cold@x@r5: worst 8.1 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 35 (3 with >= 3 ms); entry frame 8.1 + next 8.1 (from the entry: 8.1, 8.1, 1.8, 1.7); rows composed per frame max 0
+M tab-catalog-cold@x@r5: worst 12.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 29 (7 with >= 3 ms); entry frame 11.2 + next 2.0 (from the entry: 11.2, 2.0, 1.9, 3.1); rows composed per frame max 0
+M tab-home@x@r5-1: worst 16.7 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 60 (3 with >= 3 ms); entry frame 16.7 + next 1.5 (from the entry: 16.7, 1.5, 1.4, 3.3); rows composed per frame max 0
+M tab-more@x@r5-1: worst 8.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 17 (11 with >= 3 ms); entry frame 8.3 + next 8.2 (from the entry: 8.3, 8.2, 4.9, 4.9); rows composed per frame max 0
+M tab-my@x@r5-1: worst 6.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 32 (3 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M tab-news@x@r5-1: worst 16.7 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 20 (7 with >= 3 ms); entry frame 16.7 + next 1.7 (from the entry: 16.7, 1.7, 1.7, 4.0); rows composed per frame max 0
+M tab-home@x@r5-2: worst 11.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 60 (5 with >= 3 ms); entry frame 8.7 + next 1.3 (from the entry: 8.7, 1.3, 11.3, 11.2); rows composed per frame max 0
+M tab-news@x@r5-2: worst 12.8 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 17 (7 with >= 3 ms); entry frame 12.8 + next 12.8 (from the entry: 12.8, 12.8, 1.6, 1.5); rows composed per frame max 0
+M tab-my@x@r5-2: worst 10.2 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (3 with >= 3 ms); entry frame 10.2 + next 1.2 (from the entry: 10.2, 1.2, 1.2, 1.1); rows composed per frame max 0
+M tab-more@x@r5-2: worst 11.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (3 with >= 3 ms); entry frame 11.9 + next 1.8 (from the entry: 11.9, 1.8, 5.3, 5.3); rows composed per frame max 0
+M tab-catalog@x@r5: worst 14.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 18 (3 with >= 3 ms); entry frame 14.2 + next 2.4 (from the entry: 14.2, 2.4, 2.3, 14.9); rows composed per frame max 0
+M tab-home@x@r5-3: worst 15.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 62 (6 with >= 3 ms); entry frame 9.6 + next 1.7 (from the entry: 9.6, 1.7, 1.6, 15.5); rows composed per frame max 0
+## EV. Visual: the tab entries recorded at 8 frames/s
+REC tab-news-base (emu): marker 1959 ms after the recording start; 48 frames at 8/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+REC tab-more-base (emu): marker 1547 ms after the recording start; 45 frames at 8/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+REC tab-home-base (emu): marker 1536 ms after the recording start; 44 frames at 8/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+REC tab-news-x (emu): marker 1573 ms after the recording start; 47 frames at 8/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+REC tab-more-x (emu): marker 1538 ms after the recording start; 44 frames at 8/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+REC tab-home-x (emu): marker 1537 ms after the recording start; 44 frames at 8/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+## Z. The table: main-thread CPU (Running) per doFrame, by interaction and variant
+kind | variant | n | worst frame CPU ms: median / mean / max | entry frame median | next frame median | frames >25 ms (total) | frames >30 ms (total) | rows composed in the worst frame (median) | CPU of all frames, median
+---|---|---|---|---|---|---|---|---|---
+tab-news-cold | base | 5 | 13.8 / 13.3 / 20.1 | 10.2 | 10.2 | 0 | 0 | 0 | 89
+tab-news-cold | x | 5 | 15.1 / 15.2 / 23.1 | 11.2 | 11.1 | 0 | 0 | 0 | 78
+tab-my-cold | base | 5 | 15.5 / 15.6 / 20.4 | 15.5 | 2.6 | 0 | 0 | 0 | 57
+tab-my-cold | x | 5 | 13.8 / 13.7 / 15.3 | 13.8 | 2.8 | 0 | 0 | 0 | 55
+tab-more-cold | base | 5 | 15.5 / 14.3 / 18.1 | 15.5 | 15.4 | 0 | 0 | 0 | 75
+tab-more-cold | x | 5 | 9.5 / 9.5 / 11.4 | 9.5 | 9.4 | 0 | 0 | 0 | 68
+tab-catalog-cold | base | 5 | 17.9 / 19.0 / 27.4 | 9.3 | 2.6 | 2 | 0 | 0 | 84
+tab-catalog-cold | x | 5 | 18.5 / 22.6 / 45.2 | 14.2 | 2.7 | 1 | 1 | 0 | 80
+tab-home | base | 15 | 11.9 / 13.0 / 18.4 | 11.9 | 1.8 | 0 | 0 | 0 | 48
+tab-home | x | 15 | 10.5 / 12.1 / 20.6 | 9.6 | 1.8 | 0 | 0 | 0 | 58
+tab-more | base | 10 | 14.6 / 15.7 / 24.5 | 14.6 | 7.5 | 0 | 0 | 0 | 47
+tab-more | x | 10 | 9.0 / 10.6 / 19.7 | 9.0 | 1.7 | 0 | 0 | 0 | 49
+tab-my | base | 10 | 9.8 / 9.1 / 11.4 | 9.8 | 1.4 | 0 | 0 | 0 | 33
+tab-my | x | 10 | 7.8 / 8.8 / 13.3 | 4.1 | 0.6 | 0 | 0 | 0 | 35
+tab-news | base | 10 | 11.3 / 12.1 / 15.6 | 10.8 | 7.0 | 0 | 0 | 0 | 43
+tab-news | x | 10 | 11.1 / 11.4 / 17.6 | 10.4 | 3.2 | 0 | 0 | 0 | 50
+tab-catalog | base | 5 | 13.1 / 12.5 / 15.6 | 11.8 | 1.9 | 0 | 0 | 0 | 46
+tab-catalog | x | 5 | 13.2 / 12.7 / 16.6 | 13.2 | 2.0 | 0 | 0 | 0 | 58
+CRASH new: FATAL 0, base: FATAL 0; ANR 0; traces kept: 2
+contact sheets: 20 in sheets/
+contact sheets: 20 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4366', '5946', '6802', '7330', '8950', '9506', '11067', '11760']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 15
+   skipped-frames events=15 max=72 total=769
+== Davey: 32
+   davey events=32 max=1655ms median=938ms
+== NativeLink: 8
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
