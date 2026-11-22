@@ -203,11 +203,13 @@ jobs:
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
+      # Gradle — през gradle-retry.sh (още един опит само при грешка в свалянето на зависимости).
       - name: Tests and lint
         if: steps.checked.outputs.skip != 'true'
+        timeout-minutes: 30
         run: |
-          (cd shared && ../gradlew --no-daemon test)
-          ./gradlew --no-daemon testProdDebugUnitTest lintProdRelease
+          (cd shared && bash ../.github/scripts/gradle-retry.sh ../gradlew --no-daemon test)
+          bash .github/scripts/gradle-retry.sh ./gradlew --no-daemon testProdDebugUnitTest lintProdRelease
 
       # Паролите — само в средата на тази стъпка (не в GITHUB_ENV), keystore файлът се изтрива
       # след build-а. Извън доверените издания изразите дават празен низ (без secrets).
@@ -231,7 +233,7 @@ jobs:
           fi
           unset UPLOAD_KEYSTORE_BASE64 UPLOAD_STORE_PASSWORD UPLOAD_KEY_ALIAS UPLOAD_KEY_PASSWORD
           sed -i "s/versionName = \".*\"/versionName = \"$VERSION\"/" app/build.gradle.kts
-          ./gradlew --no-daemon bundleProdPlay assembleProdRelease assembleDevDebug
+          bash .github/scripts/gradle-retry.sh ./gradlew --no-daemon bundleProdPlay assembleProdRelease assembleDevDebug
           mkdir -p dist
           cp app/build/outputs/bundle/prodPlay/app-prod-play.aab "dist/chitalishte-yavorets-$VERSION.aab"
           cp app/build/outputs/apk/prod/release/app-prod-release.apk "dist/chitalishte-yavorets-$VERSION.apk"
