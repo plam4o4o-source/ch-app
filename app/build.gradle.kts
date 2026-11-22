@@ -290,7 +290,41 @@ room {
     schemaDirectory("$projectDir/schemas")
 }
 
+// Android SDK-тата на Robolectric (android-all-instrumented) — през Gradle: с повторните му опити и
+// в кеша на setup-gradle (клоновете го четат от main), а не от Maven Central по време на тестовете
+// (там без повторен опит: 429 → „Failed to fetch maven artifact“). Robolectric върви offline срещу
+// тях. Версиите — от DefaultSdkProvider на Robolectric 4.17 („<android>-robolectric-<build>“):
+// при нова версия на Robolectric или ново SDK в @Config / robolectric.properties — и тук (иначе
+// тестът пада с „Unable to locate dependency: …android-all-instrumented-…“).
+val robolectricSdks = mapOf(
+    30 to "11-robolectric-6757853",
+    34 to "14-robolectric-10818077",
+    35 to "15-robolectric-13954326",
+    36 to "16-robolectric-13921718",
+)
+val robolectricSdk = configurations.dependencyScope("robolectricSdk")
+val robolectricSdkJars = configurations.resolvable("robolectricSdkJars") {
+    extendsFrom(robolectricSdk.get())
+    isTransitive = false
+}
+dependencies {
+    robolectricSdks.values.forEach { add(robolectricSdk.name, "org.robolectric:android-all-instrumented:$it-i7") }
+}
+val robolectricJarsDir = layout.buildDirectory.dir("robolectric-jars")
+val robolectricVersion = libs.versions.robolectric.get()
+val robolectricJars = tasks.register<Sync>("robolectricJars") {
+    from(robolectricSdkJars)
+    into(robolectricJarsDir)
+    doFirst {
+        check(robolectricVersion == "4.17") { "Robolectric $robolectricVersion: обнови robolectricSdks в app/build.gradle.kts" }
+    }
+}
+
 tasks.withType<Test>().configureEach {
+    // Robolectric: SDK-тата от robolectricJars (виж по-горе), без сваляне по време на теста.
+    inputs.files(robolectricJars).withPropertyName("robolectricJars").withPathSensitivity(PathSensitivity.NAME_ONLY)
+    systemProperty("robolectric.offline", "true")
+    systemProperty("robolectric.dependency.dir", robolectricJarsDir.get().asFile.absolutePath)
     // Снимките от ScreenshotTest са изход на теста — връщат се и от кеша на Gradle.
     outputs.dir(layout.buildDirectory.dir("reports/screenshots"))
     // Robolectric (SDK 36) на JDK 25 чете jdk.internal.access чрез reflection.

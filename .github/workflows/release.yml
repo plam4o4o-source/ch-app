@@ -203,24 +203,6 @@ jobs:
             echo "skip=true" >> "$GITHUB_OUTPUT"
           fi
 
-      # Robolectric тегли android-all-instrumented (по ~150 MB за всяко SDK от тестовете) от Maven
-      # Central по време на тестовете, в ~/.m2 — извън кеша на setup-gradle и извън повторните опити
-      # на Gradle (429 → „Failed to fetch maven artifact“ и падащи тестове). Кешът е за версията на
-      # Robolectric и SDK-тата от @Config и robolectric.properties.
-      - name: Robolectric SDK jars (cache key)
-        id: robolectric
-        if: steps.checked.outputs.skip != 'true'
-        run: |
-          V=$(sed -n 's/^robolectric = "\(.*\)"/\1/p' gradle/libs.versions.toml)
-          SDKS=$( (grep -rhoE 'sdk *= *\[?[0-9][0-9, ]*' app/src/test | grep -oE '[0-9]+'; sed -n 's/^sdk=//p' app/src/test/resources/robolectric.properties) | sort -un | paste -sd-)
-          echo "key=robolectric-$V-sdk-$SDKS" >> "$GITHUB_OUTPUT"
-
-      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
-        if: steps.checked.outputs.skip != 'true'
-        with:
-          path: ~/.m2/repository/org/robolectric/android-all-instrumented
-          key: ${{ steps.robolectric.outputs.key }}
-
       # Gradle — през gradle-retry.sh (още един опит само при грешка в свалянето на зависимости).
       - name: Tests and lint
         if: steps.checked.outputs.skip != 'true'
