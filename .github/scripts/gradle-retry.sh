@@ -13,7 +13,7 @@ set -uo pipefail
 
 # Подписите на мрежова грешка и на грешка в кода — за текста на блоковете (не за целия лог:
 # тестовете печатат и свои „Connection reset“, а MockWebServer — и 429).
-NETWORK='Could not resolve|Could not GET|Could not HEAD|status code 429|Too Many Requests|Read timed out|Connection reset'
+NETWORK='Could not resolve|could not resolve plugin artifact|Could not GET|Could not HEAD|status code 429|Too Many Requests|Read timed out|Connection reset'
 CODE='There were failing tests|Compilation error|Compilation failed|Lint found|Timeout has been exceeded|No matching variant|Could not resolve project'
 DELAY=${GRADLE_RETRY_DELAY:-60}
 
