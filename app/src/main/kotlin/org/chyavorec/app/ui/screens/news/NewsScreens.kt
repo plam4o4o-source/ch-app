@@ -105,6 +105,7 @@ import org.chyavorec.app.ui.components.SkeletonBox
 import org.chyavorec.app.ui.components.SkeletonCards
 import org.chyavorec.app.ui.components.SkeletonList
 import org.chyavorec.app.ui.components.StateContent
+import org.chyavorec.app.ui.components.rememberTabContentReady
 import org.chyavorec.app.ui.components.SyncBanner
 import org.chyavorec.app.ui.components.TabReselectEffect
 import org.chyavorec.app.ui.components.windowWidth
@@ -140,6 +141,9 @@ fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? =
     val ui by vm.ui.collectAsStateWithLifecycle()
     val scroll = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
     val listState = rememberLazyListState()
+    // Смяна на раздел: в първия кадър — лентата, сегментите, търсенето и филтрите, новините — в следващия
+    // (виж rememberTabContentReady; списъкът помни мястото си — състоянието му е тук, над отлагането).
+    val listReady = rememberTabContentReady()
     val haptic = LocalHapticFeedback.current
     val tick = { haptic.performHapticFeedback(HapticFeedbackType.SegmentTick) }
     var selectedCalendar by rememberSaveable { mutableStateOf(segmentState?.get<String>(SEGMENT_KEY) == Routes.SEGMENT_CALENDAR) }
@@ -231,6 +235,7 @@ fun NewsListScreen(navigate: (String) -> Unit, segmentState: SavedStateHandle? =
                     },
                     errorSubject = stringResource(R.string.subject_news),
                 ) { all ->
+                    if (!listReady) return@StateContent
                     val list = remember(all) { all.distinctBy { it.id } }
                     // Редовете четат само своите стойности (не цялото състояние `ui`): писането в
                     // търсенето или опресняването не прекомпозира видимите редове наново.

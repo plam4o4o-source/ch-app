@@ -15,6 +15,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.withFrameNanos
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.getValue
@@ -197,6 +199,25 @@ val LocalSharedTransitionsEnabled = compositionLocalOf { true }
  * екранът е в композицията.
  */
 val LocalEnteringUnseen = compositionLocalOf { false }
+
+/**
+ * Смяна на раздел от долната лента: false в първия кадър на входящия раздел, true от следващия.
+ * Входящият раздел е невидим в началото на прехода (fadeIn със закъснение — axisEnter в
+ * ChitalishteRoot), затова по-тежката част от съдържанието му може да се построи кадър по-късно,
+ * без това да се види: два по-къси кадъра вместо един дълъг. Иначе (първото показване, назад,
+ * жестът „назад“, без анимации) — true веднага. Състоянието на превъртане да е извън отложената
+ * част (иначе празният първи кадър би го нулирал).
+ */
+@Composable
+fun rememberTabContentReady(): Boolean {
+    val defer = LocalSharedScope.current != null && !LocalSharedTransitionsEnabled.current && LocalEnteringUnseen.current
+    var ready by remember { mutableStateOf(!defer) }
+    if (!ready) LaunchedEffect(Unit) {
+        withFrameNanos { }
+        ready = true
+    }
+    return ready
+}
 
 /**
  * Пружинен преход на границите на shared element-а (леко „подскачане“ в края) —
