@@ -706,6 +706,10 @@ private fun BookScreenContent(inv: Long, onBack: () -> Unit, navigate: (String) 
                             style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(top = 6.dp),
                         )
+                        // До наличността — дали библиотеката е отворена сега (работното време от кеша).
+                        org.chyavorec.app.ui.components.OpenNowBadge(
+                            org.chyavorec.app.ui.components.rememberOpeningHours(), Modifier.padding(top = 4.dp),
+                        )
                         if (!narrow) org.chyavorec.app.ui.screens.my.WantToReadToggle(b, snackbar, Modifier.padding(top = 8.dp))
                     }
                 }

@@ -96,7 +96,9 @@ import org.chyavorec.data.repository.SiteRepository
 import org.chyavorec.data.site.ChyavorecSiteService
 import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.Loan
+import org.chyavorec.domain.model.LoanReminderPlan
 import org.chyavorec.domain.model.LoanReminderSync
+import org.chyavorec.domain.model.OpeningHours
 import org.chyavorec.domain.repository.PayloadCache
 import org.chyavorec.domain.service.AuthenticationService
 import org.chyavorec.domain.service.MembershipService
@@ -224,6 +226,22 @@ class AppContainer(
     val eventsRepository by lazy { EventsRepository(siteService, publicCache, clock) }
     val catalogRepository by lazy { CatalogRepository(catalogService, publicCache, clock, index = RoomCatalogIndexStore(recreate = { CatalogDatabase.recreate(context) }) { catalogDatabase }) }
     val siteRepository by lazy { SiteRepository(siteService, publicCache, clock, newsRepository) }
+
+    /**
+     * Работното време на библиотеката: от запазените контакти от сайта (само кеша — без мрежа),
+     * а ако редовете им не се разчетат — вграденото (contacts_fallback_hours).
+     */
+    suspend fun openingHours(): OpeningHours? {
+        val site = try {
+            siteRepository.cachedContacts()?.data?.takeIf { it.fromSite }?.workingHours
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Diagnostics.record("contacts.hours", e)
+            null
+        }
+        return OpeningHours.resolve(site.orEmpty(), context.getString(org.chyavorec.app.R.string.contacts_fallback_hours).lines())
+    }
 
     // „Старият вестник“, „Лента на времето“, „Познай Яворец“.
     /** Статиите от юбилейния вестник (PDF) за четеца — отделна папка, пази се дълго (офлайн четене). */
@@ -612,15 +630,18 @@ class AppContainer(
                 val list = loans ?: libraryRepository.cachedLoans()?.data ?: return
                 LoanReminderScheduler.awaitIdle()
                 val previous = settings.loanReminderPlan()
-                val diff = LoanReminderSync.diff(previous, list)
+                // Работното време мени часа само при необичайни часове (виж LoanReminderPlan.remindTime).
+                val hours = openingHours()
+                val hoursKey = LoanReminderPlan.hoursKey(hours)
+                val diff = LoanReminderSync.diff(previous, list, hoursKey)
                 // След обновяване — всички наново: вече поставените задачи пазят настройките на
                 // старата версия (напр. паузата между опитите). Без двойни известия: вече
                 // показаното пази дневникът (LoanReminderWorker), вървящото — awaitIdle().
                 val sameVersion = settings.loanReminderPlanVersion() == config.versionCode
                 val changes = if (sameVersion) diff else diff.copy(schedule = list.distinctBy { it.loanId })
                 if (sameVersion && changes.isEmpty && previous != null) return
-                loanReminders.applyChanges(changes)
-                settings.setLoanReminderPlan(LoanReminderSync.entries(list), config.versionCode)
+                loanReminders.applyChanges(changes, hours)
+                settings.setLoanReminderPlan(LoanReminderSync.entries(list, hoursKey), config.versionCode)
             }
         }
     }

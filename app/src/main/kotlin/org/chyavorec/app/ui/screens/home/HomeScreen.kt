@@ -227,6 +227,8 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
     // При показан поздрав празникът за деня е ред в него, а не отделен ред под търсенето.
     val greetingShown = isGreetingShown(decor, dismissedGreeting, today)
     val loanSummary = rememberLoanSummary()
+    // „Отворено сега“ до новите книги — работното време от запазените контакти (без мрежа).
+    val openingHours = org.chyavorec.app.ui.components.rememberOpeningHours()
     // TalkBack обявява раздела при отварянето му (другите раздели — с заглавката си, AppTopBar).
     val paneLabel = stringResource(R.string.tab_home)
 
@@ -358,6 +360,8 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
                         actionLabel = stringResource(R.string.action_catalog), onAction = { navigate(Routes.CATALOG) },
                         modifier = Modifier.padding(top = 24.dp, bottom = 8.dp),
                     )
+                    // Под „Библиотека · Нови книги“ — тих ред; без работно време го няма.
+                    org.chyavorec.app.ui.components.OpenNowBadge(openingHours, Modifier.padding(start = ScreenGutter, end = ScreenGutter, bottom = 8.dp))
                 }
                 item("new") { BookRow(state.newBooks) { navigate(Routes.book(it.inv)) } }
             }

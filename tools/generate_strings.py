@@ -669,6 +669,14 @@ S = {
 "contacts_phone": ("Телефон", "Phone"),
 "contacts_email_label": ("Имейл", "Email"),
 "contacts_hours": ("Работно време", "Opening hours"),
+# Вълна 25 „hours“: „Отворено сега“ (OpenNowBadge) — по работното време от сайта или вграденото.
+"open_now_until": ("Отворено до %1$s", "Open until %1$s"),
+"open_now_closing_soon": ("Затваря скоро — до %1$s", "Closing soon — until %1$s"),
+"open_now_opens_today": ("Затворено · отваря днес в %1$s", "Closed · opens today at %1$s"),
+"open_now_opens_tomorrow": ("Затворено · отваря утре в %1$s", "Closed · opens tomorrow at %1$s"),
+"open_now_opens_on": ("Затворено · отваря %1$s в %2$s", "Closed · opens %1$s at %2$s"),
+# Дните с предлога (понеделник…неделя), разделени със запетая — като event_weekdays.
+"open_days_on": ("в понеделник,във вторник,в сряда,в четвъртък,в петък,в събота,в неделя", "on Monday,on Tuesday,on Wednesday,on Thursday,on Friday,on Saturday,on Sunday"),
 "contacts_hours_unknown": ("Не е обявено в сайта", "Not listed on the website"),
 "contacts_web": ("В интернет", "Online"),
 "contacts_fallback_hours": ("Понеделник – четвъртък: 08:00 – 16:30\nПетък: 08:00 – 16:00\nСъбота и неделя: почивни дни", "Monday – Thursday: 08:00 – 16:30\nFriday: 08:00 – 16:00\nSaturday and Sunday: closed"),
@@ -949,6 +957,9 @@ S = {
 "notif_new_article": ("Нова публикация", "New post"),
 "notif_due_soon": ("Наближава срок за връщане", "Due date approaching"),
 "notif_due_today": ("Днес е срокът за връщане", "Due back today"),
+# Вълна 25 „hours“: срок в почивен ден (%1$s — „в петък“ от open_days_on; %2$s — ден, %3$s — час).
+"notif_due_closed_day": ("%1$s библиотеката не работи", "%1$s the library is closed"),
+"notif_due_closed_return_by": ("%1$s библиотеката не работи — върни книгата до %2$s %3$s", "%1$s the library is closed — return the book by %2$s %3$s"),
 "notif_due_on": ("%1$s — до %2$s", "%1$s — due %2$s"),
 "notif_overdue": ("Просрочена книга", "Overdue book"),
 "notif_public_loan": ("Наближава срок за връщане на книга", "A library book is due soon"),

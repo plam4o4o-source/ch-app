@@ -27,6 +27,7 @@ import org.chyavorec.domain.model.LoanNotificationLog
 import org.chyavorec.domain.model.LoanReminderKind
 import org.chyavorec.domain.model.LoanReminderPlan
 import org.chyavorec.domain.model.LoanReminderSync
+import org.chyavorec.domain.model.OpeningHours
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.concurrent.TimeUnit
@@ -39,14 +40,15 @@ import java.util.concurrent.TimeUnit
  */
 class LoanReminderScheduler(private val context: Context, private val clock: AppClock) {
 
-    fun schedule(loans: List<Loan>) {
+    /** [hours] — работното време (часът спрямо него, [LoanReminderPlan.remindTime]); `null` — 10:00 както досега. */
+    fun schedule(loans: List<Loan>, hours: OpeningHours? = null) {
         val wm = WorkManager.getInstance(context)
         val now = clock.now()
         for (loan in loans) {
             val dueOn = LoanDueCalculator.parse(loan.dueOn)
             for (kind in LoanReminderKind.entries) {
                 val name = uniqueName(loan.loanId, kind)
-                val at = dueOn?.let { LoanReminderPlan.at(kind, it, now) }
+                val at = dueOn?.let { LoanReminderPlan.at(kind, it, now, hours = hours) }
                 if (dueOn == null || at == null) {
                     // Няма какво да се напомня (минал момент/без срок) — без остатък от стария срок.
                     wm.cancelUniqueWork(name)
@@ -73,9 +75,9 @@ class LoanReminderScheduler(private val context: Context, private val clock: App
     }
 
     /** Прилага разликата от [LoanReminderSync.diff] — непроменените заемания не се пипат. */
-    fun applyChanges(changes: LoanReminderSync.Changes) {
+    fun applyChanges(changes: LoanReminderSync.Changes, hours: OpeningHours? = null) {
         cancel(changes.cancel)
-        if (changes.schedule.isNotEmpty()) schedule(changes.schedule)
+        if (changes.schedule.isNotEmpty()) schedule(changes.schedule, hours)
     }
 
     /** При изход и при изключени известия за срокове. */
@@ -160,11 +162,14 @@ class LoanReminderWorker(context: Context, params: WorkerParameters) : Coroutine
                 applicationContext.getString(R.string.notif_due_on, loan.title, dueOn.format(DAY_MONTH))
             LoanReminderKind.DUE_DAY -> applicationContext.getString(R.string.notif_due_today) to loan.title
         }
+        // Срок в почивен ден — ред с последния работен ден (само при известно работно време).
+        val note = LoanReminderPlan.closedDue(dueOn, now, c.openingHours())?.let { closedDueNote(applicationContext, it) }
         // Едно ID за двете напомняния: „днес“ заменя „наближава“ в лентата.
         val id = NotificationIds.dueSoon(loanId)
         Notifier.show(
             applicationContext, Channel.LOANS, id, title, text, "my/loans",
             actions = RenewActionReceiver.actionsFor(applicationContext, c, loan, id),
+            bigText = note?.let { "$text\n$it" },
         )
         c.settings.addLoanNotification(LoanNotificationLog.entry(loanId, dueOn, kind.name, today), today)
         return Result.success()
@@ -197,6 +202,21 @@ class LoanReminderWorker(context: Context, params: WorkerParameters) : Coroutine
 
     internal companion object {
         val DAY_MONTH: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM")
+        private val HOUR_MINUTE: DateTimeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+
+        /** „В петък библиотеката не работи — върни книгата до четвъртък 16:30“. */
+        fun closedDueNote(context: Context, closed: LoanReminderPlan.ClosedDue): String {
+            val on = context.getString(R.string.open_days_on).split(',').getOrElse(closed.dueDay.value - 1) { "" }
+            val by = closed.returnBy
+            val line = if (by == null) {
+                context.getString(R.string.notif_due_closed_day, on)
+            } else {
+                val day = context.getString(R.string.event_weekdays).split(',').getOrElse(by.dayOfWeek.value - 1) { "" }
+                context.getString(R.string.notif_due_closed_return_by, on, day, by.format(HOUR_MINUTE))
+            }
+            // „в петък …“ → „В петък …“ (изречението започва с деня).
+            return line.replaceFirstChar { it.titlecase() }
+        }
         const val FRESH_ENOUGH_MS = 30 * 60 * 1000L
         const val FETCH_TIMEOUT_MS = 15_000L
         /** Опитите при временно нечетима сесия: през 5, 10, 20, 40, 80 мин ([LoanReminderScheduler.schedule]). */

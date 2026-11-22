@@ -551,6 +551,8 @@
     <string name="newspaper_zoom_out">Намали</string>
     <string name="notif_action_renew">Удължи</string>
     <string name="notif_action_route">Маршрут</string>
+    <string name="notif_due_closed_day">%1$s библиотеката не работи</string>
+    <string name="notif_due_closed_return_by">%1$s библиотеката не работи — върни книгата до %2$s %3$s</string>
     <string name="notif_due_on">%1$s — до %2$s</string>
     <string name="notif_due_soon">Наближава срок за връщане</string>
     <string name="notif_due_today">Днес е срокът за връщане</string>
@@ -703,6 +705,12 @@
     <string name="onb_skip">Пропусни</string>
     <string name="onb_welcome_text">Официалното приложение на читалището — винаги актуално от сайта chyavorec.org.</string>
     <string name="onb_welcome_title">Читалище Яворец</string>
+    <string name="open_days_on">в понеделник,във вторник,в сряда,в четвъртък,в петък,в събота,в неделя</string>
+    <string name="open_now_closing_soon">Затваря скоро — до %1$s</string>
+    <string name="open_now_opens_on">Затворено · отваря %1$s в %2$s</string>
+    <string name="open_now_opens_today">Затворено · отваря днес в %1$s</string>
+    <string name="open_now_opens_tomorrow">Затворено · отваря утре в %1$s</string>
+    <string name="open_now_until">Отворено до %1$s</string>
     <string name="org_library_name">Библиотека при НЧ „Васил Левски – 1922“, с. Яворец</string>
     <string name="org_place">с. Яворец</string>
     <string name="org_short">НЧ „Васил Левски – 1922“</string>
