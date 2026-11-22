@@ -1,0 +1,129 @@
+app pids seen: ['4253', '5885', '6481', '6931', '7312', '7678', '8103', '8470', '8852', '9216', '9581', '9960', '10338', '10725', '11863', '12237', '12598', '12974', '13343', '13735', '14362', '14594', '14816', '15052', '15296', '15537']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 42
+   skipped-frames events=42 max=85 total=2385
+   11-22 17:23:31.958  4253  4253 I Choreographer: Skipped 85 frames!  The application may be doing too much work on its main thread.
+   11-22 17:23:42.907  4253  4253 I Choreographer: Skipped 66 frames!  The application may be doing too much work on its main thread.
+   11-22 17:23:44.896  4253  4253 I Choreographer: Skipped 39 frames!  The application may be doing too much work on its main thread.
+   11-22 17:24:07.598  4253  4253 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-22 17:25:51.262  5885  5885 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   11-22 17:27:34.513  6481  6481 I Choreographer: Skipped 69 frames!  The application may be doing too much work on its main thread.
+   11-22 17:28:48.893  6931  6931 I Choreographer: Skipped 50 frames!  The application may be doing too much work on its main thread.
+   11-22 17:28:50.573  6931  6931 I Choreographer: Skipped 56 frames!  The application may be doing too much work on its main thread.
+   11-22 17:30:11.490  7312  7312 I Choreographer: Skipped 45 frames!  The application may be doing too much work on its main thread.
+   11-22 17:31:32.258  7678  7678 I Choreographer: Skipped 60 frames!  The application may be doing too much work on its main thread.
+   11-22 17:32:47.343  8103  8103 I Choreographer: Skipped 64 frames!  The application may be doing too much work on its main thread.
+   11-22 17:32:48.879  8103  8103 I Choreographer: Skipped 72 frames!  The application may be doing too much work on its main thread.
+== Davey: 80
+   davey events=80 max=2211ms median=1089ms
+   11-22 17:23:29.831  4253  4265 I HWUI    : Davey! duration=875ms; Flags=1, FrameTimelineVsyncId=6719, IntendedVsync=92330448907, Vsync=92397115571, InputEventId=0, HandleInputStart=92408816113, AnimationStart=92408816864, PerformTraversalsS
+   11-22 17:23:32.189  4253  4264 I HWUI    : Davey! duration=2103ms; Flags=0, FrameTimelineVsyncId=6856, IntendedVsync=93430448863, Vsync=93847115513, InputEventId=0, HandleInputStart=93850217223, AnimationStart=93850217723, PerformTraversals
+   11-22 17:23:32.589  4253  4264 I HWUI    : Davey! duration=780ms; Flags=0, FrameTimelineVsyncId=6903, IntendedVsync=93863782179, Vsync=93997115507, InputEventId=0, HandleInputStart=94018422799, AnimationStart=94018423360, PerformTraversalsS
+   11-22 17:23:33.082  4253  4312 I HWUI    : Davey! duration=2211ms; Flags=0, FrameTimelineVsyncId=6918, IntendedVsync=94030448839, Vsync=95447115449, InputEventId=0, HandleInputStart=95456204871, AnimationStart=95456205332, PerformTraversals
+   11-22 17:23:33.386  4253  4312 I HWUI    : Davey! duration=998ms; Flags=0, FrameTimelineVsyncId=7124, IntendedVsync=95463782115, Vsync=95763782103, InputEventId=0, HandleInputStart=95765828697, AnimationStart=95765829719, PerformTraversalsS
+   11-22 17:23:33.815  4253  4312 I HWUI    : Davey! duration=1055ms; Flags=0, FrameTimelineVsyncId=7140, IntendedVsync=95780448769, Vsync=96197115419, InputEventId=0, HandleInputStart=96204324239, AnimationStart=96204324479, PerformTraversals
+   11-22 17:23:33.886  4253  4265 I HWUI    : Davey! duration=815ms; Flags=0, FrameTimelineVsyncId=7192, IntendedVsync=96213782085, Vsync=96597115403, InputEventId=0, HandleInputStart=96602240183, AnimationStart=96602240443, PerformTraversalsS
+   11-22 17:23:43.557  4253  4264 I HWUI    : Davey! duration=1766ms; Flags=0, FrameTimelineVsyncId=8065, IntendedVsync=105213781725, Vsync=105280448389, InputEventId=0, HandleInputStart=105291178132, AnimationStart=105291178443, PerformTraver
+   11-22 17:23:43.722  4253  4264 I HWUI    : Davey! duration=1559ms; Flags=0, FrameTimelineVsyncId=8073, IntendedVsync=105297115055, Vsync=106397115011, InputEventId=0, HandleInputStart=106405876473, AnimationStart=106405877104, PerformTraver
+   11-22 17:23:44.776  4253  4264 I HWUI    : Davey! duration=937ms; Flags=0, FrameTimelineVsyncId=8276, IntendedVsync=107197114979, Vsync=107480448301, InputEventId=0, HandleInputStart=107488079654, AnimationStart=107488080705, PerformTravers
+   11-22 17:23:45.334  4253  4264 I HWUI    : Davey! duration=762ms; Flags=0, FrameTimelineVsyncId=8318, IntendedVsync=107497114967, Vsync=107713781625, InputEventId=0, HandleInputStart=107728971861, AnimationStart=107728972943, PerformTravers
+   11-22 17:23:45.472  4253  4264 I HWUI    : Davey! duration=1018ms; Flags=0, FrameTimelineVsyncId=8334, IntendedVsync=107730448291, Vsync=108380448265, InputEventId=0, HandleInputStart=108414966216, AnimationStart=108414967608, PerformTraver
+== NativeLink: 26
+   11-22 17:23:47.378  4253  4591 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-22 17:25:50.238  5885  5924 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-22 17:27:33.481  6481  6520 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-22 17:28:49.745  6931  6979 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-22 17:30:11.131  7312  7353 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-22 17:31:31.169  7678  7718 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-22 17:32:47.942  8103  8144 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-22 17:34:06.426  8470  8518 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-22 17:35:24.100  8852  8894 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-22 17:36:39.772  9216  9255 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-22 17:37:58.192  9581  9635 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+   11-22 17:39:16.899  9960 10002 I ApexCodecsLazy: Failed to load libcom.android.media.swcodec.apexcodecs.so: dlopen failed: library "libcom.android.media.swcodec.apexcodecs.so" not found
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-22 17:23:24.259  4204  4204 I PERFCHECK: section: S0. NEW org.chyavorec.app and BASE org.chyavorec.app.b side by side; first launch to the catalogue, speed-profile
+   11-22 17:26:13.191  6068  6068 I PERFCHECK: section: B1. Round 1: per variant a new process, Каталог, then rows 1-3: open, Back measured
+   11-22 17:26:49.043  6273  6273 I PERFCHECK: w28 book-back@base@r1-1
+   11-22 17:27:05.695  6347  6347 I PERFCHECK: w28 book-back@base@r1-2
+   11-22 17:27:22.533  6431  6431 I PERFCHECK: w28 book-back@base@r1-3
+   11-22 17:28:05.410  6745  6745 I PERFCHECK: w28 book-back@x@r1-1
+   11-22 17:28:22.053  6817  6817 I PERFCHECK: w28 book-back@x@r1-2
+   11-22 17:28:38.784  6882  6882 I PERFCHECK: w28 book-back@x@r1-3
+   11-22 17:29:25.973  7131  7131 I PERFCHECK: w28 book-back@x-bk1@r1-1
+   11-22 17:29:42.688  7198  7198 I PERFCHECK: w28 book-back@x-bk1@r1-2
+   11-22 17:29:59.358  7264  7264 I PERFCHECK: w28 book-back@x-bk1@r1-3
+   11-22 17:30:46.489  7499  7499 I PERFCHECK: w28 book-back@x-bk2@r1-1
+   11-22 17:31:03.247  7566  7566 I PERFCHECK: w28 book-back@x-bk2@r1-2
+   11-22 17:31:19.934  7631  7631 I PERFCHECK: w28 book-back@x-bk2@r1-3
+   11-22 17:32:03.209  7863  7863 I PERFCHECK: w28 book-back@x-one@r1-1
+   11-22 17:32:19.894  7932  7932 I PERFCHECK: w28 book-back@x-one@r1-2
+   11-22 17:32:36.626  8053  8053 I PERFCHECK: w28 book-back@x-one@r1-3
+   11-22 17:33:21.837  8291  8291 I PERFCHECK: w28 book-back@x-nosh@r1-1
+   11-22 17:33:38.469  8358  8358 I PERFCHECK: w28 book-back@x-nosh@r1-2
+   11-22 17:33:55.116  8423  8423 I PERFCHECK: w28 book-back@x-nosh@r1-3
+   11-22 17:34:39.367  8664  8664 I PERFCHECK: w28 book-back@x-bk1+one@r1-1
+   11-22 17:34:56.097  8731  8731 I PERFCHECK: w28 book-back@x-bk1+one@r1-2
+   11-22 17:35:12.852  8798  8798 I PERFCHECK: w28 book-back@x-bk1+one@r1-3
+   11-22 17:35:19.956  8832  8832 I PERFCHECK: section: B2. Round 2: per variant a new process, Каталог, then rows 1-3: open, Back measured
+   11-22 17:35:55.530  9038  9038 I PERFCHECK: w28 book-back@x-bk1+one@r2-1
+   11-22 17:36:12.237  9105  9105 I PERFCHECK: w28 book-back@x-bk1+one@r2-2
+   11-22 17:36:28.948  9170  9170 I PERFCHECK: w28 book-back@x-bk1+one@r2-3
+   11-22 17:37:13.581  9398  9398 I PERFCHECK: w28 book-back@x-nosh@r2-1
+   11-22 17:37:30.249  9465  9465 I PERFCHECK: w28 book-back@x-nosh@r2-2
+   11-22 17:37:46.908  9531  9531 I PERFCHECK: w28 book-back@x-nosh@r2-3
+   11-22 17:38:31.885  9778  9778 I PERFCHECK: w28 book-back@x-one@r2-1
+   11-22 17:38:48.607  9845  9845 I PERFCHECK: w28 book-back@x-one@r2-2
+   11-22 17:39:05.227  9910  9910 I PERFCHECK: w28 book-back@x-one@r2-3
+   11-22 17:39:48.835 10159 10159 I PERFCHECK: w28 book-back@x-bk2@r2-1
+   11-22 17:40:05.546 10226 10226 I PERFCHECK: w28 book-back@x-bk2@r2-2
+   11-22 17:40:22.237 10292 10292 I PERFCHECK: w28 book-back@x-bk2@r2-3
+   11-22 17:41:05.930 10546 10546 I PERFCHECK: w28 book-back@x-bk1@r2-1
+   11-22 17:41:22.610 10613 10613 I PERFCHECK: w28 book-back@x-bk1@r2-2
+   11-22 17:41:39.469 10679 10679 I PERFCHECK: w28 book-back@x-bk1@r2-3
+   11-22 17:42:21.761 10910 10910 I PERFCHECK: w28 book-back@x@r2-1
+   11-22 17:42:38.467 10978 10978 I PERFCHECK: w28 book-back@x@r2-2
+   11-22 17:42:55.151 11043 11043 I PERFCHECK: w28 book-back@x@r2-3
+   11-22 17:43:37.652 11319 11319 I PERFCHECK: w28 book-back@base@r2-1
+   11-22 17:43:54.333 11387 11387 I PERFCHECK: w28 book-back@base@r2-2
+   11-22 17:44:11.045 11453 11453 I PERFCHECK: w28 book-back@base@r2-3
+   11-22 17:44:18.080 11487 11487 I PERFCHECK: section: B3. Round 3: per variant a new process, Каталог, then rows 1-3: open, Back measured
+   11-22 17:44:55.607 11686 11686 I PERFCHECK: w28 book-back@base@r3-1
+   11-22 17:45:12.336 11752 11752 I PERFCHECK: w28 book-back@base@r3-2
+   11-22 17:45:28.974 11817 11817 I PERFCHECK: w28 book-back@base@r3-3
+   11-22 17:46:12.890 12056 12056 I PERFCHECK: w28 book-back@x@r3-1
+   11-22 17:46:29.862 12124 12124 I PERFCHECK: w28 book-back@x@r3-2
+   11-22 17:46:46.611 12190 12190 I PERFCHECK: w28 book-back@x@r3-3
+   11-22 17:47:29.873 12419 12419 I PERFCHECK: w28 book-back@x-bk1@r3-1
+   11-22 17:47:46.491 12487 12487 I PERFCHECK: w28 book-back@x-bk1@r3-2
+   11-22 17:48:03.167 12552 12552 I PERFCHECK: w28 book-back@x-bk1@r3-3
+   11-22 17:48:45.011 12790 12790 I PERFCHECK: w28 book-back@x-bk2@r3-1
+   11-22 17:49:01.662 12857 12857 I PERFCHECK: w28 book-back@x-bk2@r3-2
+   11-22 17:49:18.258 12926 12926 I PERFCHECK: w28 book-back@x-bk2@r3-3
+   11-22 17:50:01.302 13154 13154 I PERFCHECK: w28 book-back@x-one@r3-1
+   11-22 17:50:18.027 13221 13221 I PERFCHECK: w28 book-back@x-one@r3-2
+   11-22 17:50:34.677 13286 13286 I PERFCHECK: w28 book-back@x-one@r3-3
+   11-22 17:51:18.031 13554 13554 I PERFCHECK: w28 book-back@x-nosh@r3-1
+   11-22 17:51:34.703 13621 13621 I PERFCHECK: w28 book-back@x-nosh@r3-2
+   11-22 17:51:51.333 13688 13688 I PERFCHECK: w28 book-back@x-nosh@r3-3
+   11-22 17:52:35.903 13919 13919 I PERFCHECK: w28 book-back@x-bk1+one@r3-1
+   11-22 17:52:52.556 13986 13986 I PERFCHECK: w28 book-back@x-bk1+one@r3-2
+   11-22 17:53:09.180 14052 14052 I PERFCHECK: w28 book-back@x-bk1+one@r3-3
+   11-22 17:53:16.234 14086 14086 I PERFCHECK: section: BV. Visual: open a book and Back, screen recording at 25 frames/s
+   11-22 17:53:44.343 14267 14267 I PERFCHECK: open-base
+   11-22 17:53:53.769 14304 14304 I PERFCHECK: back-base
+   11-22 17:54:30.515 14522 14522 I PERFCHECK: open-x
+   11-22 17:54:39.881 14543 14543 I PERFCHECK: back-x
+   11-22 17:55:22.885 14746 14746 I PERFCHECK: open-x-bk1
+   11-22 17:55:32.235 14765 14765 I PERFCHECK: back-x-bk1
+   11-22 17:56:09.864 14980 14980 I PERFCHECK: open-x-bk2
+   11-22 17:56:19.190 15000 15000 I PERFCHECK: back-x-bk2
+   11-22 17:56:55.349 15217 15217 I PERFCHECK: open-x-one
+   11-22 17:57:04.662 15236 15236 I PERFCHECK: back-x-one
+   11-22 17:57:40.629 15462 15462 I PERFCHECK: open-x-nosh
+   11-22 17:57:49.953 15483 15483 I PERFCHECK: back-x-nosh
+   11-22 17:58:27.436 15690 15690 I PERFCHECK: open-x-bk1+one
+   11-22 17:58:36.770 15709 15709 I PERFCHECK: back-x-bk1+one
+   11-22 17:58:45.541 15748 15748 I PERFCHECK: section: Z. The table: main-thread CPU Running per doFrame, by interaction and variant

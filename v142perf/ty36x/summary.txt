@@ -1,0 +1,357 @@
+part ty36x; APK: 1.2.40 5a14578 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 2000200 (NEW + w28-exp.patch, DEBUG ONLY: variants behind launch flags) size 4687546 bytes
+base APK: 1.2.40 5a14578 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b, throwaway key, versionCode 2000200 (BASE) size 4682814 bytes
+host: 4 cpu, 15700 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.40 5a14578 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 2000200 (NEW + w28-exp.patch, DEBUG ONLY: variants behind launch flags) size 4687546 bytes
+installed:  versionCode=2000200 minSdk=26 targetSdk=37  versionName=1.2.40 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+HELPER installed: package:org.pc.helper
+IME: default com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME; enabled: com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME com.google.android.tts/com.google.android.apps.speech.tts.googletts.settings.asr.voiceime.VoiceInputMethodService org.pc.helper/.Ime 
+trace analysis: trace_processor_shell: /home/runner/.local/share/perfetto/prebuilts/trace_processor_shell-2434129a3af4dc9e
+TRACE MODE perfetto; atrace categories: gfx view am dalvik input wm res binder_driver aidl sched; mapping app-mapping.txt; android 36
+## S0. NEW (org.chyavorec.app) and BASE (org.chyavorec.app.b) side by side; first launch to the catalogue, speed-profile
+S x:  versionCode=2000200 minSdk=26 targetSdk=37  versionName=1.2.40 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+S x: catalogue after 3841 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~ETZ9U7o1DwRxZgBN40aJ-Q==/org.chyavorec.app-fjrRnQR9s2h6iFHQtCo63A==/base.apk| x86_64: [status=speed-profile] [reason=cmdline] [primary-abi]| path: /data/app/~~kuySGAuVQxWW-FeeDZDSNw==/org.chyavorec.app.b-D5r2yB_YARrsAlY3OJSB-g==/base.apk| x86_64: [status=verify] [reason=install] [primary-abi]|
+S base:  versionCode=2000200 minSdk=26 targetSdk=37  versionName=1.2.40 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+S base: catalogue after 3299 ms
+X compile org.chyavorec.app.b: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~kuySGAuVQxWW-FeeDZDSNw==/org.chyavorec.app.b-D5r2yB_YARrsAlY3OJSB-g==/base.apk| x86_64: [status=speed-profile] [reason=cmdline] [primary-abi]| path: /data/app/~~aoR_aeSnjLRX77gs3m_J7A==/org.pc.helper-dCQGAgzB2ixq0VTDROWNIg==/base.apk| x86_64: [status=run-from-apk] [reason=unknown] [primary-abi]|
+tabs: catalog [320 2274] home [100 2274] news [760 2274] more [980 2274]
+tab my [540 2274]
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+IME now: org.pc.helper/.Ime
+## T1. Round 1: per variant a new process; typing 3 words (test IME, a letter every 350 ms), × (clear), sort by year / relevance, „Покажи още“, a fling, a slow drag
+M type@base@r1-1: worst 19.4 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 53 (9 with >= 3 ms); entry frame 11.3 + next 0.3 (from the entry: 11.3, 0.3, 0.5, 0.5); rows composed per frame max 0 [no input slice: from the trace start]
+  after type 'приказ' (base): 250 results
+M clear@base@r1-1: worst 15.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 22 (1 with >= 3 ms); entry frame 15.3 + next 0.5 (from the entry: 15.3, 0.5, 0.3, 0.6); rows composed per frame max 0
+M type@base@r1-2: worst 25.6 ms CPU (rows composed in it 0); frames >16 2, >25 2, >30 0 of 43 (8 with >= 3 ms); entry frame 12.2 + next 0.3 (from the entry: 12.2, 0.3, 0.4, 0.3); rows composed per frame max 0 [no input slice: from the trace start]
+  after type 'любов' (base): 196 results
+M clear@base@r1-2: worst 13.0 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 26 (3 with >= 3 ms); entry frame 13.0 + next 12.8 (from the entry: 13.0, 12.8, 1.5, 1.3); rows composed per frame max 0
+M type@base@r1-3: worst 25.6 ms CPU (rows composed in it 0); frames >16 1, >25 1, >30 0 of 48 (16 with >= 3 ms); entry frame 25.6 + next 0.7 (from the entry: 25.6, 0.7, 0.5, 0.5); rows composed per frame max 0 [no input slice: from the trace start]
+  after type 'мария' (base): 44 results
+M clear@base@r1-3: worst 12.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 25 (4 with >= 3 ms); entry frame 12.6 + next 12.5 (from the entry: 12.6, 12.5, 4.7, 1.5); rows composed per frame max 0
+M sort-open@base@r1: worst 10.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 63 (1 with >= 3 ms); entry frame 10.3 + next 1.6 (from the entry: 10.3, 1.6, 1.5, 2.2); rows composed per frame max 0
+M sort-year@base@r1: worst 14.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 23 (3 with >= 3 ms); entry frame 14.9 + next 14.8 (from the entry: 14.9, 14.8, 0.5, 0.3); rows composed per frame max 0
+M sort-open@base@r1-2: worst 14.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 35 (1 with >= 3 ms); entry frame 14.6 + next 1.6 (from the entry: 14.6, 1.6, 1.5, 2.0); rows composed per frame max 0
+M sort-rel@base@r1: worst 12.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 23 (5 with >= 3 ms); entry frame 12.5 + next 12.3 (from the entry: 12.5, 12.3, 0.4, 0.3); rows composed per frame max 0
+  load-more button at [540 1896] after 11 swipes (base)
+M loadmore@base@r1: worst 4.1 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 23 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@base@r1: worst 9.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 126 (15 with >= 3 ms); entry frame 9.7 + next 9.6 (from the entry: 9.7, 9.6, 0.5, 0.4); rows composed per frame max 0
+M drag@base@r1: worst 7.0 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 45 (4 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M type@x@r1-1: worst 47.0 ms CPU (rows composed in it 7); frames >16 3, >25 2, >30 1 of 54 (10 with >= 3 ms); entry frame 47.0 + next 0.2 (from the entry: 47.0, 0.2, 0.2, 0.3); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'приказ' (x): 250 results
+M clear@x@r1-1: worst 16.3 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 24 (1 with >= 3 ms); entry frame 16.3 + next 0.4 (from the entry: 16.3, 0.4, 0.3, 0.4); rows composed per frame max 7
+M type@x@r1-2: worst 18.1 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 42 (8 with >= 3 ms); entry frame 18.1 + next 0.3 (from the entry: 18.1, 0.3, 0.4, 0.3); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'любов' (x): 196 results
+M clear@x@r1-2: worst 12.2 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 25 (3 with >= 3 ms); entry frame 12.2 + next 12.0 (from the entry: 12.2, 12.0, 1.4, 1.3); rows composed per frame max 7
+M type@x@r1-3: worst 15.7 ms CPU (rows composed in it 4); frames >16 0, >25 0, >30 0 of 47 (13 with >= 3 ms); entry frame 12.7 + next 0.2 (from the entry: 12.7, 0.2, 0.4, 0.3); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'мария' (x): 44 results
+M clear@x@r1-3: worst 22.6 ms CPU (rows composed in it 7); frames >16 2, >25 0, >30 0 of 25 (3 with >= 3 ms); entry frame 22.6 + next 22.5 (from the entry: 22.6, 22.5, 0.4, 0.3); rows composed per frame max 7
+M sort-open@x@r1: worst 8.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 71 (3 with >= 3 ms); entry frame 8.6 + next 1.6 (from the entry: 8.6, 1.6, 1.5, 5.2); rows composed per frame max 0
+M sort-year@x@r1: worst 12.3 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 26 (3 with >= 3 ms); entry frame 12.3 + next 12.2 (from the entry: 12.3, 12.2, 0.5, 0.4); rows composed per frame max 7
+M sort-open@x@r1-2: worst 6.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 64 (3 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M sort-rel@x@r1: worst 13.2 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 24 (3 with >= 3 ms); entry frame 13.2 + next 13.1 (from the entry: 13.2, 13.1, 0.5, 0.4); rows composed per frame max 7
+  load-more button at [540 1896] after 10 swipes (x)
+M loadmore@x@r1: worst 10.4 ms CPU (rows composed in it 2); frames >16 0, >25 0, >30 0 of 24 (1 with >= 3 ms); entry frame 10.4 + next 0.7 (from the entry: 10.4, 0.7, 0.5, 0.4); rows composed per frame max 2
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@x@r1: worst 13.3 ms CPU (rows composed in it 9); frames >16 0, >25 0, >30 0 of 116 (9 with >= 3 ms); entry frame 13.3 + next 1.4 (from the entry: 13.3, 1.4, 3.9, 3.8); rows composed per frame max 9
+M drag@x@r1: worst 3.2 ms CPU (rows composed in it 4); frames >16 0, >25 0, >30 0 of 42 (2 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 4
+M type@x-ta@r1-1: worst 19.7 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 57 (11 with >= 3 ms); entry frame 19.7 + next 0.2 (from the entry: 19.7, 0.2, 0.1, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'приказ' (x-ta): 250 results
+M clear@x-ta@r1-1: worst 11.6 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 18 (2 with >= 3 ms); entry frame 11.6 + next 0.4 (from the entry: 11.6, 0.4, 0.3, 0.5); rows composed per frame max 7
+M type@x-ta@r1-2: worst 19.4 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 51 (9 with >= 3 ms); entry frame 19.4 + next 0.2 (from the entry: 19.4, 0.2, 0.1, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'любов' (x-ta): 196 results
+M clear@x-ta@r1-2: worst 12.5 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 25 (3 with >= 3 ms); entry frame 12.5 + next 12.4 (from the entry: 12.5, 12.4, 1.4, 1.3); rows composed per frame max 7
+M type@x-ta@r1-3: worst 18.1 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 51 (12 with >= 3 ms); entry frame 18.1 + next 0.2 (from the entry: 18.1, 0.2, 0.1, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'мария' (x-ta): 44 results
+M clear@x-ta@r1-3: worst 12.8 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 24 (3 with >= 3 ms); entry frame 12.8 + next 12.6 (from the entry: 12.8, 12.6, 0.8, 0.8); rows composed per frame max 7
+M sort-open@x-ta@r1: worst 8.8 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 54 (1 with >= 3 ms); entry frame 8.8 + next 1.5 (from the entry: 8.8, 1.5, 2.3, 2.1); rows composed per frame max 0
+M sort-year@x-ta@r1: worst 15.6 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 21 (3 with >= 3 ms); entry frame 15.6 + next 15.5 (from the entry: 15.6, 15.5, 0.3, 0.2); rows composed per frame max 7
+M sort-open@x-ta@r1-2: worst 6.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 46 (3 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M sort-rel@x-ta@r1: worst 26.3 ms CPU (rows composed in it 7); frames >16 2, >25 2, >30 0 of 22 (3 with >= 3 ms); entry frame 26.3 + next 26.2 (from the entry: 26.3, 26.2, 0.4, 0.3); rows composed per frame max 7
+  load-more button at [540 1896] after 11 swipes (x-ta)
+M loadmore@x-ta@r1: worst 3.7 ms CPU (rows composed in it 2); frames >16 0, >25 0, >30 0 of 18 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 2
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@x-ta@r1: worst 29.1 ms CPU (rows composed in it 17); frames >16 4, >25 2, >30 0 of 123 (26 with >= 3 ms); entry frame 13.9 + next 3.7 (from the entry: 13.9, 3.7, 3.6, 3.5); rows composed per frame max 17
+M drag@x-ta@r1: worst 11.2 ms CPU (rows composed in it 8); frames >16 0, >25 0, >30 0 of 43 (5 with >= 3 ms); entry frame 11.2 + next 11.1 (from the entry: 11.2, 11.1, 1.6, 1.5); rows composed per frame max 8
+M type@x-tb@r1-1: worst 28.6 ms CPU (rows composed in it 7); frames >16 1, >25 1, >30 0 of 57 (8 with >= 3 ms); entry frame 10.6 + next 0.2 (from the entry: 10.6, 0.2, 0.1, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'приказ' (x-tb): 250 results
+M clear@x-tb@r1-1: worst 15.5 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 19 (2 with >= 3 ms); entry frame 15.5 + next 0.4 (from the entry: 15.5, 0.4, 0.3, 0.5); rows composed per frame max 7
+M type@x-tb@r1-2: worst 14.8 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 49 (10 with >= 3 ms); entry frame 11.6 + next 0.2 (from the entry: 11.6, 0.2, 0.1, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'любов' (x-tb): 196 results
+M clear@x-tb@r1-2: worst 13.0 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 25 (5 with >= 3 ms); entry frame 13.0 + next 12.8 (from the entry: 13.0, 12.8, 1.6, 1.4); rows composed per frame max 7
+M type@x-tb@r1-3: worst 20.1 ms CPU (rows composed in it 7); frames >16 3, >25 0, >30 0 of 48 (11 with >= 3 ms); entry frame 20.1 + next 0.2 (from the entry: 20.1, 0.2, 0.0, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'мария' (x-tb): 44 results
+M clear@x-tb@r1-3: worst 13.7 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 25 (3 with >= 3 ms); entry frame 13.7 + next 13.6 (from the entry: 13.7, 13.6, 1.1, 1.0); rows composed per frame max 7
+M sort-open@x-tb@r1: worst 8.8 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 27 (1 with >= 3 ms); entry frame 8.8 + next 1.9 (from the entry: 8.8, 1.9, 1.7, 2.2); rows composed per frame max 0
+M sort-year@x-tb@r1: worst 19.8 ms CPU (rows composed in it 7); frames >16 2, >25 0, >30 0 of 21 (3 with >= 3 ms); entry frame 19.8 + next 19.7 (from the entry: 19.8, 19.7, 0.4, 0.3); rows composed per frame max 7
+M sort-open@x-tb@r1-2: worst 6.7 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 36 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M sort-rel@x-tb@r1: worst 21.7 ms CPU (rows composed in it 7); frames >16 2, >25 0, >30 0 of 23 (3 with >= 3 ms); entry frame 21.7 + next 21.6 (from the entry: 21.7, 21.6, 0.4, 0.2); rows composed per frame max 7
+  load-more button at [540 1896] after 10 swipes (x-tb)
+M loadmore@x-tb@r1: worst 4.2 ms CPU (rows composed in it 2); frames >16 0, >25 0, >30 0 of 17 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 2
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@x-tb@r1: worst 9.1 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 122 (17 with >= 3 ms); entry frame 9.1 + next 9.0 (from the entry: 9.1, 9.0, 0.8, 0.8); rows composed per frame max 1
+M drag@x-tb@r1: worst 4.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 41 (2 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M type@x-tc@r1-1: worst 17.5 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 61 (7 with >= 3 ms); entry frame 14.2 + next 0.7 (from the entry: 14.2, 0.7, 0.8, 1.7); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'приказ' (x-tc): 250 results
+M clear@x-tc@r1-1: worst 12.7 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 24 (1 with >= 3 ms); entry frame 12.7 + next 0.5 (from the entry: 12.7, 0.5, 0.4, 0.5); rows composed per frame max 7
+M type@x-tc@r1-2: worst 16.0 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 50 (12 with >= 3 ms); entry frame 11.8 + next 0.4 (from the entry: 11.8, 0.4, 0.5, 0.4); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'любов' (x-tc): 196 results
+M clear@x-tc@r1-2: worst 12.7 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 24 (3 with >= 3 ms); entry frame 12.7 + next 12.5 (from the entry: 12.7, 12.5, 1.3, 1.2); rows composed per frame max 7
+M type@x-tc@r1-3: worst 12.6 ms CPU (rows composed in it 6); frames >16 0, >25 0, >30 0 of 57 (14 with >= 3 ms); entry frame 9.7 + next 0.3 (from the entry: 9.7, 0.3, 0.4, 0.3); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'мария' (x-tc): 44 results
+M clear@x-tc@r1-3: worst 12.2 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 27 (5 with >= 3 ms); entry frame 12.2 + next 12.1 (from the entry: 12.2, 12.1, 1.4, 1.2); rows composed per frame max 7
+M sort-open@x-tc@r1: worst 9.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 32 (1 with >= 3 ms); entry frame 9.3 + next 1.5 (from the entry: 9.3, 1.5, 1.4, 2.8); rows composed per frame max 0
+M sort-year@x-tc@r1: worst 13.5 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 25 (4 with >= 3 ms); entry frame 13.5 + next 13.4 (from the entry: 13.5, 13.4, 3.6, 0.4); rows composed per frame max 7
+M sort-open@x-tc@r1-2: worst 7.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 30 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M sort-rel@x-tc@r1: worst 13.9 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 24 (3 with >= 3 ms); entry frame 13.9 + next 13.8 (from the entry: 13.9, 13.8, 0.5, 0.3); rows composed per frame max 7
+  load-more button at [540 1896] after 10 swipes (x-tc)
+M loadmore@x-tc@r1: worst 3.9 ms CPU (rows composed in it 2); frames >16 0, >25 0, >30 0 of 25 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 2
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@x-tc@r1: worst 8.5 ms CPU (rows composed in it 9); frames >16 0, >25 0, >30 0 of 123 (11 with >= 3 ms); entry frame 8.5 + next 1.3 (from the entry: 8.5, 1.3, 1.3, 3.2); rows composed per frame max 9
+M drag@x-tc@r1: worst 9.0 ms CPU (rows composed in it 8); frames >16 0, >25 0, >30 0 of 44 (4 with >= 3 ms); entry frame 9.0 + next 9.0 (from the entry: 9.0, 9.0, 2.4, 2.3); rows composed per frame max 8
+M type@x-sug@r1-1: worst 19.7 ms CPU (rows composed in it 7); frames >16 3, >25 0, >30 0 of 52 (12 with >= 3 ms); entry frame 19.7 + next 2.1 (from the entry: 19.7, 2.1, 0.6, 0.5); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'приказ' (x-sug): 250 results
+M clear@x-sug@r1-1: worst 9.1 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 23 (2 with >= 3 ms); entry frame 9.1 + next 0.4 (from the entry: 9.1, 0.4, 0.4, 0.5); rows composed per frame max 7
+M type@x-sug@r1-2: worst 26.9 ms CPU (rows composed in it 7); frames >16 1, >25 1, >30 0 of 45 (9 with >= 3 ms); entry frame 26.9 + next 0.3 (from the entry: 26.9, 0.3, 0.5, 0.4); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'любов' (x-sug): 196 results
+M clear@x-sug@r1-2: worst 11.5 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 24 (2 with >= 3 ms); entry frame 11.5 + next 0.4 (from the entry: 11.5, 0.4, 0.3, 0.5); rows composed per frame max 7
+M type@x-sug@r1-3: worst 20.4 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 51 (10 with >= 3 ms); entry frame 20.4 + next 0.5 (from the entry: 20.4, 0.5, 0.4, 2.8); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'мария' (x-sug): 44 results
+M clear@x-sug@r1-3: worst 11.5 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 23 (2 with >= 3 ms); entry frame 11.5 + next 0.4 (from the entry: 11.5, 0.4, 0.3, 0.7); rows composed per frame max 7
+M sort-open@x-sug@r1: worst 8.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 35 (1 with >= 3 ms); entry frame 8.5 + next 1.8 (from the entry: 8.5, 1.8, 1.7, 2.3); rows composed per frame max 0
+M sort-year@x-sug@r1: worst 16.1 ms CPU (rows composed in it 7); frames >16 2, >25 0, >30 0 of 23 (3 with >= 3 ms); entry frame 16.1 + next 16.0 (from the entry: 16.1, 16.0, 0.3, 0.2); rows composed per frame max 7
+M sort-open@x-sug@r1-2: worst 6.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 55 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M sort-rel@x-sug@r1: worst 12.8 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 25 (3 with >= 3 ms); entry frame 12.8 + next 12.7 (from the entry: 12.8, 12.7, 0.4, 0.3); rows composed per frame max 7
+  load-more button at [540 1987] after 9 swipes (x-sug)
+M loadmore@x-sug@r1: worst 2.9 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 22 (0 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 1
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@x-sug@r1: worst 9.4 ms CPU (rows composed in it 8); frames >16 0, >25 0, >30 0 of 128 (12 with >= 3 ms); entry frame 9.4 + next 2.8 (from the entry: 9.4, 2.8, 3.5, 3.4); rows composed per frame max 8
+M drag@x-sug@r1: worst 5.0 ms CPU (rows composed in it 5); frames >16 0, >25 0, >30 0 of 45 (2 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 5
+M type@x-ta+sug+one@r1-1: worst 22.6 ms CPU (rows composed in it 5); frames >16 2, >25 0, >30 0 of 63 (9 with >= 3 ms); entry frame 11.7 + next 0.2 (from the entry: 11.7, 0.2, 0.0, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'приказ' (x-ta+sug+one): 250 results
+M clear@x-ta+sug+one@r1-1: worst 14.2 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 19 (3 with >= 3 ms); entry frame 14.2 + next 0.5 (from the entry: 14.2, 0.5, 0.4, 0.3); rows composed per frame max 7
+M type@x-ta+sug+one@r1-2: worst 17.1 ms CPU (rows composed in it 6); frames >16 1, >25 0, >30 0 of 50 (5 with >= 3 ms); entry frame 12.0 + next 0.2 (from the entry: 12.0, 0.2, 0.2, 0.1); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'любов' (x-ta+sug+one): 196 results
+M clear@x-ta+sug+one@r1-2: worst 12.1 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 19 (2 with >= 3 ms); entry frame 12.1 + next 0.3 (from the entry: 12.1, 0.3, 0.2, 0.1); rows composed per frame max 7
+M type@x-ta+sug+one@r1-3: worst 19.7 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 55 (9 with >= 3 ms); entry frame 19.7 + next 0.2 (from the entry: 19.7, 0.2, 0.0, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'мария' (x-ta+sug+one): 44 results
+M clear@x-ta+sug+one@r1-3: worst 12.2 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 19 (3 with >= 3 ms); entry frame 12.2 + next 3.5 (from the entry: 12.2, 3.5, 2.3, 0.0); rows composed per frame max 7
+M sort-open@x-ta+sug+one@r1: worst 8.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 42 (1 with >= 3 ms); entry frame 8.5 + next 1.7 (from the entry: 8.5, 1.7, 1.6, 2.9); rows composed per frame max 0
+M sort-year@x-ta+sug+one@r1: worst 16.6 ms CPU (rows composed in it 7); frames >16 2, >25 0, >30 0 of 21 (3 with >= 3 ms); entry frame 16.6 + next 16.5 (from the entry: 16.6, 16.5, 0.6, 0.6); rows composed per frame max 7
+M sort-open@x-ta+sug+one@r1-2: worst 6.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 53 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M sort-rel@x-ta+sug+one@r1: worst 12.6 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 21 (3 with >= 3 ms); entry frame 12.6 + next 12.5 (from the entry: 12.6, 12.5, 0.3, 0.2); rows composed per frame max 7
+  load-more button at [540 1896] after 10 swipes (x-ta+sug+one)
+M loadmore@x-ta+sug+one@r1: worst 4.2 ms CPU (rows composed in it 2); frames >16 0, >25 0, >30 0 of 17 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 2
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@x-ta+sug+one@r1: worst 8.6 ms CPU (rows composed in it 9); frames >16 0, >25 0, >30 0 of 123 (12 with >= 3 ms); entry frame 8.6 + next 1.3 (from the entry: 8.6, 1.3, 4.5, 1.7); rows composed per frame max 9
+M drag@x-ta+sug+one@r1: worst 10.3 ms CPU (rows composed in it 6); frames >16 0, >25 0, >30 0 of 48 (3 with >= 3 ms); entry frame 10.3 + next 10.2 (from the entry: 10.3, 10.2, 1.4, 1.2); rows composed per frame max 6
+## T2. Round 2: per variant a new process; typing 3 words (test IME, a letter every 350 ms), × (clear), sort by year / relevance, „Покажи още“, a fling, a slow drag
+M type@x-ta+sug+one@r2-1: worst 20.4 ms CPU (rows composed in it 7); frames >16 3, >25 0, >30 0 of 64 (12 with >= 3 ms); entry frame 20.4 + next 0.3 (from the entry: 20.4, 0.3, 0.1, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'приказ' (x-ta+sug+one): 250 results
+M clear@x-ta+sug+one@r2-1: worst 10.7 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 19 (1 with >= 3 ms); entry frame 10.7 + next 0.3 (from the entry: 10.7, 0.3, 0.2, 0.1); rows composed per frame max 7
+M type@x-ta+sug+one@r2-2: worst 20.6 ms CPU (rows composed in it 6); frames >16 2, >25 0, >30 0 of 51 (4 with >= 3 ms); entry frame 19.2 + next 0.2 (from the entry: 19.2, 0.2, 0.1, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'любов' (x-ta+sug+one): 196 results
+M clear@x-ta+sug+one@r2-2: worst 10.9 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 21 (3 with >= 3 ms); entry frame 10.9 + next 10.9 (from the entry: 10.9, 10.9, 0.4, 0.3); rows composed per frame max 7
+M type@x-ta+sug+one@r2-3: worst 21.0 ms CPU (rows composed in it 7); frames >16 5, >25 0, >30 0 of 54 (8 with >= 3 ms); entry frame 21.0 + next 0.2 (from the entry: 21.0, 0.2, 0.0, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'мария' (x-ta+sug+one): 44 results
+M clear@x-ta+sug+one@r2-3: worst 12.5 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 18 (2 with >= 3 ms); entry frame 12.5 + next 0.4 (from the entry: 12.5, 0.4, 0.3, 0.4); rows composed per frame max 7
+M sort-open@x-ta+sug+one@r2: worst 8.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 31 (1 with >= 3 ms); entry frame 8.6 + next 1.7 (from the entry: 8.6, 1.7, 1.6, 2.8); rows composed per frame max 0
+M sort-year@x-ta+sug+one@r2: worst 13.4 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 23 (3 with >= 3 ms); entry frame 13.4 + next 13.4 (from the entry: 13.4, 13.4, 0.3, 0.2); rows composed per frame max 7
+M sort-open@x-ta+sug+one@r2-2: worst 5.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 72 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M sort-rel@x-ta+sug+one@r2: worst 12.1 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 24 (3 with >= 3 ms); entry frame 12.1 + next 12.0 (from the entry: 12.1, 12.0, 0.3, 0.2); rows composed per frame max 7
+  load-more button at [540 1896] after 10 swipes (x-ta+sug+one)
+M loadmore@x-ta+sug+one@r2: worst 3.7 ms CPU (rows composed in it 2); frames >16 0, >25 0, >30 0 of 15 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 2
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@x-ta+sug+one@r2: worst 10.6 ms CPU (rows composed in it 9); frames >16 0, >25 0, >30 0 of 124 (9 with >= 3 ms); entry frame 10.6 + next 2.2 (from the entry: 10.6, 2.2, 8.3, 8.1); rows composed per frame max 9
+M drag@x-ta+sug+one@r2: worst 8.2 ms CPU (rows composed in it 4); frames >16 0, >25 0, >30 0 of 44 (3 with >= 3 ms); entry frame 8.2 + next 8.1 (from the entry: 8.2, 8.1, 0.6, 0.9); rows composed per frame max 4
+M type@x-sug@r2-1: worst 20.8 ms CPU (rows composed in it 7); frames >16 2, >25 0, >30 0 of 54 (7 with >= 3 ms); entry frame 20.8 + next 0.2 (from the entry: 20.8, 0.2, 0.3, 0.3); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'приказ' (x-sug): 250 results
+M clear@x-sug@r2-1: worst 11.3 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 22 (1 with >= 3 ms); entry frame 11.3 + next 0.4 (from the entry: 11.3, 0.4, 0.3, 0.6); rows composed per frame max 7
+M type@x-sug@r2-2: worst 23.8 ms CPU (rows composed in it 7); frames >16 3, >25 0, >30 0 of 45 (8 with >= 3 ms); entry frame 23.8 + next 0.3 (from the entry: 23.8, 0.3, 0.4, 0.3); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'любов' (x-sug): 196 results
+M clear@x-sug@r2-2: worst 10.9 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 22 (2 with >= 3 ms); entry frame 10.9 + next 0.5 (from the entry: 10.9, 0.5, 0.3, 0.6); rows composed per frame max 7
+M type@x-sug@r2-3: worst 11.9 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 48 (10 with >= 3 ms); entry frame 11.9 + next 0.2 (from the entry: 11.9, 0.2, 0.5, 0.4); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'мария' (x-sug): 44 results
+M clear@x-sug@r2-3: worst 14.8 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 24 (2 with >= 3 ms); entry frame 14.8 + next 0.4 (from the entry: 14.8, 0.4, 0.3, 0.5); rows composed per frame max 7
+M sort-open@x-sug@r2: worst 11.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 19 (1 with >= 3 ms); entry frame 11.6 + next 1.7 (from the entry: 11.6, 1.7, 1.6, 2.5); rows composed per frame max 0
+M sort-year@x-sug@r2: worst 13.2 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 22 (3 with >= 3 ms); entry frame 13.2 + next 13.1 (from the entry: 13.2, 13.1, 0.5, 0.4); rows composed per frame max 7
+M sort-open@x-sug@r2-2: worst 6.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 48 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M sort-rel@x-sug@r2: worst 18.0 ms CPU (rows composed in it 7); frames >16 2, >25 0, >30 0 of 25 (3 with >= 3 ms); entry frame 18.0 + next 17.8 (from the entry: 18.0, 17.8, 2.4, 2.3); rows composed per frame max 7
+  load-more button at [540 1896] after 11 swipes (x-sug)
+M loadmore@x-sug@r2: worst 4.6 ms CPU (rows composed in it 2); frames >16 0, >25 0, >30 0 of 25 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 2
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@x-sug@r2: worst 9.3 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 124 (16 with >= 3 ms); entry frame 8.4 + next 1.3 (from the entry: 8.4, 1.3, 9.3, 3.6); rows composed per frame max 9
+M drag@x-sug@r2: worst 5.5 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 43 (6 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 7
+M type@x-tc@r2-1: worst 16.0 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 63 (11 with >= 3 ms); entry frame 16.0 + next 0.2 (from the entry: 16.0, 0.2, 0.4, 0.3); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'приказ' (x-tc): 250 results
+M clear@x-tc@r2-1: worst 11.1 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 22 (2 with >= 3 ms); entry frame 9.2 + next 1.2 (from the entry: 9.2, 1.2, 0.1, 11.1); rows composed per frame max 7
+M type@x-tc@r2-2: worst 11.9 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 50 (10 with >= 3 ms); entry frame 11.2 + next 0.3 (from the entry: 11.2, 0.3, 0.4, 0.4); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'любов' (x-tc): 196 results
+M clear@x-tc@r2-2: worst 11.8 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 25 (3 with >= 3 ms); entry frame 11.8 + next 11.7 (from the entry: 11.8, 11.7, 1.5, 1.3); rows composed per frame max 7
+M type@x-tc@r2-3: worst 18.0 ms CPU (rows composed in it 5); frames >16 2, >25 0, >30 0 of 56 (15 with >= 3 ms); entry frame 13.2 + next 13.1 (from the entry: 13.2, 13.1, 0.4, 0.3); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'мария' (x-tc): 44 results
+M clear@x-tc@r2-3: worst 14.0 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 27 (3 with >= 3 ms); entry frame 14.0 + next 13.9 (from the entry: 14.0, 13.9, 1.1, 1.0); rows composed per frame max 7
+M sort-open@x-tc@r2: worst 8.8 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 39 (1 with >= 3 ms); entry frame 8.8 + next 1.8 (from the entry: 8.8, 1.8, 1.7, 2.4); rows composed per frame max 0
+M sort-year@x-tc@r2: worst 13.4 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 25 (3 with >= 3 ms); entry frame 13.4 + next 13.3 (from the entry: 13.4, 13.3, 0.4, 0.3); rows composed per frame max 7
+M sort-open@x-tc@r2-2: worst 7.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 52 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M sort-rel@x-tc@r2: worst 24.5 ms CPU (rows composed in it 7); frames >16 2, >25 0, >30 0 of 24 (3 with >= 3 ms); entry frame 24.5 + next 24.4 (from the entry: 24.5, 24.4, 0.4, 0.3); rows composed per frame max 7
+  load-more button at [540 1896] after 10 swipes (x-tc)
+M loadmore@x-tc@r2: worst 4.0 ms CPU (rows composed in it 2); frames >16 0, >25 0, >30 0 of 25 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 2
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@x-tc@r2: worst 13.4 ms CPU (rows composed in it 9); frames >16 0, >25 0, >30 0 of 126 (14 with >= 3 ms); entry frame 13.4 + next 3.3 (from the entry: 13.4, 3.3, 3.0, 3.0); rows composed per frame max 9
+M drag@x-tc@r2: worst 12.5 ms CPU (rows composed in it 8); frames >16 0, >25 0, >30 0 of 47 (2 with >= 3 ms); entry frame 12.5 + next 12.4 (from the entry: 12.5, 12.4, 2.5, 2.3); rows composed per frame max 8
+M type@x-tb@r2-1: worst 17.2 ms CPU (rows composed in it 7); frames >16 3, >25 0, >30 0 of 58 (9 with >= 3 ms); entry frame 16.2 + next 0.2 (from the entry: 16.2, 0.2, 0.1, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'приказ' (x-tb): 250 results
+M clear@x-tb@r2-1: worst 10.9 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 18 (2 with >= 3 ms); entry frame 10.9 + next 0.6 (from the entry: 10.9, 0.6, 0.2, 0.5); rows composed per frame max 7
+M type@x-tb@r2-2: worst 28.0 ms CPU (rows composed in it 7); frames >16 1, >25 1, >30 0 of 48 (3 with >= 3 ms); entry frame 12.3 + next 0.3 (from the entry: 12.3, 0.3, 0.1, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'любов' (x-tb): 196 results
+M clear@x-tb@r2-2: worst 12.4 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 25 (3 with >= 3 ms); entry frame 12.4 + next 12.3 (from the entry: 12.4, 12.3, 1.1, 1.1); rows composed per frame max 7
+M type@x-tb@r2-3: worst 21.6 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 50 (11 with >= 3 ms); entry frame 21.6 + next 0.3 (from the entry: 21.6, 0.3, 0.1, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'мария' (x-tb): 44 results
+M clear@x-tb@r2-3: worst 12.0 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 24 (3 with >= 3 ms); entry frame 12.0 + next 11.9 (from the entry: 12.0, 11.9, 2.1, 2.0); rows composed per frame max 7
+M sort-open@x-tb@r2: worst 9.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 45 (3 with >= 3 ms); entry frame 9.3 + next 1.5 (from the entry: 9.3, 1.5, 1.4, 5.4); rows composed per frame max 0
+M sort-year@x-tb@r2: worst 13.0 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 23 (3 with >= 3 ms); entry frame 13.0 + next 12.8 (from the entry: 13.0, 12.8, 0.4, 0.2); rows composed per frame max 7
+M sort-open@x-tb@r2-2: worst 6.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 67 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M sort-rel@x-tb@r2: worst 16.3 ms CPU (rows composed in it 7); frames >16 2, >25 0, >30 0 of 23 (3 with >= 3 ms); entry frame 16.3 + next 16.2 (from the entry: 16.3, 16.2, 0.4, 0.3); rows composed per frame max 7
+  load-more button at [540 1896] after 10 swipes (x-tb)
+M loadmore@x-tb@r2: worst 3.9 ms CPU (rows composed in it 2); frames >16 0, >25 0, >30 0 of 17 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 2
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@x-tb@r2: worst 6.9 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 120 (19 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 2
+M drag@x-tb@r2: worst 5.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 44 (2 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M type@x-ta@r2-1: worst 26.8 ms CPU (rows composed in it 7); frames >16 3, >25 2, >30 0 of 59 (14 with >= 3 ms); entry frame 23.3 + next 0.2 (from the entry: 23.3, 0.2, 0.0, 2.7); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'приказ' (x-ta): 250 results
+M clear@x-ta@r2-1: worst 12.4 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 19 (2 with >= 3 ms); entry frame 12.4 + next 0.4 (from the entry: 12.4, 0.4, 0.3, 0.1); rows composed per frame max 7
+M type@x-ta@r2-2: worst 20.3 ms CPU (rows composed in it 7); frames >16 3, >25 0, >30 0 of 49 (8 with >= 3 ms); entry frame 20.3 + next 0.2 (from the entry: 20.3, 0.2, 0.1, 0.0); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'любов' (x-ta): 196 results
+M clear@x-ta@r2-2: worst 12.8 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 24 (5 with >= 3 ms); entry frame 12.8 + next 12.7 (from the entry: 12.8, 12.7, 1.3, 1.2); rows composed per frame max 7
+M type@x-ta@r2-3: worst 13.1 ms CPU (rows composed in it 6); frames >16 0, >25 0, >30 0 of 54 (12 with >= 3 ms); entry frame 11.9 + next 0.3 (from the entry: 11.9, 0.3, 0.2, 0.2); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'мария' (x-ta): 44 results
+M clear@x-ta@r2-3: worst 12.0 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 24 (4 with >= 3 ms); entry frame 12.0 + next 11.9 (from the entry: 12.0, 11.9, 1.5, 1.5); rows composed per frame max 7
+M sort-open@x-ta@r2: worst 8.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 52 (1 with >= 3 ms); entry frame 8.9 + next 1.5 (from the entry: 8.9, 1.5, 1.4, 2.3); rows composed per frame max 0
+M sort-year@x-ta@r2: worst 13.9 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 22 (5 with >= 3 ms); entry frame 13.9 + next 13.8 (from the entry: 13.9, 13.8, 0.5, 0.4); rows composed per frame max 7
+M sort-open@x-ta@r2-2: worst 6.1 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 49 (2 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M sort-rel@x-ta@r2: worst 11.8 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 22 (3 with >= 3 ms); entry frame 11.8 + next 11.7 (from the entry: 11.8, 11.7, 0.5, 0.3); rows composed per frame max 7
+  load-more button at [540 1983] after 10 swipes (x-ta)
+M loadmore@x-ta@r2: worst 3.0 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 17 (0 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 1
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@x-ta@r2: worst 16.0 ms CPU (rows composed in it 14); frames >16 1, >25 0, >30 0 of 141 (19 with >= 3 ms); entry frame 13.2 + next 3.4 (from the entry: 13.2, 3.4, 3.6, 3.6); rows composed per frame max 14
+M drag@x-ta@r2: worst 3.4 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 44 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M type@x@r2-1: worst 27.2 ms CPU (rows composed in it 7); frames >16 2, >25 1, >30 0 of 51 (13 with >= 3 ms); entry frame 27.2 + next 0.3 (from the entry: 27.2, 0.3, 0.3, 0.6); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'приказ' (x): 250 results
+M clear@x@r2-1: worst 14.0 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 24 (2 with >= 3 ms); entry frame 14.0 + next 0.5 (from the entry: 14.0, 0.5, 0.4, 0.4); rows composed per frame max 7
+M type@x@r2-2: worst 20.2 ms CPU (rows composed in it 7); frames >16 3, >25 0, >30 0 of 41 (10 with >= 3 ms); entry frame 20.2 + next 0.3 (from the entry: 20.2, 0.3, 0.4, 0.4); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'любов' (x): 196 results
+M clear@x@r2-2: worst 27.4 ms CPU (rows composed in it 7); frames >16 2, >25 2, >30 0 of 24 (3 with >= 3 ms); entry frame 27.4 + next 27.2 (from the entry: 27.4, 27.2, 1.3, 1.2); rows composed per frame max 7
+M type@x@r2-3: worst 23.2 ms CPU (rows composed in it 4); frames >16 2, >25 0, >30 0 of 45 (8 with >= 3 ms); entry frame 9.8 + next 0.3 (from the entry: 9.8, 0.3, 0.5, 0.4); rows composed per frame max 7 [no input slice: from the trace start]
+  after type 'мария' (x): 44 results
+M clear@x@r2-3: worst 14.5 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 25 (6 with >= 3 ms); entry frame 14.5 + next 14.4 (from the entry: 14.5, 14.4, 1.3, 1.2); rows composed per frame max 7
+M sort-open@x@r2: worst 8.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 53 (1 with >= 3 ms); entry frame 8.3 + next 1.7 (from the entry: 8.3, 1.7, 1.6, 2.2); rows composed per frame max 0
+M sort-year@x@r2: worst 19.7 ms CPU (rows composed in it 7); frames >16 2, >25 0, >30 0 of 23 (3 with >= 3 ms); entry frame 19.7 + next 19.6 (from the entry: 19.7, 19.6, 0.4, 0.3); rows composed per frame max 7
+M sort-open@x@r2-2: worst 7.1 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 58 (3 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M sort-rel@x@r2: worst 13.8 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 25 (5 with >= 3 ms); entry frame 13.8 + next 13.5 (from the entry: 13.8, 13.5, 0.4, 0.3); rows composed per frame max 7
+  load-more button at [540 1896] after 11 swipes (x)
+M loadmore@x@r2: worst 4.5 ms CPU (rows composed in it 2); frames >16 0, >25 0, >30 0 of 23 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 2
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@x@r2: worst 16.3 ms CPU (rows composed in it 9); frames >16 2, >25 0, >30 0 of 125 (17 with >= 3 ms); entry frame 16.3 + next 3.5 (from the entry: 16.3, 3.5, 3.5, 3.3); rows composed per frame max 11
+M drag@x@r2: worst 2.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 46 (0 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+M type@base@r2-1: worst 22.8 ms CPU (rows composed in it 0); frames >16 2, >25 0, >30 0 of 47 (15 with >= 3 ms); entry frame 14.0 + next 0.2 (from the entry: 14.0, 0.2, 0.4, 0.3); rows composed per frame max 0 [no input slice: from the trace start]
+  after type 'приказ' (base): 250 results
+M clear@base@r2-1: worst 11.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 24 (1 with >= 3 ms); entry frame 11.9 + next 0.4 (from the entry: 11.9, 0.4, 0.3, 0.6); rows composed per frame max 0
+M type@base@r2-2: worst 29.8 ms CPU (rows composed in it 0); frames >16 2, >25 2, >30 0 of 43 (13 with >= 3 ms); entry frame 12.2 + next 0.3 (from the entry: 12.2, 0.3, 3.4, 0.4); rows composed per frame max 0 [no input slice: from the trace start]
+  after type 'любов' (base): 196 results
+M clear@base@r2-2: worst 13.0 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 23 (3 with >= 3 ms); entry frame 13.0 + next 12.9 (from the entry: 13.0, 12.9, 1.2, 1.2); rows composed per frame max 0
+M type@base@r2-3: worst 15.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 50 (13 with >= 3 ms); entry frame 15.3 + next 0.4 (from the entry: 15.3, 0.4, 0.4, 0.5); rows composed per frame max 0 [no input slice: from the trace start]
+  after type 'мария' (base): 44 results
+M clear@base@r2-3: worst 12.3 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 25 (5 with >= 3 ms); entry frame 12.3 + next 12.2 (from the entry: 12.3, 12.2, 1.2, 1.1); rows composed per frame max 0
+M sort-open@base@r2: worst 11.6 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 37 (1 with >= 3 ms); entry frame 11.6 + next 2.0 (from the entry: 11.6, 2.0, 1.8, 2.2); rows composed per frame max 0
+M sort-year@base@r2: worst 14.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 23 (3 with >= 3 ms); entry frame 14.5 + next 14.3 (from the entry: 14.5, 14.3, 0.5, 0.4); rows composed per frame max 0
+M sort-open@base@r2-2: worst 9.0 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 48 (3 with >= 3 ms); entry frame 9.0 + next 1.5 (from the entry: 9.0, 1.5, 1.4, 3.5); rows composed per frame max 0
+M sort-rel@base@r2: worst 13.9 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 26 (3 with >= 3 ms); entry frame 8.8 + next 1.7 (from the entry: 8.8, 1.7, 1.6, 13.9); rows composed per frame max 0
+  load-more button at [540 1896] after 9 swipes (base)
+M loadmore@base@r2: worst 4.1 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 25 (1 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+  after load more: text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" 
+M fling@base@r2: worst 10.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 115 (16 with >= 3 ms); entry frame 10.5 + next 1.5 (from the entry: 10.5, 1.5, 4.2, 4.1); rows composed per frame max 0
+M drag@base@r2: worst 5.5 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 45 (6 with >= 3 ms); entry frame 0.0 + next 0.0 (from the entry: ); rows composed per frame max 0
+IME now: com.google.android.inputmethod.latin/com.android.inputmethod.latin.LatinIME
+## Z. The table: main-thread CPU (Running) per doFrame, by interaction and variant
+kind | variant | n | worst frame CPU ms: median / mean / max | entry frame median | next frame median | frames >25 ms (total) | frames >30 ms (total) | rows composed in the worst frame (median) | CPU of all frames, median
+---|---|---|---|---|---|---|---|---|---
+type | base | 6 | 24.2 / 23.1 / 29.8 | 13.1 | 0.3 | 5 | 0 | 0 | 130
+type | x | 6 | 21.7 / 25.2 / 47.0 | 19.1 | 0.3 | 3 | 1 | 7 | 118
+type | x-sug | 6 | 20.6 / 20.6 / 26.9 | 20.6 | 0.3 | 1 | 0 | 7 | 115
+type | x-ta | 6 | 19.5 / 19.6 / 26.8 | 19.5 | 0.2 | 2 | 0 | 7 | 127
+type | x-ta+sug+one | 6 | 20.5 / 20.2 / 22.6 | 19.4 | 0.2 | 0 | 0 | 6 | 125
+type | x-tb | 6 | 20.9 / 21.7 / 28.6 | 14.2 | 0.2 | 2 | 0 | 7 | 103
+type | x-tc | 6 | 16.0 / 15.3 / 18.0 | 12.5 | 0.3 | 0 | 0 | 7 | 119
+clear | base | 6 | 12.8 / 13.0 / 15.3 | 12.8 | 12.3 | 0 | 0 | 0 | 47
+clear | x | 6 | 15.4 / 17.8 / 27.4 | 15.4 | 13.2 | 2 | 0 | 7 | 53
+clear | x-sug | 6 | 11.4 / 11.5 / 14.8 | 11.4 | 0.4 | 0 | 0 | 7 | 24
+clear | x-ta | 6 | 12.4 / 12.3 / 12.8 | 12.4 | 12.2 | 0 | 0 | 7 | 44
+clear | x-ta+sug+one | 6 | 12.1 / 12.1 / 14.2 | 12.1 | 0.5 | 0 | 0 | 7 | 23
+clear | x-tb | 6 | 12.7 / 12.9 / 15.5 | 12.7 | 12.1 | 0 | 0 | 7 | 43
+clear | x-tc | 6 | 12.4 / 12.4 / 14.0 | 12.4 | 11.9 | 0 | 0 | 7 | 43
+sort-open | base | 4 | 10.9 / 11.4 / 14.6 | 10.9 | 1.6 | 0 | 0 | 0 | 26
+sort-open | x | 4 | 7.7 / 7.6 / 8.6 | 4.2 | 0.8 | 0 | 0 | 0 | 26
+sort-open | x-sug | 4 | 7.7 / 8.4 / 11.6 | 4.2 | 0.8 | 0 | 0 | 0 | 22
+sort-open | x-ta | 4 | 7.9 / 7.7 / 8.9 | 4.4 | 0.8 | 0 | 0 | 0 | 26
+sort-open | x-ta+sug+one | 4 | 7.5 / 7.4 / 8.6 | 4.2 | 0.8 | 0 | 0 | 0 | 21
+sort-open | x-tb | 4 | 7.8 / 7.9 / 9.3 | 4.4 | 0.8 | 0 | 0 | 0 | 22
+sort-open | x-tc | 4 | 8.1 / 8.2 / 9.3 | 4.4 | 0.8 | 0 | 0 | 0 | 23
+sort-year | base | 2 | 14.7 / 14.7 / 14.9 | 14.7 | 14.6 | 0 | 0 | 0 | 45
+sort-year | x | 2 | 16.0 / 16.0 / 19.7 | 16.0 | 15.9 | 0 | 0 | 7 | 50
+sort-year | x-sug | 2 | 14.7 / 14.7 / 16.1 | 14.7 | 14.6 | 0 | 0 | 7 | 43
+sort-year | x-ta | 2 | 14.8 / 14.8 / 15.6 | 14.8 | 14.7 | 0 | 0 | 7 | 45
+sort-year | x-ta+sug+one | 2 | 15.0 / 15.0 / 16.6 | 15.0 | 14.9 | 0 | 0 | 7 | 44
+sort-year | x-tb | 2 | 16.4 / 16.4 / 19.8 | 16.4 | 16.2 | 0 | 0 | 7 | 45
+sort-year | x-tc | 2 | 13.4 / 13.4 / 13.5 | 13.4 | 13.4 | 0 | 0 | 7 | 42
+sort-rel | base | 2 | 13.2 / 13.2 / 13.9 | 10.7 | 7.0 | 0 | 0 | 0 | 47
+sort-rel | x | 2 | 13.5 / 13.5 / 13.8 | 13.5 | 13.3 | 0 | 0 | 7 | 46
+sort-rel | x-sug | 2 | 15.4 / 15.4 / 18.0 | 15.4 | 15.2 | 0 | 0 | 7 | 48
+sort-rel | x-ta | 2 | 19.1 / 19.1 / 26.3 | 19.1 | 18.9 | 2 | 0 | 7 | 52
+sort-rel | x-ta+sug+one | 2 | 12.3 / 12.3 / 12.6 | 12.3 | 12.2 | 0 | 0 | 7 | 36
+sort-rel | x-tb | 2 | 19.0 / 19.0 / 21.7 | 19.0 | 18.9 | 0 | 0 | 7 | 52
+sort-rel | x-tc | 2 | 19.2 / 19.2 / 24.5 | 19.2 | 19.1 | 0 | 0 | 7 | 57
+loadmore | base | 2 | 4.1 / 4.1 / 4.1 | 0.0 | 0.0 | 0 | 0 | 0 | 11
+loadmore | x | 2 | 7.5 / 7.5 / 10.4 | 5.2 | 0.3 | 0 | 0 | 2 | 15
+loadmore | x-sug | 2 | 3.8 / 3.8 / 4.6 | 0.0 | 0.0 | 0 | 0 | 2 | 10
+loadmore | x-ta | 2 | 3.4 / 3.4 / 3.7 | 0.0 | 0.0 | 0 | 0 | 2 | 6
+loadmore | x-ta+sug+one | 2 | 4.0 / 4.0 / 4.2 | 0.0 | 0.0 | 0 | 0 | 2 | 6
+loadmore | x-tb | 2 | 4.0 / 4.0 / 4.2 | 0.0 | 0.0 | 0 | 0 | 2 | 7
+loadmore | x-tc | 2 | 4.0 / 4.0 / 4.0 | 0.0 | 0.0 | 0 | 0 | 2 | 11
+fling | base | 2 | 10.1 / 10.1 / 10.5 | 10.1 | 5.5 | 0 | 0 | 0 | 150
+fling | x | 2 | 14.8 / 14.8 / 16.3 | 14.8 | 2.5 | 0 | 0 | 9 | 158
+fling | x-sug | 2 | 9.4 / 9.4 / 9.4 | 8.9 | 2.0 | 0 | 0 | 4 | 144
+fling | x-ta | 2 | 22.6 / 22.6 / 29.1 | 13.6 | 3.5 | 2 | 0 | 16 | 255
+fling | x-ta+sug+one | 2 | 9.6 / 9.6 / 10.6 | 9.6 | 1.8 | 0 | 0 | 9 | 134
+fling | x-tb | 2 | 8.0 / 8.0 / 9.1 | 4.5 | 4.5 | 0 | 0 | 1 | 144
+fling | x-tc | 2 | 10.9 / 10.9 / 13.4 | 10.9 | 2.3 | 0 | 0 | 9 | 145
+drag | base | 2 | 6.2 / 6.2 / 7.0 | 0.0 | 0.0 | 0 | 0 | 0 | 69
+drag | x | 2 | 3.0 / 3.0 / 3.2 | 0.0 | 0.0 | 0 | 0 | 2 | 52
+drag | x-sug | 2 | 5.2 / 5.2 / 5.5 | 0.0 | 0.0 | 0 | 0 | 6 | 65
+drag | x-ta | 2 | 7.3 / 7.3 / 11.2 | 5.6 | 5.5 | 0 | 0 | 4 | 65
+drag | x-ta+sug+one | 2 | 9.2 / 9.2 / 10.3 | 9.2 | 9.1 | 0 | 0 | 5 | 68
+drag | x-tb | 2 | 5.2 / 5.2 / 5.4 | 0.0 | 0.0 | 0 | 0 | 0 | 55
+drag | x-tc | 2 | 10.8 / 10.8 / 12.5 | 10.8 | 10.7 | 0 | 0 | 8 | 75
+CRASH new: FATAL 0, base: FATAL 0; ANR 0; traces kept: 12
+contact sheets: 0 in sheets/
+contact sheets: 0 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4266', '5971', '7286', '8367', '9305', '10232', '11200', '12085', '12999', '13915', '14877', '15840', '16743', '17660']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 43
+   skipped-frames events=43 max=141 total=2646
+== Davey: 125
+   davey events=125 max=2489ms median=870ms
+== NativeLink: 14
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt

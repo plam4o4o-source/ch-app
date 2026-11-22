@@ -1,5 +1,7 @@
 # Emulator results
 
+slow frames after 1.2.40 (back from a book, tab entries, catalogue typing, load more, fling), main-thread CPU per frame, API 33/36: [v142perf/index.md](v142perf/index.md)
+
 catalogue entry-frame fix (ae598c45) vs 1.2.39 (ab175e49), main-thread CPU per entry, API 33/36: [v139fix/index.md](v139fix/index.md)
 
 v1.2.39 released (ab175e49): catalogue tab slow frames, framestats + Perfetto per interaction: [v139cat/index.md](v139cat/index.md)

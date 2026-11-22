@@ -1,0 +1,220 @@
+app pids seen: ['6045', '8063', '9533', '10774', '11790', '12770', '13769', '14843', '15823', '16786', '17708', '18708', '19672', '20615']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 53
+   skipped-frames events=53 max=125 total=2953
+   11-22 17:24:30.573  6045  6045 I Choreographer: Skipped 67 frames!  The application may be doing too much work on its main thread.
+   11-22 17:24:31.159  6045  6045 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-22 17:24:33.225  6045  6045 I Choreographer: Skipped 117 frames!  The application may be doing too much work on its main thread.
+   11-22 17:24:34.350  6045  6045 I Choreographer: Skipped 63 frames!  The application may be doing too much work on its main thread.
+   11-22 17:24:34.978  6045  6045 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-22 17:24:35.747  6045  6045 I Choreographer: Skipped 33 frames!  The application may be doing too much work on its main thread.
+   11-22 17:24:36.611  6045  6045 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   11-22 17:24:37.746  6045  6045 I Choreographer: Skipped 31 frames!  The application may be doing too much work on its main thread.
+   11-22 17:24:47.004  6045  6045 I Choreographer: Skipped 36 frames!  The application may be doing too much work on its main thread.
+   11-22 17:24:47.779  6045  6045 I Choreographer: Skipped 32 frames!  The application may be doing too much work on its main thread.
+   11-22 17:27:10.666  8063  8063 I Choreographer: Skipped 56 frames!  The application may be doing too much work on its main thread.
+   11-22 17:27:11.712  8063  8063 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+== Davey: 95
+   davey events=95 max=2809ms median=1091ms
+   11-22 17:24:34.036  6045  6081 I OpenGLRenderer: Davey! duration=2684ms; Flags=1, FrameTimelineVsyncId=8102, IntendedVsync=99425330957, Vsync=99975330935, InputEventId=0, HandleInputStart=99977873327, AnimationStart=99977874218, PerformTrav
+   11-22 17:24:34.362  6045  6081 I OpenGLRenderer: Davey! duration=1091ms; Flags=0, FrameTimelineVsyncId=8507, IntendedVsync=102075330851, Vsync=102075330851, InputEventId=0, HandleInputStart=102076104292, AnimationStart=102076104983, Perform
+   11-22 17:24:34.959  6045  6057 I OpenGLRenderer: Davey! duration=1658ms; Flags=0, FrameTimelineVsyncId=8521, IntendedVsync=102108664183, Vsync=103158664141, InputEventId=0, HandleInputStart=103168366162, AnimationStart=103168366382, Perform
+   11-22 17:24:35.726  6045  6057 I OpenGLRenderer: Davey! duration=1242ms; Flags=0, FrameTimelineVsyncId=8685, IntendedVsync=103175330807, Vsync=103791997449, InputEventId=0, HandleInputStart=103796398719, AnimationStart=103796399500, Perform
+   11-22 17:24:36.591  6045  6057 I OpenGLRenderer: Davey! duration=1038ms; Flags=0, FrameTimelineVsyncId=8802, IntendedVsync=103825330781, Vsync=103858664113, InputEventId=0, HandleInputStart=103865435578, AnimationStart=103865435888, Perform
+   11-22 17:24:37.047  6045  6139 I OpenGLRenderer: Davey! duration=954ms; Flags=0, FrameTimelineVsyncId=8818, IntendedVsync=103891997445, Vsync=103991997441, InputEventId=0, HandleInputStart=104000454933, AnimationStart=104000455113, PerformT
+   11-22 17:24:37.213  6045  6139 I OpenGLRenderer: Davey! duration=1056ms; Flags=0, FrameTimelineVsyncId=8850, IntendedVsync=104008669654, Vsync=104558669599, InputEventId=0, HandleInputStart=104565777912, AnimationStart=104565778182, Perform
+   11-22 17:24:37.744  6045  6143 I OpenGLRenderer: Davey! duration=1448ms; Flags=0, FrameTimelineVsyncId=8959, IntendedVsync=104575336299, Vsync=105425336214, InputEventId=0, HandleInputStart=105429270791, AnimationStart=105429271512, Perform
+   11-22 17:24:37.918  6045  6143 I OpenGLRenderer: Davey! duration=1088ms; Flags=0, FrameTimelineVsyncId=8995, IntendedVsync=105458664049, Vsync=105891997365, InputEventId=0, HandleInputStart=105908075491, AnimationStart=105908076082, Perform
+   11-22 17:24:47.086  6045  6057 I OpenGLRenderer: Davey! duration=813ms; Flags=0, FrameTimelineVsyncId=10055, IntendedVsync=114991997001, Vsync=114991997001, InputEventId=-247338334, HandleInputStart=114996802764, AnimationStart=114996803415
+   11-22 17:24:47.781  6045  6057 I OpenGLRenderer: Davey! duration=893ms; Flags=0, FrameTimelineVsyncId=10077, IntendedVsync=115208663659, Vsync=115808663635, InputEventId=0, HandleInputStart=115822574300, AnimationStart=115822575322, Perform
+   11-22 17:24:48.223  6045  6057 I OpenGLRenderer: Davey! duration=716ms; Flags=0, FrameTimelineVsyncId=10151, IntendedVsync=115825330301, Vsync=115908663631, InputEventId=0, HandleInputStart=115911156739, AnimationStart=115911157330, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-22 17:24:25.698  5932  5932 I PERFCHECK: section: S0. NEW org.chyavorec.app and BASE org.chyavorec.app.b side by side; first launch to the catalogue, speed-profile
+   11-22 17:27:33.737  8217  8217 I PERFCHECK: section: T1. Round 1: per variant a new process; typing 3 words test IME, a letter every 350 ms, × clear, sort by year / relevance, „Покажи още“, a fling, a slow drag
+   11-22 17:28:14.958  8431  8431 I PERFCHECK: w28 type@base@r1-1
+   11-22 17:28:26.591  8536  8536 I PERFCHECK: w28 clear@base@r1-1
+   11-22 17:28:34.297  8561  8561 I PERFCHECK: w28 type@base@r1-2
+   11-22 17:28:45.402  8608  8608 I PERFCHECK: w28 clear@base@r1-2
+   11-22 17:28:53.154  8633  8633 I PERFCHECK: w28 type@base@r1-3
+   11-22 17:29:04.191  8701  8701 I PERFCHECK: w28 clear@base@r1-3
+   11-22 17:29:11.901  8726  8726 I PERFCHECK: w28 sort-open@base@r1
+   11-22 17:29:21.094  8784  8784 I PERFCHECK: w28 sort-year@base@r1
+   11-22 17:29:29.538  8829  8829 I PERFCHECK: w28 sort-open@base@r1-2
+   11-22 17:29:38.769  8875  8875 I PERFCHECK: w28 sort-rel@base@r1
+   11-22 17:30:30.896  9366  9366 I PERFCHECK: w28 loadmore@base@r1
+   11-22 17:30:43.755  9417  9417 I PERFCHECK: w28 fling@base@r1
+   11-22 17:31:06.344  9498  9498 I PERFCHECK: w28 drag@base@r1
+   11-22 17:31:46.318  9701  9701 I PERFCHECK: w28 type@x@r1-1
+   11-22 17:31:58.018  9770  9770 I PERFCHECK: w28 clear@x@r1-1
+   11-22 17:32:05.838  9796  9796 I PERFCHECK: w28 type@x@r1-2
+   11-22 17:32:16.305  9843  9843 I PERFCHECK: w28 clear@x@r1-2
+   11-22 17:32:24.229  9868  9868 I PERFCHECK: w28 type@x@r1-3
+   11-22 17:32:35.615  9929  9929 I PERFCHECK: w28 clear@x@r1-3
+   11-22 17:32:43.364  9954  9954 I PERFCHECK: w28 sort-open@x@r1
+   11-22 17:32:52.603  9999  9999 I PERFCHECK: w28 sort-year@x@r1
+   11-22 17:33:00.897 10065 10065 I PERFCHECK: w28 sort-open@x@r1-2
+   11-22 17:33:10.081 10109 10109 I PERFCHECK: w28 sort-rel@x@r1
+   11-22 17:34:01.519 10416 10416 I PERFCHECK: w28 loadmore@x@r1
+   11-22 17:34:14.395 10467 10467 I PERFCHECK: w28 fling@x@r1
+   11-22 17:34:37.645 10740 10740 I PERFCHECK: w28 drag@x@r1
+   11-22 17:35:18.463 10993 10993 I PERFCHECK: w28 type@x-ta@r1-1
+   11-22 17:35:29.906 11040 11040 I PERFCHECK: w28 clear@x-ta@r1-1
+   11-22 17:35:37.687 11065 11065 I PERFCHECK: w28 type@x-ta@r1-2
+   11-22 17:35:48.687 11109 11109 I PERFCHECK: w28 clear@x-ta@r1-2
+   11-22 17:35:56.476 11134 11134 I PERFCHECK: w28 type@x-ta@r1-3
+   11-22 17:36:07.519 11190 11190 I PERFCHECK: w28 clear@x-ta@r1-3
+   11-22 17:36:15.168 11216 11216 I PERFCHECK: w28 sort-open@x-ta@r1
+   11-22 17:36:24.447 11262 11262 I PERFCHECK: w28 sort-year@x-ta@r1
+   11-22 17:36:32.664 11289 11289 I PERFCHECK: w28 sort-open@x-ta@r1-2
+   11-22 17:36:41.831 11332 11332 I PERFCHECK: w28 sort-rel@x-ta@r1
+   11-22 17:37:32.590 11625 11625 I PERFCHECK: w28 loadmore@x-ta@r1
+   11-22 17:37:45.417 11675 11675 I PERFCHECK: w28 fling@x-ta@r1
+   11-22 17:38:07.380 11755 11755 I PERFCHECK: w28 drag@x-ta@r1
+   11-22 17:38:45.678 11954 11954 I PERFCHECK: w28 type@x-tb@r1-1
+   11-22 17:38:57.128 11997 11997 I PERFCHECK: w28 clear@x-tb@r1-1
+   11-22 17:39:04.891 12022 12022 I PERFCHECK: w28 type@x-tb@r1-2
+   11-22 17:39:15.924 12065 12065 I PERFCHECK: w28 clear@x-tb@r1-2
+   11-22 17:39:23.835 12092 12092 I PERFCHECK: w28 type@x-tb@r1-3
+   11-22 17:39:34.965 12143 12143 I PERFCHECK: w28 clear@x-tb@r1-3
+   11-22 17:39:42.702 12168 12168 I PERFCHECK: w28 sort-open@x-tb@r1
+   11-22 17:39:51.910 12211 12211 I PERFCHECK: w28 sort-year@x-tb@r1
+   11-22 17:40:00.135 12237 12237 I PERFCHECK: w28 sort-open@x-tb@r1-2
+   11-22 17:40:09.317 12281 12281 I PERFCHECK: w28 sort-rel@x-tb@r1
+   11-22 17:40:59.887 12574 12574 I PERFCHECK: w28 loadmore@x-tb@r1
+   11-22 17:41:12.813 12625 12625 I PERFCHECK: w28 fling@x-tb@r1
+   11-22 17:41:35.239 12706 12706 I PERFCHECK: w28 drag@x-tb@r1
+   11-22 17:42:16.636 12994 12994 I PERFCHECK: w28 type@x-tc@r1-1
+   11-22 17:42:28.050 13037 13037 I PERFCHECK: w28 clear@x-tc@r1-1
+   11-22 17:42:35.775 13062 13062 I PERFCHECK: w28 type@x-tc@r1-2
+   11-22 17:42:47.211 13111 13111 I PERFCHECK: w28 clear@x-tc@r1-2
+   11-22 17:42:54.956 13139 13139 I PERFCHECK: w28 type@x-tc@r1-3
+   11-22 17:43:06.064 13194 13194 I PERFCHECK: w28 clear@x-tc@r1-3
+   11-22 17:43:13.761 13219 13219 I PERFCHECK: w28 sort-open@x-tc@r1
+   11-22 17:43:22.995 13265 13265 I PERFCHECK: w28 sort-year@x-tc@r1
+   11-22 17:43:31.263 13292 13292 I PERFCHECK: w28 sort-open@x-tc@r1-2
+   11-22 17:43:40.449 13337 13337 I PERFCHECK: w28 sort-rel@x-tc@r1
+   11-22 17:44:27.982 13603 13603 I PERFCHECK: w28 loadmore@x-tc@r1
+   11-22 17:44:40.861 13654 13654 I PERFCHECK: w28 fling@x-tc@r1
+   11-22 17:45:02.654 13733 13733 I PERFCHECK: w28 drag@x-tc@r1
+   11-22 17:45:39.876 13928 13928 I PERFCHECK: w28 type@x-sug@r1-1
+   11-22 17:45:51.677 13971 13971 I PERFCHECK: w28 clear@x-sug@r1-1
+   11-22 17:45:59.419 13996 13996 I PERFCHECK: w28 type@x-sug@r1-2
+   11-22 17:46:10.468 14039 14039 I PERFCHECK: w28 clear@x-sug@r1-2
+   11-22 17:46:18.187 14065 14065 I PERFCHECK: w28 type@x-sug@r1-3
+   11-22 17:46:29.169 14119 14119 I PERFCHECK: w28 clear@x-sug@r1-3
+   11-22 17:46:36.860 14144 14144 I PERFCHECK: w28 sort-open@x-sug@r1
+   11-22 17:46:46.029 14187 14187 I PERFCHECK: w28 sort-year@x-sug@r1
+   11-22 17:46:54.221 14214 14214 I PERFCHECK: w28 sort-open@x-sug@r1-2
+   11-22 17:47:03.484 14258 14258 I PERFCHECK: w28 sort-rel@x-sug@r1
+   11-22 17:47:51.132 14524 14524 I PERFCHECK: w28 loadmore@x-sug@r1
+   11-22 17:48:04.010 14628 14628 I PERFCHECK: w28 fling@x-sug@r1
+   11-22 17:48:26.615 14793 14793 I PERFCHECK: w28 drag@x-sug@r1
+   11-22 17:49:06.670 15003 15003 I PERFCHECK: w28 type@x-ta+sug+one@r1-1
+   11-22 17:49:18.077 15046 15046 I PERFCHECK: w28 clear@x-ta+sug+one@r1-1
+   11-22 17:49:25.828 15072 15072 I PERFCHECK: w28 type@x-ta+sug+one@r1-2
+   11-22 17:49:36.868 15115 15115 I PERFCHECK: w28 clear@x-ta+sug+one@r1-2
+   11-22 17:49:44.678 15140 15140 I PERFCHECK: w28 type@x-ta+sug+one@r1-3
+   11-22 17:49:55.908 15193 15193 I PERFCHECK: w28 clear@x-ta+sug+one@r1-3
+   11-22 17:50:03.637 15218 15218 I PERFCHECK: w28 sort-open@x-ta+sug+one@r1
+   11-22 17:50:12.831 15267 15267 I PERFCHECK: w28 sort-year@x-ta+sug+one@r1
+   11-22 17:50:21.084 15293 15293 I PERFCHECK: w28 sort-open@x-ta+sug+one@r1-2
+   11-22 17:50:30.305 15337 15337 I PERFCHECK: w28 sort-rel@x-ta+sug+one@r1
+   11-22 17:51:18.081 15604 15604 I PERFCHECK: w28 loadmore@x-ta+sug+one@r1
+   11-22 17:51:30.917 15655 15655 I PERFCHECK: w28 fling@x-ta+sug+one@r1
+   11-22 17:51:53.165 15783 15783 I PERFCHECK: w28 drag@x-ta+sug+one@r1
+   11-22 17:51:58.948 15800 15800 I PERFCHECK: section: T2. Round 2: per variant a new process; typing 3 words test IME, a letter every 350 ms, × clear, sort by year / relevance, „Покажи още“, a fling, a slow drag
+   11-22 17:52:30.388 15988 15988 I PERFCHECK: w28 type@x-ta+sug+one@r2-1
+   11-22 17:52:42.033 16032 16032 I PERFCHECK: w28 clear@x-ta+sug+one@r2-1
+   11-22 17:52:49.774 16058 16058 I PERFCHECK: w28 type@x-ta+sug+one@r2-2
+   11-22 17:53:00.834 16101 16101 I PERFCHECK: w28 clear@x-ta+sug+one@r2-2
+   11-22 17:53:08.554 16127 16127 I PERFCHECK: w28 type@x-ta+sug+one@r2-3
+   11-22 17:53:19.684 16182 16182 I PERFCHECK: w28 clear@x-ta+sug+one@r2-3
+   11-22 17:53:27.366 16207 16207 I PERFCHECK: w28 sort-open@x-ta+sug+one@r2
+   11-22 17:53:36.582 16250 16250 I PERFCHECK: w28 sort-year@x-ta+sug+one@r2
+   11-22 17:53:44.861 16276 16276 I PERFCHECK: w28 sort-open@x-ta+sug+one@r2-2
+   11-22 17:53:54.025 16320 16320 I PERFCHECK: w28 sort-rel@x-ta+sug+one@r2
+   11-22 17:54:45.808 16611 16611 I PERFCHECK: w28 loadmore@x-ta+sug+one@r2
+   11-22 17:54:58.590 16663 16663 I PERFCHECK: w28 fling@x-ta+sug+one@r2
+   11-22 17:55:20.261 16752 16752 I PERFCHECK: w28 drag@x-ta+sug+one@r2
+   11-22 17:56:00.699 16944 16944 I PERFCHECK: w28 type@x-sug@r2-1
+   11-22 17:56:12.090 16988 16988 I PERFCHECK: w28 clear@x-sug@r2-1
+   11-22 17:56:19.830 17012 17012 I PERFCHECK: w28 type@x-sug@r2-2
+   11-22 17:56:31.277 17056 17056 I PERFCHECK: w28 clear@x-sug@r2-2
+   11-22 17:56:39.220 17082 17082 I PERFCHECK: w28 type@x-sug@r2-3
+   11-22 17:56:50.510 17134 17134 I PERFCHECK: w28 clear@x-sug@r2-3
+   11-22 17:56:58.240 17159 17159 I PERFCHECK: w28 sort-open@x-sug@r2
+   11-22 17:57:07.510 17202 17202 I PERFCHECK: w28 sort-year@x-sug@r2
+   11-22 17:57:15.759 17228 17228 I PERFCHECK: w28 sort-open@x-sug@r2-2
+   11-22 17:57:24.941 17271 17271 I PERFCHECK: w28 sort-rel@x-sug@r2
+   11-22 17:58:12.802 17537 17537 I PERFCHECK: w28 loadmore@x-sug@r2
+   11-22 17:58:25.663 17588 17588 I PERFCHECK: w28 fling@x-sug@r2
+   11-22 17:58:47.477 17668 17668 I PERFCHECK: w28 drag@x-sug@r2
+   11-22 17:59:27.095 17878 17878 I PERFCHECK: w28 type@x-tc@r2-1
+   11-22 17:59:38.613 17922 17922 I PERFCHECK: w28 clear@x-tc@r2-1
+   11-22 17:59:46.426 17947 17947 I PERFCHECK: w28 type@x-tc@r2-2
+   11-22 17:59:57.560 17990 17990 I PERFCHECK: w28 clear@x-tc@r2-2
+   11-22 18:00:05.270 18016 18016 I PERFCHECK: w28 type@x-tc@r2-3
+   11-22 18:00:16.392 18073 18073 I PERFCHECK: w28 clear@x-tc@r2-3
+   11-22 18:00:24.119 18098 18098 I PERFCHECK: w28 sort-open@x-tc@r2
+   11-22 18:00:33.326 18171 18171 I PERFCHECK: w28 sort-year@x-tc@r2
+   11-22 18:00:41.546 18197 18197 I PERFCHECK: w28 sort-open@x-tc@r2-2
+   11-22 18:00:50.831 18242 18242 I PERFCHECK: w28 sort-rel@x-tc@r2
+   11-22 18:01:42.359 18534 18534 I PERFCHECK: w28 loadmore@x-tc@r2
+   11-22 18:01:55.242 18585 18585 I PERFCHECK: w28 fling@x-tc@r2
+   11-22 18:02:17.450 18672 18672 I PERFCHECK: w28 drag@x-tc@r2
+   11-22 18:03:02.573 18859 18859 I PERFCHECK: w28 type@x-tb@r2-1
+   11-22 18:03:14.027 18902 18902 I PERFCHECK: w28 clear@x-tb@r2-1
+   11-22 18:03:21.826 18927 18927 I PERFCHECK: w28 type@x-tb@r2-2
+   11-22 18:03:32.924 18970 18970 I PERFCHECK: w28 clear@x-tb@r2-2
+   11-22 18:03:40.717 18995 18995 I PERFCHECK: w28 type@x-tb@r2-3
+   11-22 18:03:51.835 19048 19048 I PERFCHECK: w28 clear@x-tb@r2-3
+   11-22 18:03:59.535 19073 19073 I PERFCHECK: w28 sort-open@x-tb@r2
+   11-22 18:04:08.808 19116 19116 I PERFCHECK: w28 sort-year@x-tb@r2
+   11-22 18:04:17.082 19142 19142 I PERFCHECK: w28 sort-open@x-tb@r2-2
+   11-22 18:04:26.352 19186 19186 I PERFCHECK: w28 sort-rel@x-tb@r2
+   11-22 18:05:21.799 19504 19504 I PERFCHECK: w28 loadmore@x-tb@r2
+   11-22 18:05:34.651 19557 19557 I PERFCHECK: w28 fling@x-tb@r2
+   11-22 18:05:55.678 19635 19635 I PERFCHECK: w28 drag@x-tb@r2
+   11-22 18:06:33.869 19833 19833 I PERFCHECK: w28 type@x-ta@r2-1
+   11-22 18:06:45.402 19876 19876 I PERFCHECK: w28 clear@x-ta@r2-1
+   11-22 18:06:53.161 19902 19902 I PERFCHECK: w28 type@x-ta@r2-2
+   11-22 18:07:04.221 19944 19944 I PERFCHECK: w28 clear@x-ta@r2-2
+   11-22 18:07:12.150 19970 19970 I PERFCHECK: w28 type@x-ta@r2-3
+   11-22 18:07:23.415 20021 20021 I PERFCHECK: w28 clear@x-ta@r2-3
+   11-22 18:07:31.155 20046 20046 I PERFCHECK: w28 sort-open@x-ta@r2
+   11-22 18:07:40.497 20090 20090 I PERFCHECK: w28 sort-year@x-ta@r2
+   11-22 18:07:48.956 20116 20116 I PERFCHECK: w28 sort-open@x-ta@r2-2
+   11-22 18:07:58.150 20160 20160 I PERFCHECK: w28 sort-rel@x-ta@r2
+   11-22 18:08:49.670 20450 20450 I PERFCHECK: w28 loadmore@x-ta@r2
+   11-22 18:09:02.496 20500 20500 I PERFCHECK: w28 fling@x-ta@r2
+   11-22 18:09:24.606 20580 20580 I PERFCHECK: w28 drag@x-ta@r2
+   11-22 18:10:02.635 20764 20764 I PERFCHECK: w28 type@x@r2-1
+   11-22 18:10:14.012 20809 20809 I PERFCHECK: w28 clear@x@r2-1
+   11-22 18:10:21.735 20834 20834 I PERFCHECK: w28 type@x@r2-2
+   11-22 18:10:33.010 20880 20880 I PERFCHECK: w28 clear@x@r2-2
+   11-22 18:10:40.792 20904 20904 I PERFCHECK: w28 type@x@r2-3
+   11-22 18:10:51.985 20959 20959 I PERFCHECK: w28 clear@x@r2-3
+   11-22 18:10:59.678 20984 20984 I PERFCHECK: w28 sort-open@x@r2
+   11-22 18:11:08.902 21027 21027 I PERFCHECK: w28 sort-year@x@r2
+   11-22 18:11:17.111 21054 21054 I PERFCHECK: w28 sort-open@x@r2-2
+   11-22 18:11:26.397 21097 21097 I PERFCHECK: w28 sort-rel@x@r2
+   11-22 18:12:15.071 21364 21364 I PERFCHECK: w28 loadmore@x@r2
+   11-22 18:12:27.907 21414 21414 I PERFCHECK: w28 fling@x@r2
+   11-22 18:12:49.736 21492 21492 I PERFCHECK: w28 drag@x@r2
+   11-22 18:13:26.003 21695 21695 I PERFCHECK: w28 type@base@r2-1
+   11-22 18:13:37.456 21739 21739 I PERFCHECK: w28 clear@base@r2-1
+   11-22 18:13:45.206 21764 21764 I PERFCHECK: w28 type@base@r2-2
+   11-22 18:13:56.651 21807 21807 I PERFCHECK: w28 clear@base@r2-2
+   11-22 18:14:04.455 21832 21832 I PERFCHECK: w28 type@base@r2-3
+   11-22 18:14:15.470 21883 21883 I PERFCHECK: w28 clear@base@r2-3
+   11-22 18:14:23.264 21908 21908 I PERFCHECK: w28 sort-open@base@r2
+   11-22 18:14:32.501 21952 21952 I PERFCHECK: w28 sort-year@base@r2
+   11-22 18:14:40.718 21977 21977 I PERFCHECK: w28 sort-open@base@r2-2
+   11-22 18:14:49.960 22020 22020 I PERFCHECK: w28 sort-rel@base@r2
+   11-22 18:15:41.323 22315 22315 I PERFCHECK: w28 loadmore@base@r2
+   11-22 18:15:54.153 22364 22364 I PERFCHECK: w28 fling@base@r2
+   11-22 18:16:16.517 22447 22447 I PERFCHECK: w28 drag@base@r2
+   11-22 18:16:24.356 22552 22552 I PERFCHECK: section: Z. The table: main-thread CPU Running per doFrame, by interaction and variant

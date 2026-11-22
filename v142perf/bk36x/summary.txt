@@ -1,0 +1,138 @@
+part bk36x; APK: 1.2.40 5a14578 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 2000200 (NEW + w28-exp.patch, DEBUG ONLY: variants behind launch flags) size 4687546 bytes
+base APK: 1.2.40 5a14578 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app.b, throwaway key, versionCode 2000200 (BASE) size 4682814 bytes
+host: 4 cpu, 15983 MB RAM
+android 16 sdk 36; Physical size: 1080x2400; Physical density: 420; adb uid 0
+RELEASE APK: rel-133.apk missing — built x86_64 app.apk
+APK for this part: 1.2.40 5a14578 prodRelease (minified), x86_64 added, applicationId org.chyavorec.app, throwaway key, versionCode 2000200 (NEW + w28-exp.patch, DEBUG ONLY: variants behind launch flags) size 4687546 bytes
+installed:  versionCode=2000200 minSdk=26 targetSdk=37  versionName=1.2.40 
+app locale: Locales for org.chyavorec.app for user 0 are [bg-BG]
+camera permission: 
+screen 1080x2400
+trace analysis: trace_processor_shell: /home/runner/.local/share/perfetto/prebuilts/trace_processor_shell-2434129a3af4dc9e
+TRACE MODE perfetto; atrace categories: gfx view am dalvik input wm res binder_driver aidl sched; mapping app-mapping.txt; android 36
+## S0. NEW (org.chyavorec.app) and BASE (org.chyavorec.app.b) side by side; first launch to the catalogue, speed-profile
+S x:  versionCode=2000200 minSdk=26 targetSdk=37  versionName=1.2.40 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+S x: catalogue after 4416 ms
+X compile org.chyavorec.app: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~Ai1GUJUb3IpNOwYDLDU9Mg==/org.chyavorec.app-tY5QhDoae3nEJg2MIRaBeA==/base.apk| x86_64: [status=speed-profile] [reason=cmdline] [primary-abi]| path: /data/app/~~YszGhreOdAVqZbisYp7w7w==/org.chyavorec.app.b-dpob7hlcdasgE0u6We7Psw==/base.apk| x86_64: [status=verify] [reason=install] [primary-abi]|
+S base:  versionCode=2000200 minSdk=26 targetSdk=37  versionName=1.2.40 
+(dismissed '=Пропусни': text="Пропусни" text="Читалище Яворец" text="НЧ „Васил Левски – 1922“" )
+S base: catalogue after 2854 ms
+X compile org.chyavorec.app.b: profile broadcast result=1; compile: Success; dexopt:  path: /data/app/~~YszGhreOdAVqZbisYp7w7w==/org.chyavorec.app.b-dpob7hlcdasgE0u6We7Psw==/base.apk| x86_64: [status=speed-profile] [reason=cmdline] [primary-abi]|
+tabs: catalog [320 2274] home [100 2274] news [760 2274] more [980 2274]
+tab my [540 2274]
+gestures: 6 flings up (540,1800 → 540,600 in 60 ms, 0.9 s apart), then 4 down; one shell script on the device
+## B1. Round 1: per variant a new process, Каталог, then rows 1-3: open, Back (measured)
+M book-back@base@r1-1: worst 17.4 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 17 (10 with >= 3 ms); entry frame 17.4 + next 3.3 (from the entry: 17.4, 3.3, 3.3, 2.6); rows composed per frame max 0
+M book-back@base@r1-2: worst 26.5 ms CPU (rows composed in it 0); frames >16 1, >25 1, >30 0 of 17 (9 with >= 3 ms); entry frame 26.5 + next 3.8 (from the entry: 26.5, 3.8, 3.8, 4.7); rows composed per frame max 0
+M book-back@base@r1-3: worst 14.0 ms CPU (rows composed in it 0); frames >16 0, >25 0, >30 0 of 17 (6 with >= 3 ms); entry frame 14.0 + next 2.2 (from the entry: 14.0, 2.2, 3.0, 2.9); rows composed per frame max 0
+M book-back@x@r1-1: worst 23.7 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 15 (8 with >= 3 ms); entry frame 23.7 + next 3.5 (from the entry: 23.7, 3.5, 3.4, 1.3); rows composed per frame max 7
+M book-back@x@r1-2: worst 26.7 ms CPU (rows composed in it 7); frames >16 1, >25 1, >30 0 of 16 (5 with >= 3 ms); entry frame 26.7 + next 3.9 (from the entry: 26.7, 3.9, 3.8, 1.9); rows composed per frame max 7
+M book-back@x@r1-3: worst 21.8 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (10 with >= 3 ms); entry frame 21.8 + next 3.6 (from the entry: 21.8, 3.6, 3.5, 1.4); rows composed per frame max 7
+M book-back@x-bk1@r1-1: worst 11.3 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 17 (9 with >= 3 ms); entry frame 11.3 + next 3.0 (from the entry: 11.3, 3.0, 3.0, 6.7); rows composed per frame max 6
+M book-back@x-bk1@r1-2: worst 12.6 ms CPU (rows composed in it 6); frames >16 0, >25 0, >30 0 of 16 (7 with >= 3 ms); entry frame 11.0 + next 2.7 (from the entry: 11.0, 2.7, 12.6, 5.0); rows composed per frame max 6
+M book-back@x-bk1@r1-3: worst 15.9 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 17 (8 with >= 3 ms); entry frame 15.9 + next 2.8 (from the entry: 15.9, 2.8, 9.0, 8.9); rows composed per frame max 6
+M book-back@x-bk2@r1-1: worst 25.6 ms CPU (rows composed in it 7); frames >16 1, >25 1, >30 0 of 17 (9 with >= 3 ms); entry frame 25.6 + next 2.7 (from the entry: 25.6, 2.7, 2.6, 5.3); rows composed per frame max 7
+M book-back@x-bk2@r1-2: worst 13.4 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 17 (10 with >= 3 ms); entry frame 13.4 + next 4.5 (from the entry: 13.4, 4.5, 4.4, 9.6); rows composed per frame max 7
+M book-back@x-bk2@r1-3: worst 20.3 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 19 (10 with >= 3 ms); entry frame 20.3 + next 3.3 (from the entry: 20.3, 3.3, 6.3, 6.3); rows composed per frame max 7
+M book-back@x-one@r1-1: worst 23.0 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 15 (7 with >= 3 ms); entry frame 23.0 + next 2.6 (from the entry: 23.0, 2.6, 2.6, 1.5); rows composed per frame max 7
+M book-back@x-one@r1-2: worst 30.0 ms CPU (rows composed in it 7); frames >16 1, >25 1, >30 0 of 17 (7 with >= 3 ms); entry frame 30.0 + next 4.2 (from the entry: 30.0, 4.2, 4.1, 1.6); rows composed per frame max 7
+M book-back@x-one@r1-3: worst 16.4 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (6 with >= 3 ms); entry frame 16.4 + next 5.3 (from the entry: 16.4, 5.3, 5.3, 2.4); rows composed per frame max 7
+M book-back@x-nosh@r1-1: worst 22.4 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (8 with >= 3 ms); entry frame 22.4 + next 3.6 (from the entry: 22.4, 3.6, 3.5, 1.2); rows composed per frame max 7
+M book-back@x-nosh@r1-2: worst 17.4 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (9 with >= 3 ms); entry frame 17.4 + next 3.9 (from the entry: 17.4, 3.9, 3.9, 1.7); rows composed per frame max 7
+M book-back@x-nosh@r1-3: worst 15.2 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 15 (10 with >= 3 ms); entry frame 15.2 + next 3.0 (from the entry: 15.2, 3.0, 5.4, 2.5); rows composed per frame max 7
+M book-back@x-bk1+one@r1-1: worst 21.8 ms CPU (rows composed in it 1); frames >16 1, >25 0, >30 0 of 17 (11 with >= 3 ms); entry frame 21.8 + next 3.6 (from the entry: 21.8, 3.6, 3.5, 5.8); rows composed per frame max 6
+M book-back@x-bk1+one@r1-2: worst 16.4 ms CPU (rows composed in it 1); frames >16 1, >25 0, >30 0 of 17 (8 with >= 3 ms); entry frame 16.4 + next 3.2 (from the entry: 16.4, 3.2, 8.7, 8.6); rows composed per frame max 6
+M book-back@x-bk1+one@r1-3: worst 14.1 ms CPU (rows composed in it 6); frames >16 0, >25 0, >30 0 of 19 (4 with >= 3 ms); entry frame 10.5 + next 3.0 (from the entry: 10.5, 3.0, 2.9, 14.1); rows composed per frame max 6
+## B2. Round 2: per variant a new process, Каталог, then rows 1-3: open, Back (measured)
+M book-back@x-bk1+one@r2-1: worst 16.7 ms CPU (rows composed in it 1); frames >16 1, >25 0, >30 0 of 17 (5 with >= 3 ms); entry frame 16.7 + next 3.6 (from the entry: 16.7, 3.6, 3.6, 5.5); rows composed per frame max 6
+M book-back@x-bk1+one@r2-2: worst 17.0 ms CPU (rows composed in it 1); frames >16 1, >25 0, >30 0 of 17 (10 with >= 3 ms); entry frame 17.0 + next 3.6 (from the entry: 17.0, 3.6, 3.5, 5.2); rows composed per frame max 6
+M book-back@x-bk1+one@r2-3: worst 10.3 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 19 (4 with >= 3 ms); entry frame 10.3 + next 2.4 (from the entry: 10.3, 2.4, 7.8, 7.7); rows composed per frame max 6
+M book-back@x-nosh@r2-1: worst 21.3 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (9 with >= 3 ms); entry frame 21.3 + next 3.5 (from the entry: 21.3, 3.5, 3.5, 4.3); rows composed per frame max 7
+M book-back@x-nosh@r2-2: worst 20.9 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (8 with >= 3 ms); entry frame 20.9 + next 4.2 (from the entry: 20.9, 4.2, 4.1, 1.7); rows composed per frame max 7
+M book-back@x-nosh@r2-3: worst 28.7 ms CPU (rows composed in it 7); frames >16 1, >25 1, >30 0 of 17 (5 with >= 3 ms); entry frame 28.7 + next 8.3 (from the entry: 28.7, 8.3, 8.2, 2.3); rows composed per frame max 7
+M book-back@x-one@r2-1: worst 30.6 ms CPU (rows composed in it 7); frames >16 1, >25 1, >30 1 of 17 (5 with >= 3 ms); entry frame 30.6 + next 3.5 (from the entry: 30.6, 3.5, 3.4, 1.6); rows composed per frame max 7
+M book-back@x-one@r2-2: worst 20.7 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (6 with >= 3 ms); entry frame 20.7 + next 3.9 (from the entry: 20.7, 3.9, 3.8, 1.8); rows composed per frame max 7
+M book-back@x-one@r2-3: worst 17.5 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (7 with >= 3 ms); entry frame 17.5 + next 3.8 (from the entry: 17.5, 3.8, 3.8, 1.7); rows composed per frame max 7
+M book-back@x-bk2@r2-1: worst 16.0 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 17 (6 with >= 3 ms); entry frame 16.0 + next 3.0 (from the entry: 16.0, 3.0, 2.9, 5.3); rows composed per frame max 7
+M book-back@x-bk2@r2-2: worst 18.8 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (10 with >= 3 ms); entry frame 18.8 + next 2.7 (from the entry: 18.8, 2.7, 6.8, 6.8); rows composed per frame max 7
+M book-back@x-bk2@r2-3: worst 37.8 ms CPU (rows composed in it 7); frames >16 1, >25 1, >30 1 of 19 (9 with >= 3 ms); entry frame 37.8 + next 3.3 (from the entry: 37.8, 3.3, 3.3, 11.2); rows composed per frame max 7
+M book-back@x-bk1@r2-1: worst 14.9 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 17 (6 with >= 3 ms); entry frame 14.9 + next 3.3 (from the entry: 14.9, 3.3, 3.3, 14.3); rows composed per frame max 6
+M book-back@x-bk1@r2-2: worst 16.1 ms CPU (rows composed in it 1); frames >16 1, >25 0, >30 0 of 17 (8 with >= 3 ms); entry frame 16.1 + next 3.5 (from the entry: 16.1, 3.5, 3.5, 12.7); rows composed per frame max 6
+M book-back@x-bk1@r2-3: worst 18.0 ms CPU (rows composed in it 1); frames >16 1, >25 0, >30 0 of 19 (13 with >= 3 ms); entry frame 18.0 + next 3.9 (from the entry: 18.0, 3.9, 3.8, 7.7); rows composed per frame max 6
+M book-back@x@r2-1: worst 14.7 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 17 (5 with >= 3 ms); entry frame 14.7 + next 4.0 (from the entry: 14.7, 4.0, 3.9, 2.2); rows composed per frame max 7
+M book-back@x@r2-2: worst 17.9 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 18 (7 with >= 3 ms); entry frame 17.9 + next 3.1 (from the entry: 17.9, 3.1, 3.1, 2.3); rows composed per frame max 7
+M book-back@x@r2-3: worst 18.5 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 19 (9 with >= 3 ms); entry frame 18.5 + next 7.9 (from the entry: 18.5, 7.9, 7.9, 1.6); rows composed per frame max 7
+M book-back@base@r2-1: worst 24.4 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 17 (10 with >= 3 ms); entry frame 24.4 + next 3.8 (from the entry: 24.4, 3.8, 3.8, 2.1); rows composed per frame max 0
+M book-back@base@r2-2: worst 24.9 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 17 (4 with >= 3 ms); entry frame 24.9 + next 6.6 (from the entry: 24.9, 6.6, 2.7, 2.6); rows composed per frame max 0
+M book-back@base@r2-3: worst 23.8 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 17 (7 with >= 3 ms); entry frame 23.8 + next 3.6 (from the entry: 23.8, 3.6, 3.5, 2.6); rows composed per frame max 0
+## B3. Round 3: per variant a new process, Каталог, then rows 1-3: open, Back (measured)
+M book-back@base@r3-1: worst 19.5 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 17 (7 with >= 3 ms); entry frame 19.5 + next 3.5 (from the entry: 19.5, 3.5, 3.5, 1.1); rows composed per frame max 0
+M book-back@base@r3-2: worst 18.1 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 17 (8 with >= 3 ms); entry frame 18.1 + next 3.6 (from the entry: 18.1, 3.6, 3.6, 2.1); rows composed per frame max 0
+M book-back@base@r3-3: worst 24.5 ms CPU (rows composed in it 0); frames >16 1, >25 0, >30 0 of 17 (8 with >= 3 ms); entry frame 24.5 + next 5.4 (from the entry: 24.5, 5.4, 2.3, 2.2); rows composed per frame max 0
+M book-back@x@r3-1: worst 16.3 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 15 (8 with >= 3 ms); entry frame 16.3 + next 4.7 (from the entry: 16.3, 4.7, 4.6, 2.0); rows composed per frame max 7
+M book-back@x@r3-2: worst 29.0 ms CPU (rows composed in it 7); frames >16 1, >25 1, >30 0 of 17 (10 with >= 3 ms); entry frame 29.0 + next 3.2 (from the entry: 29.0, 3.2, 3.1, 2.8); rows composed per frame max 7
+M book-back@x@r3-3: worst 23.2 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (8 with >= 3 ms); entry frame 23.2 + next 4.6 (from the entry: 23.2, 4.6, 4.0, 4.0); rows composed per frame max 7
+M book-back@x-bk1@r3-1: worst 12.7 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 17 (8 with >= 3 ms); entry frame 12.7 + next 3.1 (from the entry: 12.7, 3.1, 8.8, 8.8); rows composed per frame max 6
+M book-back@x-bk1@r3-2: worst 13.2 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 19 (8 with >= 3 ms); entry frame 13.2 + next 3.3 (from the entry: 13.2, 3.3, 3.2, 6.2); rows composed per frame max 6
+M book-back@x-bk1@r3-3: worst 10.0 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 19 (6 with >= 3 ms); entry frame 10.0 + next 6.4 (from the entry: 10.0, 6.4, 8.7, 8.7); rows composed per frame max 6
+M book-back@x-bk2@r3-1: worst 13.7 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 18 (8 with >= 3 ms); entry frame 13.7 + next 3.0 (from the entry: 13.7, 3.0, 3.0, 6.6); rows composed per frame max 7
+M book-back@x-bk2@r3-2: worst 16.6 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (12 with >= 3 ms); entry frame 16.6 + next 3.6 (from the entry: 16.6, 3.6, 3.6, 8.1); rows composed per frame max 7
+M book-back@x-bk2@r3-3: worst 16.9 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 19 (12 with >= 3 ms); entry frame 16.9 + next 6.3 (from the entry: 16.9, 6.3, 5.5, 5.5); rows composed per frame max 7
+M book-back@x-one@r3-1: worst 25.0 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (6 with >= 3 ms); entry frame 25.0 + next 2.5 (from the entry: 25.0, 2.5, 2.5, 3.5); rows composed per frame max 7
+M book-back@x-one@r3-2: worst 19.4 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 17 (8 with >= 3 ms); entry frame 19.4 + next 3.6 (from the entry: 19.4, 3.6, 3.5, 5.5); rows composed per frame max 7
+M book-back@x-one@r3-3: worst 14.4 ms CPU (rows composed in it 7); frames >16 0, >25 0, >30 0 of 17 (1 with >= 3 ms); entry frame 14.4 + next 2.3 (from the entry: 14.4, 2.3, 3.0, 2.9); rows composed per frame max 7
+M book-back@x-nosh@r3-1: worst 26.0 ms CPU (rows composed in it 7); frames >16 1, >25 1, >30 0 of 15 (8 with >= 3 ms); entry frame 26.0 + next 3.6 (from the entry: 26.0, 3.6, 3.6, 1.8); rows composed per frame max 7
+M book-back@x-nosh@r3-2: worst 18.8 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 14 (4 with >= 3 ms); entry frame 18.8 + next 7.7 (from the entry: 18.8, 7.7, 2.3, 2.3); rows composed per frame max 7
+M book-back@x-nosh@r3-3: worst 24.2 ms CPU (rows composed in it 7); frames >16 1, >25 0, >30 0 of 19 (10 with >= 3 ms); entry frame 24.2 + next 5.9 (from the entry: 24.2, 5.9, 5.8, 1.7); rows composed per frame max 7
+M book-back@x-bk1+one@r3-1: worst 13.9 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 16 (8 with >= 3 ms); entry frame 13.9 + next 5.2 (from the entry: 13.9, 5.2, 11.9, 11.8); rows composed per frame max 6
+M book-back@x-bk1+one@r3-2: worst 14.1 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 15 (7 with >= 3 ms); entry frame 14.1 + next 2.2 (from the entry: 14.1, 2.2, 12.0, 3.0); rows composed per frame max 6
+M book-back@x-bk1+one@r3-3: worst 13.4 ms CPU (rows composed in it 1); frames >16 0, >25 0, >30 0 of 18 (4 with >= 3 ms); entry frame 13.4 + next 2.6 (from the entry: 13.4, 2.6, 6.9, 2.5); rows composed per frame max 6
+## BV. Visual: open a book and Back, screen recording at 25 frames/s
+REC open-base (emu): marker 1535 ms after the recording start; 62 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+REC back-base (emu): marker 1569 ms after the recording start; 64 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+VIS base: back on the list yes; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" text="Ключова дума" text="2446 резултата  ·  данни от InvLib към 09.11.2026" 
+REC open-x (emu): marker 1537 ms after the recording start; 64 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+REC back-x (emu): marker 1541 ms after the recording start; 62 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+VIS x: back on the list yes; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" text="Ключова дума" text="2446 резултата  ·  данни от InvLib към 09.11.2026" 
+REC open-x-bk1 (emu): marker 1542 ms after the recording start; 62 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+REC back-x-bk1 (emu): marker 1542 ms after the recording start; 64 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+VIS x-bk1: back on the list yes; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" text="Ключова дума" text="2446 резултата  ·  данни от InvLib към 09.11.2026" 
+REC open-x-bk2 (emu): marker 1538 ms after the recording start; 63 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+REC back-x-bk2 (emu): marker 1532 ms after the recording start; 64 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+VIS x-bk2: back on the list yes; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" text="Ключова дума" text="2446 резултата  ·  данни от InvLib към 09.11.2026" 
+REC open-x-one (emu): marker 1533 ms after the recording start; 64 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+REC back-x-one (emu): marker 1531 ms after the recording start; 63 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+VIS x-one: back on the list yes; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" text="Ключова дума" text="2446 резултата  ·  данни от InvLib към 09.11.2026" 
+REC open-x-nosh (emu): marker 1531 ms after the recording start; 61 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+REC back-x-nosh (emu): marker 1536 ms after the recording start; 64 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+VIS x-nosh: back on the list yes; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" text="Ключова дума" text="2446 резултата  ·  данни от InvLib към 09.11.2026" 
+REC open-x-bk1+one (emu): marker 1532 ms after the recording start; 62 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+REC back-x-bk1+one (emu): marker 1535 ms after the recording start; 64 frames at 25/s from 0.5 s before the marker (the tap itself needs ~0.3-1 s to arrive)
+VIS x-bk1+one: back on the list yes; text="Търси навсякъде" content-desc="Сканирай баркод" text="Всичко" text="Заглавие" text="Автор" text="ISBN" text="Ключова дума" text="2446 резултата  ·  данни от InvLib към 09.11.2026" 
+## Z. The table: main-thread CPU (Running) per doFrame, by interaction and variant
+kind | variant | n | worst frame CPU ms: median / mean / max | entry frame median | next frame median | frames >25 ms (total) | frames >30 ms (total) | rows composed in the worst frame (median) | CPU of all frames, median
+---|---|---|---|---|---|---|---|---|---
+book-back | base | 9 | 23.8 / 21.5 / 26.5 | 23.8 | 3.6 | 1 | 0 | 0 | 63
+book-back | x | 9 | 21.8 / 21.3 / 29.0 | 21.8 | 3.9 | 2 | 0 | 7 | 68
+book-back | x-bk1 | 9 | 13.2 / 13.9 / 18.0 | 13.2 | 3.3 | 0 | 0 | 1 | 68
+book-back | x-bk1+one | 9 | 14.1 / 15.3 / 21.8 | 14.1 | 3.2 | 0 | 0 | 1 | 62
+book-back | x-bk2 | 9 | 16.9 / 19.9 / 37.8 | 16.9 | 3.3 | 2 | 1 | 7 | 72
+book-back | x-nosh | 9 | 21.3 / 21.7 / 28.7 | 21.3 | 3.9 | 2 | 0 | 7 | 72
+book-back | x-one | 9 | 20.7 / 21.9 / 30.6 | 20.7 | 3.6 | 2 | 1 | 7 | 66
+CRASH new: FATAL 0, base: FATAL 0; ANR 0; traces kept: 9
+contact sheets: 72 in sheets/
+contact sheets: 72 in sheets/
+## COMPLETE
+## logcat findings
+app pids seen: ['4253', '5885', '6481', '6931', '7312', '7678', '8103', '8470', '8852', '9216', '9581', '9960', '10338', '10725', '11863', '12237', '12598', '12974', '13343', '13735', '14362', '14594', '14816', '15052', '15296', '15537']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 42
+   skipped-frames events=42 max=85 total=2385
+== Davey: 80
+   davey events=80 max=2211ms median=1089ms
+== NativeLink: 26
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+CRASHES: 0 block(s)  → crashes.txt
