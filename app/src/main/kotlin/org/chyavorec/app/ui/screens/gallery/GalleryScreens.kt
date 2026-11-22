@@ -131,10 +131,12 @@ fun GalleryScreen(onBack: () -> Unit, navigate: (String) -> Unit) {
     val vm = appViewModel { GalleryViewModel(it.siteRepository, hasNetwork = it.connectivity::hasNetwork) }
     val state by vm.state.collectAsStateWithLifecycle()
     val reconnects = rememberReconnects()
+    // Снимките, които сайтът няма (404/410), не се броят, а албум без снимки изчезва.
+    val missing = rememberMissingPhotos()
     Scaffold(topBar = { BackTopBar(stringResource(R.string.gallery_title), onBack) }) { padding ->
         LeafRefreshBox(state.refreshing, onRefresh = { vm.refresh() }, modifier = Modifier.padding(padding).fillMaxSize()) {
             StateContent(
-                state = state, onRetry = { vm.refresh() }, isEmpty = { it.isEmpty() },
+                state = state.map { it.withoutMissing(missing) }, onRetry = { vm.refresh() }, isEmpty = { it.isEmpty() },
                 skeleton = { SkeletonCards() },
                 empty = { EmptyView(stringResource(R.string.gallery_empty), icon = Icons.Outlined.PhotoLibrary) },
                 errorSubject = stringResource(R.string.subject_gallery),
@@ -178,9 +180,11 @@ fun AlbumScreen(name: String, onBack: () -> Unit, navigate: (String) -> Unit) {
     val vm = appViewModel { GalleryViewModel(it.siteRepository, hasNetwork = it.connectivity::hasNetwork) }
     val state by vm.state.collectAsStateWithLifecycle()
     val reconnects = rememberReconnects()
+    val missing = rememberMissingPhotos()
     Scaffold(topBar = { BackTopBar(albumTitle(name), onBack) }) { padding ->
         StateContent(
-            state = state.map { albums -> albums.firstOrNull { it.name == name }?.photos.orEmpty() },
+            // Липсващите на сайта снимки (404/410) отпадат от мрежата; индексът в прегледа е в същия списък.
+            state = state.map { albums -> albums.withoutMissing(missing).firstOrNull { it.name == name }?.photos.orEmpty() },
             onRetry = { vm.refresh() }, isEmpty = { it.isEmpty() },
             skeleton = { SkeletonCards() }, empty = { EmptyView(stringResource(R.string.gallery_empty), icon = Icons.Outlined.PhotoLibrary) },
             modifier = Modifier.padding(padding),
@@ -218,14 +222,16 @@ internal enum class PhotoFailure {
 }
 
 /**
- * Миниатюра от сайта. Липсва на сайта (404/410) — „Снимката липсва“ с икона (не празна плочка,
- * която изглежда като „още се зарежда“). Друга грешка (напр. без връзка) — неутрална плочка с
- * „Опитай отново“, която опитва и сама, щом връзката се върне ([reload] се смени).
+ * Миниатюра от сайта. Липсва на сайта (404/410) — записва се в [PhotoMisses] (галерията и
+ * албумът я махат от мрежата), а докато това стане — „Снимката липсва“ с икона (не празна
+ * плочка, която изглежда като „още се зарежда“). Друга грешка (напр. без връзка) — неутрална
+ * плочка с „Опитай отново“, която опитва и сама, щом връзката се върне ([reload] се смени).
  */
 @Composable
 internal fun PhotoTile(url: String?, width: Dp, contentDescription: String?, modifier: Modifier = Modifier, reload: Int = 0) {
     var failure by remember(url) { mutableStateOf<PhotoFailure?>(null) }
     LaunchedEffect(reload) { if (failure == PhotoFailure.Transient) failure = null }
+    LaunchedEffect(failure, url) { if (failure == PhotoFailure.Missing) PhotoMisses.record(url) }
     when (failure) {
         PhotoFailure.Missing -> MissingPhoto(contentDescription, modifier)
         PhotoFailure.Transient -> UnloadedPhoto(contentDescription, modifier, onRetry = { failure = null })
@@ -233,7 +239,7 @@ internal fun PhotoTile(url: String?, width: Dp, contentDescription: String?, mod
     }
 }
 
-/** Липсва на сайта: икона и „Снимката липсва“ — с името на снимката (и за екранния четец). */
+/** Липсва на сайта (до махането ѝ от мрежата): икона и „Снимката липсва“ — с името на снимката (и за екранния четец). */
 @Composable
 private fun MissingPhoto(title: String?, modifier: Modifier) {
     val label = stringResource(R.string.photo_unavailable)
@@ -298,8 +304,11 @@ fun PhotoViewerScreen(
     // Отделни снимки по адрес (от статия/страница) не изискват зареждане на галерията.
     val vm = appViewModel { GalleryViewModel(it.siteRepository, load = !album.isNullOrBlank(), hasNetwork = it.connectivity::hasNetwork) }
     val state by vm.state.collectAsStateWithLifecycle()
+    // Липсващите на сайта снимки — както ги е видяла мрежата на албума при отварянето (индексът е
+    // в нея). Открити по-късно (и тук) не местят страниците, докато прегледът е отворен.
+    val missingAtOpen = remember { PhotoMisses.active() }
     val photos: List<GalleryPhoto> = if (!album.isNullOrBlank()) {
-        state.data?.firstOrNull { it.name == album }?.photos.orEmpty()
+        state.data?.withoutMissing(missingAtOpen)?.firstOrNull { it.name == album }?.photos.orEmpty()
     } else remember(urls, alts, pageUrl) { viewerPhotos(urls, alts, pageUrl) }
     if (photos.isNotEmpty()) PhotoViewer(photos, index, onClose, pageTitle)
     else Box(Modifier.fillMaxSize().background(Color.Black))
@@ -528,7 +537,10 @@ internal fun ZoomableImage(
                 when {
                     original -> { original = false; originalFailed = true }
                     attempt < sources.lastIndex -> attempt++
-                    else -> failure = PhotoFailure.of(it.result.throwable)
+                    else -> failure = PhotoFailure.of(it.result.throwable).also { f ->
+                        // Няма я и миниатюрата: в мрежата на албума вече няма да се показва.
+                        if (f == PhotoFailure.Missing) PhotoMisses.record(photo.thumbUrl)
+                    }
                 }
             },
             // Без собствен фон: при плъзгане за затваряне избледнява фонът на прегледа.

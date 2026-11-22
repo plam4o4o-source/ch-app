@@ -79,6 +79,7 @@ class BrokenPhotoTest {
 
     @OptIn(DelicateCoilApi::class)
     @After fun stop() {
+        PhotoMisses.clear()
         SingletonImageLoader.reset()
         server.shutdown()
     }
@@ -91,6 +92,8 @@ class BrokenPhotoTest {
         compose.setContent { ChitalishteTheme { PhotoTile(url, 110.dp, "Сцена", Modifier.size(110.dp)) } }
         compose.waitUntil(10_000) { hasDescription(app.getString(R.string.photo_unavailable_named, "Сцена")) }
         assertTrue(requests.get() >= 1, "снимката е поискана от сайта")
+        // Записана е като липсваща — галерията и албумът я махат от мрежата и от броя.
+        compose.waitUntil(5_000) { url in PhotoMisses.active() }
     }
 
     @Test fun offlineThumbnailIsNotMissingAndRetriesWhenTheConnectionReturns() {
@@ -103,6 +106,7 @@ class BrokenPhotoTest {
         assertTrue(!hasDescription(app.getString(R.string.photo_unavailable_named, "Снимка 3")), "без връзка не е „липсва“")
         compose.onNodeWithContentDescription(app.getString(R.string.action_retry)).assertExists()
         assertEquals(0, requests.get())
+        assertTrue(url !in PhotoMisses.active(), "без връзка снимката остава в мрежата (с „Опитай отново“)")
 
         // Връзката се върна — плочката опитва сама (а сайтът казва, че снимката липсва).
         online = true
@@ -127,6 +131,7 @@ class BrokenPhotoTest {
         compose.setContent { ChitalishteTheme { ZoomableImage(photo, "Снимка 2", active = true) } }
         compose.waitUntil(10_000) { hasText(app.getString(R.string.photo_missing_on_site)) }
         assertTrue(!hasText(app.getString(R.string.action_retry)), "без „Опитай отново“ — снимката просто я няма")
+        assertTrue(photo.thumbUrl in PhotoMisses.active(), "няма я и миниатюрата — и мрежата на албума я маха")
     }
 
     @Test fun viewerWithoutConnectionShowsAnErrorWithRetry() {
@@ -136,6 +141,7 @@ class BrokenPhotoTest {
         val retry = app.getString(R.string.action_retry)
         compose.waitUntil(10_000) { hasText(retry) }
         compose.onNodeWithText(app.getString(R.string.photo_load_failed)).assertExists()
+        assertTrue(PhotoMisses.active().isEmpty(), "без връзка — не е липсваща")
         // „Опитай отново“ с върната връзка — нова заявка към сайта (който казва, че снимката липсва).
         online = true
         compose.onNodeWithText(retry).performClick()
