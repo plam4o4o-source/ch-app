@@ -14,8 +14,8 @@ on:
 permissions:
   contents: read
 env:
-  NEW_REF: 5a145786be4860151a4345077f12b304ac3ca2b8
-  NEW_PATCH: w28-exp.patch
+  NEW_REF: ed441ba4ff55eb8f9e68be162db8da5e4a4b9b7b
+  NEW_PATCH: ""
   BASE_REF: 5a145786be4860151a4345077f12b304ac3ca2b8
   V: v142perf
 jobs:

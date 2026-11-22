@@ -18,3 +18,7 @@ doFrame from a Perfetto trace of each interaction (as in [../v139fix/index.md](.
   `next` — the one after it; frames over 25/30 ms in total; `rows` — catalogue rows composed in the worst frame
   (experimental build only).
 - Wall times on this software-GPU emulator are mostly waits for the RenderThread and are not used.
+- Run 1 (parts `bk*`, `ty*`, `tb*`): BASE 5a145786 against NEW = 5a145786 + `w28-exp.patch` (the variants).
+  Run 2, the final A/B (parts `fbk*`, `fty*`, `ftb*`): BASE 5a145786 against NEW = wave25/perf (no patch, no flags),
+  more rounds; recordings at 8 frames/s over the whole transition (the emulator draws a frame in 0.2–0.5 s).
+- Host CPUs of the runners differ (a part can be 2× slower than another): compare BASE and NEW within one part.

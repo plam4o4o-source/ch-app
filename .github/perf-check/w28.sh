@@ -5,7 +5,7 @@
 # A variant label: base | x (NEW without flags) | x-<flag>+<flag>.
 # Measured as in part_fix (w27.sh): a Perfetto trace of one interaction, CPU (Running) per doFrame (w28.py meas).
 # Loaded by run.sh after w27.sh.
-W28_PARTS=" bk33 bk36x ty33 ty36x tb33 tb36x "
+W28_PARTS=" bk33 bk36x ty33 ty36x tb33 tb36x fbk33 fbk36x fty33 fty36x ftb33 ftb36x "
 W20_PARTS="$W20_PARTS $W28_PARTS"
 W28PY=$H_/w28.py
 W28VARS_BK=${W28VARS_BK:-"base x x-bk1 x-bk2 x-one x-nosh x-bk1+one"}
@@ -47,6 +47,7 @@ w_setup() {  # both builds: BASE installed next to NEW, the app language, first 
   TR_APPS="org.chyavorec.app org.chyavorec.app.b"
   anims 1
   tr_init; MAPF=""
+  log "host cpu: $(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2)"
   sec "S0. NEW (org.chyavorec.app) and BASE (org.chyavorec.app.b) side by side; first launch to the catalogue, speed-profile"
   [ -f app-base.apk ] && timeout 240 adb install -r app-base.apk 2>&1 | tail -1
   for K in x base; do
@@ -95,19 +96,20 @@ bk_visual() {  # $1 — variant: Back from a book and the open of the next one, 
   v_use $v; v_launch; w_catalog; dump
   p=$(python3 $H_/find.py $OUT/ui.xml --clickables $(results_top) $((H * 8 / 10)) 100 | sed -n 2p)
   [ -n "$p" ] || { log "VIS $v: no row"; return 0; }
-  REC_FPS=25 rec_cmd open-$v emu 2 a input tap $p
+  # the software-GPU emulator draws a frame in ~0.2-0.5 s: the whole transition takes several seconds
+  REC_FPS=8 rec_cmd open-$v emu 7 a input tap $p
   sleep 2; shot bk/$v-book >/dev/null
-  REC_FPS=25 rec_cmd back-$v emu 2 a input keyevent 4
+  REC_FPS=8 rec_cmd back-$v emu 7 a input keyevent 4
   sleep 1; dump; log "VIS $v: back on the list $(has "$RX_RESULTS" && echo yes || echo NO); $(texts 8 | cut -c1-200)"; shot bk/$v-after >/dev/null
 }
 part_bk() {
   local r v
   w_setup
-  for r in 1 2 3; do
+  for r in $(seq 1 ${W28R_BK:-3}); do
     sec "B$r. Round $r: per variant a new process, Каталог, then rows 1-3: open, Back (measured)"
     for v in $(w_order $r $W28VARS_BK); do bk_round $v $r; done
   done
-  sec "BV. Visual: open a book and Back, screen recording at 25 frames/s"
+  sec "BV. Visual: open a book and Back, screen recording at 8 frames/s"
   for v in $W28VARS_BK; do bk_visual $v; done
   w_end
 }
@@ -155,9 +157,16 @@ part_ty() {
   helper_install; ime_init
   w_setup
   ime_use pc
-  for r in 1 2; do
+  for r in $(seq 1 ${W28R_TY:-2}); do
     sec "T$r. Round $r: per variant a new process; typing 3 words (test IME, a letter every 350 ms), × (clear), sort by year / relevance, „Покажи още“, a fling, a slow drag"
     for v in $(w_order $r $W28VARS_TY); do ty_round $v $r; done
+  done
+  sec "TV. Visual: typing a word, recorded"
+  for v in $W28VARS_TY; do
+    v_use $v; v_launch; w_catalog; dump
+    p=$(xy text "$L_SEARCH"); [ -n "$p" ] || p=$(xy class EditText)
+    a input tap $p; sleep 2
+    REC_FPS=8 rec_cmd type-$v emu 6 ime_type любов 350
   done
   ime_use default
   w_end
@@ -177,25 +186,26 @@ tb_round() {  # $1 — variant, $2 — round
 tb_visual() {  # $1 — variant: the tab entries recorded
   local v=$1
   v_use $v; v_launch
-  REC_FPS=25 rec_cmd tab-news-$v emu 1.5 a input tap $NEWS
-  REC_FPS=25 rec_cmd tab-my-$v emu 1.5 a input tap $MY_
-  REC_FPS=25 rec_cmd tab-more-$v emu 1.5 a input tap $MORE_
-  REC_FPS=25 rec_cmd tab-home-$v emu 1.5 a input tap $HOME_
+  REC_FPS=8 rec_cmd tab-news-$v emu 5 a input tap $NEWS
+  REC_FPS=8 rec_cmd tab-more-$v emu 5 a input tap $MORE_
+  REC_FPS=8 rec_cmd tab-home-$v emu 5 a input tap $HOME_
 }
 part_tb() {
   local r v
   w_setup
-  for r in 1 2 3 4; do
+  for r in $(seq 1 ${W28R_TB:-4}); do
     sec "E$r. Round $r: per variant a new process on Home; News, Моето, Още, Каталог, Home (first entries), then warm entries"
     for v in $(w_order $r $W28VARS_TB); do tb_round $v $r; done
   done
-  sec "EV. Visual: the tab entries recorded at 25 frames/s"
+  sec "EV. Visual: the tab entries recorded at 8 frames/s"
   for v in $W28VARS_TB; do tb_visual $v; done
   w_end
 }
 
 part_w28() {
   case "$W28_PARTS" in *" $PART "*) ;; *) return 1;; esac
-  case $PART in bk*) part_bk;; ty*) part_ty;; tb*) part_tb;; esac
+  # f* — the final A/B: BASE against NEW without flags, more rounds
+  case $PART in f*) W28VARS_BK="base x"; W28VARS_TY="base x"; W28VARS_TB="base x"; W28R_BK=5; W28R_TY=3; W28R_TB=5;; esac
+  case $PART in bk*|fbk*) part_bk;; ty*|fty*) part_ty;; tb*|ftb*) part_tb;; esac
   return 0
 }
