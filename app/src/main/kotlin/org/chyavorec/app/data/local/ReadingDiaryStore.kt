@@ -17,7 +17,8 @@ fun ReadingDiaryEntity.toEntry(): DiaryEntry = DiaryEntry(bookKey, title, author
 /**
  * „Читателски дневник“ на телефона: оценка (1–5) и бележка на ред за прочетена книга. Всички записи
  * са през [dbWrite] (грешка на базата не сривa екрана); четенията — през [orOnDbError]. Трие се
- * при изход, както историята на четенето (AppContainer.clearReaderTraces).
+ * при изход, както историята на четенето (AppContainer.clearReaderTraces) — освен ако читателят
+ * изрично го остави в потвърждението на „Изход“ ([KeptDiary]).
  */
 class ReadingDiaryStore(private val dao: ReadingDiaryDao, private val clock: AppClock) {
     val entries: Flow<List<ReadingDiaryEntity>> = dao.observeAll().orOnDbError(emptyList())

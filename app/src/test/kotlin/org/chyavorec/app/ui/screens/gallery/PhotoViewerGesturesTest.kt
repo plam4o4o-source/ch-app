@@ -78,6 +78,7 @@ class PhotoViewerGesturesTest {
 
     @OptIn(DelicateCoilApi::class)
     @After fun stop() {
+        PhotoMisses.clear()
         SingletonImageLoader.reset()
         server.shutdown()
     }

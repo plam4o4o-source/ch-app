@@ -1,6 +1,7 @@
 package org.chyavorec.app.notifications
 
 import android.app.NotificationManager
+import android.content.res.Configuration
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.ListenableWorker
@@ -12,12 +13,16 @@ import org.chyavorec.app.WorkerTestApp
 import org.chyavorec.core.FixedClock
 import org.chyavorec.core.Outcome
 import org.chyavorec.domain.model.LoanReminderKind
+import org.chyavorec.domain.model.LoanReminderPlan
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
+import java.time.DayOfWeek
 import java.time.Instant
+import java.time.LocalDateTime
+import java.util.Locale
 import java.util.UUID
 import kotlin.test.assertEquals
 import kotlin.test.assertIs
@@ -190,6 +195,44 @@ class LoanReminderWorkerTest {
         run(LoanReminderKind.DUE_DAY)
         val n = reminders().single()
         assertEquals("Под игото", n.notification.extras.getCharSequence(android.app.Notification.EXTRA_TEXT).toString())
+    }
+
+    /** Срок в събота (почивен ден по вграденото работно време) — в разгънатото известие има бележка. */
+    @Test fun dueOnClosedDayAddsReturnByNote() {
+        signIn()
+        backend.loans(loan(due = "2026-10-24"))
+        // Четвъртък 22.10, 10:00 — „2 дни преди“ срока в събота.
+        clock.advanceSeconds(4 * 24 * 3600)
+        run(due = "2026-10-24")
+        val extras = reminders().single().notification.extras
+        val text = extras.getCharSequence(android.app.Notification.EXTRA_TEXT).toString()
+        val note = LoanReminderWorker.closedDueNote(
+            app, LoanReminderPlan.ClosedDue(DayOfWeek.SATURDAY, LocalDateTime.of(2026, 10, 23, 16, 0)),
+        )
+        assertEquals("$text\n$note", extras.getCharSequence(android.app.Notification.EXTRA_BIG_TEXT).toString())
+    }
+
+    @Test fun dueOnOpenDayHasNoNote() {
+        signIn()
+        backend.loans(loan())
+        run()
+        val extras = reminders().single().notification.extras
+        assertEquals(
+            extras.getCharSequence(android.app.Notification.EXTRA_TEXT).toString(),
+            extras.getCharSequence(android.app.Notification.EXTRA_BIG_TEXT).toString(),
+        )
+    }
+
+    @Test fun closedDueNoteInBulgarian() {
+        val bg = app.createConfigurationContext(Configuration(app.resources.configuration).apply { setLocale(Locale.forLanguageTag("bg")) })
+        assertEquals(
+            "В петък библиотеката не работи — върни книгата до четвъртък 16:30",
+            LoanReminderWorker.closedDueNote(bg, LoanReminderPlan.ClosedDue(DayOfWeek.FRIDAY, LocalDateTime.of(2026, 10, 22, 16, 30))),
+        )
+        assertEquals(
+            "Във вторник библиотеката не работи",
+            LoanReminderWorker.closedDueNote(bg, LoanReminderPlan.ClosedDue(DayOfWeek.TUESDAY, null)),
+        )
     }
 
     @Test fun disabledLoanNotificationsShowNothing() = runBlocking<Unit> {

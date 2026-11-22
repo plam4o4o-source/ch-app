@@ -538,6 +538,9 @@ S = {
 "reader_number": ("Читателски № %1$s", "Reader no. %1$s"),
 "logout_title": ("Изход от профила?", "Sign out?"),
 "logout_text": ("Сесията и всички запазени на устройството читателски данни ще бъдат изтрити.", "Your session and all reader data stored on this device will be deleted."),
+# Изходът при оценки/бележки в читателския дневник: отметка (сложена по подразбиране) и бележка, ако е махната.
+"logout_delete_diary": ("Изтрий и бележките от читателския дневник", "Also delete the notes in the reading diary"),
+"logout_diary_kept_note": ("Оценките и бележките остават само на този телефон и се показват пак, когато влезеш отново.", "Your ratings and notes stay on this phone only and come back when you sign in again."),
 "login_title": ("Вход", "Sign in"),
 "login_heading": ("Вход за читатели", "Reader sign-in"),
 "login_card": ("Читателски номер", "Reader number"),
@@ -666,6 +669,14 @@ S = {
 "contacts_phone": ("Телефон", "Phone"),
 "contacts_email_label": ("Имейл", "Email"),
 "contacts_hours": ("Работно време", "Opening hours"),
+# Вълна 25 „hours“: „Отворено сега“ (OpenNowBadge) — по работното време от сайта или вграденото.
+"open_now_until": ("Отворено до %1$s", "Open until %1$s"),
+"open_now_closing_soon": ("Затваря скоро — до %1$s", "Closing soon — until %1$s"),
+"open_now_opens_today": ("Затворено · отваря днес в %1$s", "Closed · opens today at %1$s"),
+"open_now_opens_tomorrow": ("Затворено · отваря утре в %1$s", "Closed · opens tomorrow at %1$s"),
+"open_now_opens_on": ("Затворено · отваря %1$s в %2$s", "Closed · opens %1$s at %2$s"),
+# Дните с предлога (понеделник…неделя), разделени със запетая — като event_weekdays.
+"open_days_on": ("в понеделник,във вторник,в сряда,в четвъртък,в петък,в събота,в неделя", "on Monday,on Tuesday,on Wednesday,on Thursday,on Friday,on Saturday,on Sunday"),
 "contacts_hours_unknown": ("Не е обявено в сайта", "Not listed on the website"),
 "contacts_web": ("В интернет", "Online"),
 "contacts_fallback_hours": ("Понеделник – четвъртък: 08:00 – 16:30\nПетък: 08:00 – 16:00\nСъбота и неделя: почивни дни", "Monday – Thursday: 08:00 – 16:30\nFriday: 08:00 – 16:00\nSaturday and Sunday: closed"),
@@ -946,6 +957,9 @@ S = {
 "notif_new_article": ("Нова публикация", "New post"),
 "notif_due_soon": ("Наближава срок за връщане", "Due date approaching"),
 "notif_due_today": ("Днес е срокът за връщане", "Due back today"),
+# Вълна 25 „hours“: срок в почивен ден (%1$s — „в петък“ от open_days_on; %2$s — ден, %3$s — час).
+"notif_due_closed_day": ("%1$s библиотеката не работи", "%1$s the library is closed"),
+"notif_due_closed_return_by": ("%1$s библиотеката не работи — върни книгата до %2$s %3$s", "%1$s the library is closed — return the book by %2$s %3$s"),
 "notif_due_on": ("%1$s — до %2$s", "%1$s — due %2$s"),
 "notif_overdue": ("Просрочена книга", "Overdue book"),
 "notif_public_loan": ("Наближава срок за връщане на книга", "A library book is due soon"),
@@ -1151,7 +1165,7 @@ S = {
 "about_invlib": ("Библиотечната система InvLib", "The InvLib library system"),
 }
 
-PRIVACY_BG = """Последна актуализация: 12 ноември 2026 г.
+PRIVACY_BG = """Последна актуализация: 22 ноември 2026 г.
 
 # Кой обработва данните
 
@@ -1185,7 +1199,7 @@ PRIVACY_BG = """Последна актуализация: 12 ноември 202
 
 Отключване на личните екрани (по избор, „Настройки › Поверителност“): картата, заеманията, историята и личните съобщения се отварят след отключване със заключването на телефона (пръстов отпечатък, лице или ПИН) — проверката прави системата на телефона, а приложението никога не получава биометрични данни.
 
-Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.\n\nСкенер на баркодове: сканира скенерът на Google Play услугите — той включва камерата само докато е отворен и разчита кода на телефона; приложението няма достъп до камерата и получава само разчетения номер, а кадрите не се записват и не се изпращат от приложението.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона. „Читателски дневник“: оценките и бележките ти за прочетени книги остават само на телефона, не се изпращат никъде и се изтриват при изход; в споделената картинка „Препоръчай“ влиза само оценката, а бележката — само ако я включиш.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
+Уиджет на началния екран: ако го добавиш, той показва само броя книги за връщане и сроковете им — без заглавия и без име.\n\nСкенер на баркодове: сканира скенерът на Google Play услугите — той включва камерата само докато е отворен и разчита кода на телефона; приложението няма достъп до камерата и получава само разчетения номер, а кадрите не се записват и не се изпращат от приложението.\n\nИстория на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона. „Читателски дневник“: оценките и бележките ти за прочетени книги остават само на телефона, не се изпращат никъде и се изтриват при изход — освен ако в потвърждението на изхода махнеш отметката „Изтрий и бележките от читателския дневник“: тогава остават на телефона и се показват пак при следващия ти вход (вход на друг читател ги изтрива); в споделената картинка „Препоръчай“ влиза само оценката, а бележката — само ако я включиш.\n\nУдължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
 
 Заявка за книга: ако заявиш книга от каталога, заявката (коя книга) се изпраща до сървъра на читалището, за да може библиотеката да я отдели за теб. Телефонът помни седмица, че си я заявил (шифровано, изтрива се при изход).
 
@@ -1217,7 +1231,7 @@ PRIVACY_BG = """Последна актуализация: 12 ноември 202
 
 При промяна на тази политика новата версия се публикува в приложението и в сайта на читалището."""
 
-PRIVACY_EN = """Last updated: November 12, 2026
+PRIVACY_EN = """Last updated: November 22, 2026
 
 # Who processes the data
 
@@ -1251,7 +1265,7 @@ Sign-in protection: after several failed sign-in attempts, sign-in is temporaril
 
 Unlock for personal screens (optional, “Settings › Privacy”): the card, loans, history and personal messages open only after unlocking with the phone’s screen lock (fingerprint, face or PIN) — the phone’s system does the check, and the app never receives any biometric data.
 
-Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.\n\nBarcode scanner: scanning is done by the Google Play services code scanner — it turns the camera on only while it is open and reads the code on the phone; the app has no camera access and receives only the decoded number, and frames are never stored or sent by the app.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only. Reading diary: your ratings and notes on books you have read stay on the phone only, are never sent anywhere and are deleted when you sign out; the shared “Recommend” image carries only the rating, and the note only if you include it.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
+Home-screen widget: if you add it, it shows only the number of books due and their due dates — no titles and no name.\n\nBarcode scanner: scanning is done by the Google Play services code scanner — it turns the camera on only while it is open and reads the code on the phone; the app has no camera access and receives only the decoded number, and frames are never stored or sent by the app.\n\nReading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only. Reading diary: your ratings and notes on books you have read stay on the phone only, are never sent anywhere and are deleted when you sign out — unless, when confirming sign-out, you untick “Also delete the notes in the reading diary”: then they stay on the phone and come back at your next sign-in (a different reader signing in deletes them); the shared “Recommend” image carries only the rating, and the note only if you include it.\n\nRenewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
 
 Holds: if you place a hold on a book in the catalogue, the request (which book) goes to the centre’s server so that the library can set the book aside for you. The phone remembers for a week that you placed it (encrypted, deleted when you sign out).
 

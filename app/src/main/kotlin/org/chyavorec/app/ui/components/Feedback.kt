@@ -13,7 +13,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,7 +26,6 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.CloudOff
 import androidx.compose.material.icons.outlined.CollectionsBookmark
@@ -147,39 +145,45 @@ fun MessageView(
     motion: EmptyMotion? = emptyMotionFor(icon),
     /** Бродирана лента от ромбове под илюстрацията — избродира се веднъж при появата (празните състояния). */
     ornament: Boolean = false,
+    /** Нисък прозорец (под [CompactMessageHeight]): само бродираният медальон със значката — без илюстрацията и лентата. */
+    compact: Boolean = isCompactMessageHeight(windowHeight()),
 ) {
     Column(
-        modifier = modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = 40.dp),
+        modifier = modifier.fillMaxWidth().padding(horizontal = 32.dp, vertical = if (compact) 16.dp else 40.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
-        // Илюстрация (в стила на логото) + значка според ситуацията.
-        Box(Modifier.size(160.dp, 120.dp)) {
-            if (animation != null) {
-                Box(Modifier.fillMaxSize()) { animation() }
-            } else if (motion != null) {
-                EmptyAnimation(motion, Modifier.fillMaxSize())
-            } else androidx.compose.foundation.Image(
-                painter = androidx.compose.ui.res.painterResource(illustration.res),
-                contentDescription = null,
-                colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(LocalExtendedColors.current.gold),
-                modifier = Modifier.fillMaxSize(),
-            )
-            Box(
-                Modifier.align(Alignment.BottomEnd).padding(end = 8.dp).size(44.dp)
-                    .background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
-                contentAlignment = Alignment.Center,
-            ) {
-                // Златният контейнер (като индикатора в лентата), не розовият secondaryContainer.
-                Icon(icon, contentDescription = null, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(24.dp))
+        if (compact) {
+            // Не по-висок от екрана: значката в бродирания медальон и веднага заглавието.
+            // Медальонът вече е шевицата — без лентата.
+            EmbroideredMedallion(icon, size = 64.dp)
+            Spacer(Modifier.height(12.dp))
+        } else {
+            // Илюстрация (в стила на логото) + значката в бродиран медальон (EmbroideredMedallion).
+            Box(Modifier.size(160.dp, 120.dp)) {
+                if (animation != null) {
+                    Box(Modifier.fillMaxSize()) { animation() }
+                } else if (motion != null) {
+                    EmptyAnimation(motion, Modifier.fillMaxSize())
+                } else androidx.compose.foundation.Image(
+                    painter = androidx.compose.ui.res.painterResource(illustration.res),
+                    contentDescription = null,
+                    colorFilter = androidx.compose.ui.graphics.ColorFilter.tint(LocalExtendedColors.current.gold),
+                    modifier = Modifier.fillMaxSize(),
+                )
+                // Златният контейнер (като индикатора в лентата), не розовият secondaryContainer — в
+                // кръстат венец; в същия ъгъл и без да увеличава височината на илюстрацията.
+                EmbroideredMedallion(icon, Modifier.align(Alignment.BottomEnd), size = 56.dp)
             }
         }
-        if (ornament) {
-            Spacer(Modifier.height(8.dp))
-            StitchInOrnament(EmptyBand, Modifier.size(width = 132.dp, height = 28.dp))
-            Spacer(Modifier.height(10.dp))
-        } else {
-            Spacer(Modifier.height(20.dp))
+        if (!compact) {
+            if (ornament) {
+                Spacer(Modifier.height(8.dp))
+                StitchInOrnament(EmptyBand, Modifier.size(width = 132.dp, height = 28.dp))
+                Spacer(Modifier.height(10.dp))
+            } else {
+                Spacer(Modifier.height(20.dp))
+            }
         }
         Text(
             title, style = MaterialTheme.typography.headlineSmall, textAlign = TextAlign.Center,
@@ -237,7 +241,8 @@ fun EmptyView(
     illustration: Illustration = illustrationFor(icon),
     animation: (@Composable () -> Unit)? = null,
     motion: EmptyMotion? = emptyMotionFor(icon),
-) = MessageView(icon, title, message, modifier, illustration = illustration, animation = animation, motion = motion, ornament = true)
+    compact: Boolean = isCompactMessageHeight(windowHeight()),
+) = MessageView(icon, title, message, modifier, illustration = illustration, animation = animation, motion = motion, ornament = true, compact = compact)
 
 /** Лентата под илюстрацията на празните състояния: четири ромба (33×7 бода). */
 private val EmptyBand: StitchChart = StitchCharts.band(4)

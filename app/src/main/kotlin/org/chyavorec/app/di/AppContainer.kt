@@ -37,6 +37,7 @@ import org.chyavorec.app.data.local.CatalogDatabase
 import org.chyavorec.app.data.local.DataStoreThrottleStore
 import org.chyavorec.app.data.local.FilePayloadCache
 import org.chyavorec.app.data.local.FileUnreadableSessionCounter
+import org.chyavorec.app.data.local.KeptDiary
 import org.chyavorec.app.data.local.RoomCatalogIndexStore
 import org.chyavorec.app.data.local.SecureSelfCardStore
 import org.chyavorec.app.data.local.SecureSessionStore
@@ -95,13 +96,16 @@ import org.chyavorec.data.repository.SiteRepository
 import org.chyavorec.data.site.ChyavorecSiteService
 import org.chyavorec.domain.model.Contacts
 import org.chyavorec.domain.model.Loan
+import org.chyavorec.domain.model.LoanReminderPlan
 import org.chyavorec.domain.model.LoanReminderSync
+import org.chyavorec.domain.model.OpeningHours
 import org.chyavorec.domain.repository.PayloadCache
 import org.chyavorec.domain.service.AuthenticationService
 import org.chyavorec.domain.service.MembershipService
 import org.chyavorec.domain.service.ReaderService
 import java.io.File
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.atomic.AtomicBoolean
 
 /** Трите читателски услуги — от една и съща реализация. */
 data class ReaderServices(
@@ -222,6 +226,22 @@ class AppContainer(
     val eventsRepository by lazy { EventsRepository(siteService, publicCache, clock) }
     val catalogRepository by lazy { CatalogRepository(catalogService, publicCache, clock, index = RoomCatalogIndexStore(recreate = { CatalogDatabase.recreate(context) }) { catalogDatabase }) }
     val siteRepository by lazy { SiteRepository(siteService, publicCache, clock, newsRepository) }
+
+    /**
+     * Работното време на библиотеката: от запазените контакти от сайта (само кеша — без мрежа),
+     * а ако редовете им не се разчетат — вграденото (contacts_fallback_hours).
+     */
+    suspend fun openingHours(): OpeningHours? {
+        val site = try {
+            siteRepository.cachedContacts()?.data?.takeIf { it.fromSite }?.workingHours
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Diagnostics.record("contacts.hours", e)
+            null
+        }
+        return OpeningHours.resolve(site.orEmpty(), context.getString(org.chyavorec.app.R.string.contacts_fallback_hours).lines())
+    }
 
     // „Старият вестник“, „Лента на времето“, „Познай Яворец“.
     /** Статиите от юбилейния вестник (PDF) за четеца — отделна папка, пази се дълго (офлайн четене). */
@@ -401,22 +421,58 @@ class AppContainer(
     }
 
     /**
+     * Изборът от потвърждението на ръчния „Изход“ ([signOut]): читателският дневник остава на
+     * телефона. Взима се (и се нулира) от наблюдателя при прехода към изход; всеки друг изход
+     * (изтекла сесия, премахнат профил, нечетима сесия) го намира `false` и трие дневника.
+     */
+    private val keepDiaryOnSignOut = AtomicBoolean(false)
+
+    /**
+     * Ръчният „Изход“ от „Моето“. [keepDiary] — читателят е махнал отметката „Изтрий и бележките
+     * от читателския дневник“: дневникът остава за следващ вход на същия читател ([KeptDiary]).
+     */
+    suspend fun signOut(keepDiary: Boolean) {
+        keepDiaryOnSignOut.set(keepDiary)
+        try {
+            authRepository.logout()
+        } finally {
+            // Изходът не е станал (напр. вече е бил излязъл) — изборът не бива да остане за
+            // следващ, принудителен изход. Станал ли е, наблюдателят го е взел или ще го вземе.
+            if (authRepository.state.value !is AuthState.SignedOut) keepDiaryOnSignOut.set(false)
+        }
+    }
+
+    /**
      * При ВСЕКИ преход от вход към изход — ръчен изход или принудителен (отказано
      * подновяване на сесията) — изчиства личните следи ([clearReaderTraces]). Също при старт
      * без сесия, ако предишният процес е имал вход („не ме помни“ и спрян процес — следващият
      * на същия телефон не бива да види нищо), и при вход на друг читател без изход между двата.
      * Временно нечетима сесия ([AuthState.Unavailable]) НЕ е изход — нищо не се изчиства; нов вход
-     * на нейно място — да (чия е била, не се знае).
+     * на нейно място — да (чия е била, не се знае). Читателският дневник остава само при ръчния
+     * изход с махната отметка ([signOut]) и само за същия читател: вход на друг го изтрива.
      */
     private fun watchSignOut(auth: AuthRepository) {
         appScope.launch { runCatching { evictLegacyReaderHttpCache() }.logFailure("signout.http-cache") }
         appScope.launch {
             var wasSignedIn = false
             var previous: AuthState? = null
+            // Последният влязъл читател — чий е оставеният при изхода дневник.
+            var reader: String? = null
             auth.state.collect { s ->
                 val before = previous
                 previous = s
                 if (s is AuthState.SignedIn) {
+                    // Изборът при изхода важи само за прехода към изход, който го последва.
+                    keepDiaryOnSignOut.set(false)
+                    reader = s.readerId
+                    // Дневникът, оставен при изход от друг читател, не е за този.
+                    runCatching {
+                        val kept = settings.keptDiaryOwner()
+                        if (kept != null) {
+                            if (KeptDiary.clearOnSignIn(kept, s.readerId)) database.readingDiary().clear()
+                            settings.setKeptDiaryOwner(null)
+                        }
+                    }.logFailure("signin.kept-diary")
                     // Unavailable може и да не е видяно (StateFlow пропуска междинни стойности).
                     val replaced = before !is AuthState.SignedIn && auth.loginReplacedUnreadable
                     if ((before is AuthState.SignedIn && before.readerId != s.readerId) || replaced) clearReaderTraces()
@@ -428,7 +484,10 @@ class AppContainer(
                 } else if (s is AuthState.SignedOut) {
                     val traces = wasSignedIn || runCatching { settings.readerTraces() }.getOrDefault(false)
                     wasSignedIn = false
-                    if (traces) clearReaderTraces()
+                    // Само ръчният изход с махната отметка и само ако се знае чий е дневникът.
+                    val keepFor = reader?.takeIf { keepDiaryOnSignOut.getAndSet(false) }
+                    reader = null
+                    if (traces) clearReaderTraces(keepDiaryFor = keepFor)
                 }
             }
         }
@@ -436,17 +495,27 @@ class AppContainer(
 
     /**
      * Личните следи на излезлия читател: съобщенията в паметта, историята на търсенето и
-     * следите от известията (DataStore), напомнянията за срок и чакащите „Удължи“, показаните
-     * лични известия, прекият път „последната книга“ и отговорите на моста в HTTP кеша. Шифрованият читателски кеш и сесията се трият в
+     * следите от известията (DataStore), читателският дневник, напомнянията за срок и чакащите
+     * „Удължи“, показаните лични известия, прекият път „последната книга“ и отговорите на моста в
+     * HTTP кеша. Шифрованият читателски кеш и сесията се трият в
      * [AuthRepository] — заедно с личните изображения (снимка в профила, корици на заети
      * книги; [readerCache], [evictPersonalImages]); останалите изображения остават.
+     * [keepDiaryFor] — читателят, оставил дневника си на телефона при ръчния „Изход“ ([signOut]):
+     * тогава дневникът остава (за следващия му вход); `null` — трие се (всички други пътища).
      */
-    private suspend fun clearReaderTraces() {
+    private suspend fun clearReaderTraces(keepDiaryFor: String? = null) {
         // Личните съобщения изчезват веднага и от паметта (кешът им е в readerCache).
         runCatching { messages.clearPersonal() }.logFailure("signout.messages")
         runCatching { settings.clearPersonal() }.logFailure("signout.settings")
-        // Читателският дневник (оценки и бележки) върви с историята на четенето — трие се при изход.
-        runCatching { database.readingDiary().clear() }.logFailure("signout.diary")
+        // Читателският дневник (оценки и бележки) върви с историята на четенето — трие се при
+        // изход, освен ако читателят изрично го е оставил (тогава се помни чий е).
+        // Не се ли запише чий е, дневникът не остава (иначе би го видял и следващият читател).
+        val kept = keepDiaryFor != null &&
+            runCatching { settings.setKeptDiaryOwner(KeptDiary.ownerKey(keepDiaryFor)) }.logFailure("signout.diary").isSuccess
+        if (!kept) {
+            runCatching { database.readingDiary().clear() }.logFailure("signout.diary")
+            runCatching { settings.setKeptDiaryOwner(null) }.logFailure("signout.diary")
+        }
         // Напомнянията за срок на предишния читател — отменени, списъкът му — забравен.
         storedLoans.value = null
         runCatching { loanReminders.cancelAll() }.logFailure("signout.reminders")
@@ -561,15 +630,18 @@ class AppContainer(
                 val list = loans ?: libraryRepository.cachedLoans()?.data ?: return
                 LoanReminderScheduler.awaitIdle()
                 val previous = settings.loanReminderPlan()
-                val diff = LoanReminderSync.diff(previous, list)
+                // Работното време мени часа само при необичайни часове (виж LoanReminderPlan.remindTime).
+                val hours = openingHours()
+                val hoursKey = LoanReminderPlan.hoursKey(hours)
+                val diff = LoanReminderSync.diff(previous, list, hoursKey)
                 // След обновяване — всички наново: вече поставените задачи пазят настройките на
                 // старата версия (напр. паузата между опитите). Без двойни известия: вече
                 // показаното пази дневникът (LoanReminderWorker), вървящото — awaitIdle().
                 val sameVersion = settings.loanReminderPlanVersion() == config.versionCode
                 val changes = if (sameVersion) diff else diff.copy(schedule = list.distinctBy { it.loanId })
                 if (sameVersion && changes.isEmpty && previous != null) return
-                loanReminders.applyChanges(changes)
-                settings.setLoanReminderPlan(LoanReminderSync.entries(list), config.versionCode)
+                loanReminders.applyChanges(changes, hours)
+                settings.setLoanReminderPlan(LoanReminderSync.entries(list, hoursKey), config.versionCode)
             }
         }
     }

@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
 import org.chyavorec.app.di.AppContainer
+import org.chyavorec.app.data.local.KeptDiary
 import org.chyavorec.app.data.security.SavedLogin
 import org.chyavorec.app.ui.components.ScreenState
 import org.chyavorec.app.ui.components.limitedInput
@@ -112,11 +113,19 @@ class AccountViewModel(private val c: AppContainer) : ViewModel() {
         _loadError.value = (r as? Outcome.Failure)?.error
     }
 
-    fun logout() = viewModelScope.launch {
-        c.authRepository.logout()
+    /**
+     * „Изход“ от потвърждението. [keepDiary] — читателят е махнал отметката „Изтрий и бележките
+     * от читателския дневник“: дневникът остава на телефона (AppContainer.signOut).
+     */
+    fun logout(keepDiary: Boolean = false) = viewModelScope.launch {
+        c.signOut(keepDiary)
         c.settings.clearPersonal()
         _loadError.value = null
     }
+
+    /** Има ли в читателския дневник оценка или бележка — тогава изходът пита дали да ги изтрие. */
+    suspend fun diaryHasEntries(): Boolean =
+        runCatching { KeptDiary.hasEntries(c.database.readingDiary().all()) }.getOrDefault(false)
 
     fun saveSelfCard(number: String, name: String, onResult: (Boolean) -> Unit) = viewModelScope.launch {
         onResult(c.selfCardRepository.save(number, name))

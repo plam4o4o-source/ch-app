@@ -1,9 +1,11 @@
 package org.chyavorec.domain.model
 
 import org.chyavorec.core.Hashing
+import java.time.DayOfWeek
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 
@@ -23,7 +25,9 @@ data class LoanReminder(val kind: LoanReminderKind, val at: Instant)
  * - [DAYS_BEFORE] дни преди срока и в деня на срока, в [REMIND_AT] българско време;
  * - минал момент се пропуска; ако обаче денят на напомнянето е днес и вече е след
  *   [REMIND_AT], но преди [CATCH_UP_UNTIL] — известие [SOON] след сега;
- * - никога в тихите часове ([QUIET_FROM]–[QUIET_UNTIL]).
+ * - никога в тихите часове ([QUIET_FROM]–[QUIET_UNTIL]);
+ * - при известно работно време ([OpeningHours]) — докато библиотеката е отворена или
+ *   сутринта преди да отвори ([remindTime]); без него — както досега.
  */
 object LoanReminderPlan {
     /** Сроковете в библиотеката се водят по българско време. */
@@ -42,13 +46,34 @@ object LoanReminderPlan {
     }
 
     /** Всички напомняния, които още имат смисъл към [now] (най-много по едно от вид). */
-    fun plan(dueOn: LocalDate, now: Instant, zone: ZoneId = ZONE): List<LoanReminder> =
-        LoanReminderKind.entries.mapNotNull { kind -> at(kind, dueOn, now, zone)?.let { LoanReminder(kind, it) } }
+    fun plan(dueOn: LocalDate, now: Instant, zone: ZoneId = ZONE, hours: OpeningHours? = null): List<LoanReminder> =
+        LoanReminderKind.entries.mapNotNull { kind -> at(kind, dueOn, now, zone, hours)?.let { LoanReminder(kind, it) } }
+
+    /**
+     * Часът на напомнянето в [day]: [REMIND_AT], ако библиотеката тогава е отворена или
+     * тепърва ще отвори този ден (сутринта преди отваряне); ако вече е затворила за деня —
+     * при отварянето (не по-рано от [QUIET_UNTIL]). В почивен ден и без работно време — [REMIND_AT].
+     */
+    fun remindTime(day: DayOfWeek, hours: OpeningHours?): LocalTime {
+        val intervals = hours?.intervalsOn(day).orEmpty()
+        if (intervals.isEmpty() || intervals.any { REMIND_AT < it.until }) return REMIND_AT
+        return maxOf(intervals.first().from, QUIET_UNTIL)
+    }
+
+    /**
+     * Отпечатък на правилата за часа спрямо работното време: дните, в които той се
+     * различава от [REMIND_AT] (празно — както без работно време). При промяна
+     * напомнянията се пренасрочват ([LoanReminderSync]).
+     */
+    fun hoursKey(hours: OpeningHours?): String = DayOfWeek.entries.mapNotNull { d ->
+        val t = remindTime(d, hours)
+        if (t == REMIND_AT) null else "${d.value}=$t"
+    }.joinToString(",")
 
     /** Моментът за [kind] или `null`, ако вече е късно (или би паднал в тихите часове). */
-    fun at(kind: LoanReminderKind, dueOn: LocalDate, now: Instant, zone: ZoneId = ZONE): Instant? {
+    fun at(kind: LoanReminderKind, dueOn: LocalDate, now: Instant, zone: ZoneId = ZONE, hours: OpeningHours? = null): Instant? {
         val day = dayOf(kind, dueOn)
-        val planned = day.atTime(REMIND_AT).atZone(zone).toInstant()
+        val planned = day.atTime(remindTime(day.dayOfWeek, hours)).atZone(zone).toInstant()
         val local = now.atZone(zone)
         val result = when {
             planned.isAfter(now) -> planned
@@ -71,6 +96,19 @@ object LoanReminderPlan {
      */
     fun deliverable(kind: LoanReminderKind, dueOn: LocalDate, now: Instant, zone: ZoneId = ZONE): Boolean =
         !isQuiet(now, zone) && now.atZone(zone).toLocalDate() == dayOf(kind, dueOn)
+
+    /**
+     * Срокът е в почивен ден на библиотеката: [dueDay] — денят на срока; [returnBy] — последното
+     * затваряне преди него (напр. четвъртък 16:30), ако още не е минало към [now].
+     */
+    data class ClosedDue(val dueDay: DayOfWeek, val returnBy: LocalDateTime?)
+
+    /** Бележка за известието, ако [dueOn] е почивен ден (иначе и без работно време — `null`). */
+    fun closedDue(dueOn: LocalDate, now: Instant, hours: OpeningHours?, zone: ZoneId = ZONE): ClosedDue? {
+        if (hours == null || hours.isOpenOn(dueOn)) return null
+        val local = now.atZone(zone).toLocalDateTime()
+        return ClosedDue(dueOn.dayOfWeek, hours.lastClosingBefore(dueOn)?.takeIf { it.isAfter(local) })
+    }
 }
 
 /**
@@ -136,23 +174,28 @@ object LoanReminderSync {
         val isEmpty: Boolean get() = schedule.isEmpty() && cancel.isEmpty()
     }
 
-    /** Отпечатъкът на едно заемане — от него зависят моментите на напомнянията. */
-    fun entry(loan: Loan): String {
-        val plan = "$FORMAT$SEP${loan.dueOn.orEmpty()}$SEP${loan.renewPending}"
+    /**
+     * Отпечатъкът на едно заемане — от него зависят моментите на напомнянията. [hoursKey]
+     * ([LoanReminderPlan.hoursKey]) — празен, когато работното време не мени часа (същият
+     * отпечатък като преди, без излишно пренасрочване).
+     */
+    fun entry(loan: Loan, hoursKey: String = ""): String {
+        val plan = "$FORMAT$SEP${loan.dueOn.orEmpty()}$SEP${loan.renewPending}" + if (hoursKey.isEmpty()) "" else "$SEP$hoursKey"
         return loan.loanId + SEP + Hashing.hex(Hashing.sha256(plan.toByteArray()), 6)
     }
 
     /** Отпечатъкът на целия план (записва се след успешно планиране). */
-    fun entries(loans: List<Loan>): Set<String> = loans.distinctBy { it.loanId }.mapTo(linkedSetOf()) { entry(it) }
+    fun entries(loans: List<Loan>, hoursKey: String = ""): Set<String> =
+        loans.distinctBy { it.loanId }.mapTo(linkedSetOf()) { entry(it, hoursKey) }
 
     /** loanId от запис (loanId може да съдържа разделителя — хешът е след последния). */
     private fun loanIdOf(entry: String): String? = entry.lastIndexOf(SEP).takeIf { it > 0 }?.let { entry.substring(0, it) }
 
     /** Разликата между запомнения план [previous] и текущите заемания [loans]. */
-    fun diff(previous: Set<String>?, loans: List<Loan>): Changes {
+    fun diff(previous: Set<String>?, loans: List<Loan>, hoursKey: String = ""): Changes {
         val unique = loans.distinctBy { it.loanId }
         if (previous == null) return Changes(unique, emptySet())
-        val schedule = unique.filter { entry(it) !in previous }
+        val schedule = unique.filter { entry(it, hoursKey) !in previous }
         val current = unique.mapTo(hashSetOf()) { it.loanId }
         val cancel = previous.mapNotNullTo(linkedSetOf()) { loanIdOf(it) }.filterTo(linkedSetOf()) { it !in current }
         return Changes(schedule, cancel)
