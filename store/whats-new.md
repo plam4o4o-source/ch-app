@@ -13,6 +13,22 @@
 (без имена на файлове и технически подробности). Новият раздел — най-отгоре.
 -->
 
+## 1.2.43
+
+### bg
+- „Отворено сега“: на началния екран, в контактите и в каталога се вижда дали читалището е отворено и кога затваря или отваря. Напомнянията за връщане на книга се съобразяват с работното време.
+- Галерията крие снимките, които липсват на сайта, вместо празни полета.
+- При изход от профила можете да изберете дали да запазите бележките от читателския дневник.
+- Нова бродирана икона за „Познай Яворец“ и бродирани рисунки на празните екрани.
+- По-плавно връщане от книга към каталога, смяна на разделите и писане в търсенето.
+
+### en
+- “Open now”: the home screen, contacts and catalogue show whether the community centre is open and when it closes or opens. Book return reminders follow the opening hours.
+- The gallery hides photos missing from the website instead of showing empty boxes.
+- When signing out you can choose whether to keep your reading diary notes.
+- A new embroidered icon for “Know Yavorets” and embroidered drawings on empty screens.
+- Smoother return from a book to the catalogue, tab switching and typing in search.
+
 ## 1.2.42
 
 ### bg
