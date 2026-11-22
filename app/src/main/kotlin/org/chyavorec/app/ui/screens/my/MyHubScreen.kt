@@ -44,6 +44,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -54,7 +55,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
-import org.chyavorec.app.ui.components.AppAlertDialog
 import org.chyavorec.app.ui.components.AppTopBar
 import org.chyavorec.app.ui.components.DemoBanner
 import org.chyavorec.app.ui.components.InlineNotice
@@ -177,13 +177,14 @@ fun MyHubScreen(navigate: (String) -> Unit) {
         }
     }
 
-    if (confirmLogout) {
-        AppAlertDialog(
-            onDismissRequest = { confirmLogout = false },
-            title = { Text(stringResource(R.string.logout_title)) },
-            text = { Text(stringResource(R.string.logout_text)) },
-            confirmButton = { TextButton(onClick = { confirmLogout = false; vm.logout() }) { Text(stringResource(R.string.action_logout)) } },
-            dismissButton = { TextButton(onClick = { confirmLogout = false }) { Text(stringResource(R.string.action_cancel)) } },
+    // Има ли какво да се пази в читателския дневник — питането е при отварянето на потвърждението.
+    val hasDiary by produceState<Boolean?>(null, confirmLogout) { value = if (confirmLogout) vm.diaryHasEntries() else null }
+    val diary = hasDiary
+    if (confirmLogout && diary != null) {
+        LogoutDialog(
+            hasDiary = diary,
+            onConfirm = { keepDiary -> confirmLogout = false; vm.logout(keepDiary) },
+            onDismiss = { confirmLogout = false },
         )
     }
 }

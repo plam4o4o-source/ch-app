@@ -1,6 +1,6 @@
 # Политика за поверителност — приложение „Читалище Яворец“
 
-Последна актуализация: 12 ноември 2026 г.
+Последна актуализация: 22 ноември 2026 г.
 
 ## Кой обработва данните
 
@@ -38,7 +38,7 @@
 
 Скенер на баркодове: сканира скенерът на Google Play услугите — той включва камерата само докато е отворен и разчита кода на телефона; приложението няма достъп до камерата и получава само разчетения номер, а кадрите не се записват и не се изпращат от приложението.
 
-История на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона. „Читателски дневник“: оценките и бележките ти за прочетени книги остават само на телефона, не се изпращат никъде и се изтриват при изход; в споделената картинка „Препоръчай“ влиза само оценката, а бележката — само ако я включиш.
+История на четенето: за читатели, дали съгласие в библиотеката, списъкът с върнати книги идва от сървъра на читалището и се пази шифрован на телефона. „Подобни книги“ се подбират само на телефона. „Читателски дневник“: оценките и бележките ти за прочетени книги остават само на телефона, не се изпращат никъде и се изтриват при изход — освен ако в потвърждението на изхода махнеш отметката „Изтрий и бележките от читателския дневник“: тогава остават на телефона и се показват пак при следващия ти вход (вход на друг читател ги изтрива); в споделената картинка „Препоръчай“ влиза само оценката, а бележката — само ако я включиш.
 
 Удължаване на срока: заявката се изпраща до сървъра на читалището и се изпълнява от библиотечната програма при следващото ѝ обновяване.
 
@@ -76,7 +76,7 @@
 
 # Privacy policy — “Chitalishte Yavorets” app
 
-Last updated: November 12, 2026
+Last updated: November 22, 2026
 
 ## Who processes the data
 
@@ -114,7 +114,7 @@ Home-screen widget: if you add it, it shows only the number of books due and the
 
 Barcode scanner: scanning is done by the Google Play services code scanner — it turns the camera on only while it is open and reads the code on the phone; the app has no camera access and receives only the decoded number, and frames are never stored or sent by the app.
 
-Reading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only. Reading diary: your ratings and notes on books you have read stay on the phone only, are never sent anywhere and are deleted when you sign out; the shared “Recommend” image carries only the rating, and the note only if you include it.
+Reading history: for readers who consented at the library, the list of returned books comes from the centre’s server and is kept encrypted on the phone. “Similar books” are picked on the phone only. Reading diary: your ratings and notes on books you have read stay on the phone only, are never sent anywhere and are deleted when you sign out — unless, when confirming sign-out, you untick “Also delete the notes in the reading diary”: then they stay on the phone and come back at your next sign-in (a different reader signing in deletes them); the shared “Recommend” image carries only the rating, and the note only if you include it.
 
 Renewals: a renewal request goes to the centre’s server and is carried out by the library program at its next update.
 

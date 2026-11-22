@@ -145,6 +145,7 @@ class SettingsStore(private val context: Context) {
         val messagePollInterval = longPreferencesKey("message_poll_interval")
         val messagesSignature = stringPreferencesKey("messages_signature")
         val readerTraces = booleanPreferencesKey("reader_traces")
+        val keptDiaryOwner = stringPreferencesKey("kept_diary_owner")
         val readerHttpCacheEvicted = booleanPreferencesKey("reader_http_cache_evicted")
         val catalogHttpCacheEvicted = booleanPreferencesKey("catalog_http_cache_evicted")
         val passwordManagerUsed = booleanPreferencesKey("password_manager_used")
@@ -408,6 +409,16 @@ class SettingsStore(private val context: Context) {
      */
     suspend fun readerTraces(): Boolean = context.dataStore.data.first()[Keys.readerTraces] ?: false
     suspend fun setReaderTraces(on: Boolean) = context.dataStore.edit { it[Keys.readerTraces] = on }
+
+    /**
+     * Читателският дневник е оставен на телефона при „Изход“ (изборът в потвърждението) — чий е:
+     * отпечатък на читателя ([KeptDiary.ownerKey]), не самият номер. При следващ вход на друг
+     * читател дневникът се трие; `null` — нищо не е оставено.
+     */
+    suspend fun keptDiaryOwner(): String? = context.dataStore.data.first()[Keys.keptDiaryOwner]
+    suspend fun setKeptDiaryOwner(owner: String?) = context.dataStore.edit {
+        if (owner == null) it.remove(Keys.keptDiaryOwner) else it[Keys.keptDiaryOwner] = owner
+    }
 
     /** Еднократно: старите отговори на моста са изтрити от HTTP кеша (преди него нямаше `no-store`). */
     suspend fun readerHttpCacheEvicted(): Boolean = context.dataStore.data.first()[Keys.readerHttpCacheEvicted] ?: false
