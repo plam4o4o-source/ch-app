@@ -168,6 +168,9 @@ import org.chyavorec.app.ui.components.openLibraryCoverUrl
 import org.chyavorec.app.ui.components.LocalOnlineCovers
 import org.chyavorec.app.ui.components.LocalSharedScope
 import org.chyavorec.app.ui.components.LocalSharedTransitionsEnabled
+import org.chyavorec.app.ui.components.LocalEnteringUnseen
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 
 @Composable
 fun fieldLabel(f: SearchField): String = stringResource(
@@ -234,6 +237,18 @@ fun CatalogScreen(navigate: (String) -> Unit) {
     if (!rowsReady) LaunchedEffect(Unit) {
         withFrameNanos { }
         rowsReady = true
+    }
+    // Назад от книга (с бутон): в първия кадър — само редът на книгата, към който „прелита“ корицата ѝ;
+    // другите видими редове са празни места със същата височина (виж ListReturnRows), истинските — в
+    // следващия кадър. Иначе и тук целият екран се строи в един кадър от 35–45 ms. Екранът е невидим в
+    // началото на прехода (fadeIn от 0), затова не се вижда; при жеста „назад“ — без отлагане.
+    val density = LocalDensity.current
+    val layoutKey = ListLayoutKey(LocalWindowInfo.current.containerSize.width, density.density, density.fontScale)
+    val entering = LocalEnteringUnseen.current
+    var returning by remember { mutableStateOf(entering && !deferRows && vm.returnRows.opened != null) }
+    if (returning) LaunchedEffect(Unit) {
+        withFrameNanos { }
+        returning = false
     }
     // Заявка от друг екран (скенера): „Търси в каталога“ с предварително попълнен ISBN/заглавие.
     LaunchedEffect(Unit) {
@@ -444,7 +459,24 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                             LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
                                 item(contentType = "header") { header() }
                                 itemsIndexed(state.page, key = { _, b -> b.inv }, contentType = { _, _ -> "book" }) { i, b ->
-                                    BookListItem(b, onClick = { navigate(Routes.book(b.inv)) }, modifier = Modifier.animateItem().animateEntrance(i, maxStaggered = staggered))
+                                    val standIn = if (returning) vm.returnRows.standIn(b, layoutKey) else null
+                                    if (standIn != null) {
+                                        Spacer(Modifier.animateItem().fillMaxWidth().height(with(density) { standIn.toDp() }))
+                                    } else {
+                                        BookListItem(
+                                            b,
+                                            onClick = {
+                                                // Видимите редове сега — за първия кадър при връщане от книгата.
+                                                val page = state.page
+                                                val visible = listState.layoutInfo.visibleItemsInfo.mapNotNull { item ->
+                                                    (item.key as? Long)?.let { inv -> page.firstOrNull { it.inv == inv } }?.let { it to item.size }
+                                                }
+                                                vm.returnRows.onOpen(b.inv, layoutKey, visible)
+                                                navigate(Routes.book(b.inv))
+                                            },
+                                            modifier = Modifier.animateItem().animateEntrance(i, maxStaggered = staggered),
+                                        )
+                                    }
                                 }
                                 if (state.canLoadMore) {
                                     item(contentType = "more") {

@@ -117,10 +117,12 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.graphicsLayer
 import org.chyavorec.app.ui.components.BrandIntro
 import org.chyavorec.app.ui.components.LocalBookFold
+import org.chyavorec.app.ui.components.LocalEnteringUnseen
 import org.chyavorec.app.ui.components.LocalNavAnimatedScope
 import org.chyavorec.app.ui.components.rememberBookFold
 import org.chyavorec.app.ui.components.LocalOnlineCovers
@@ -579,6 +581,9 @@ private fun TabLabel(text: String) {
     }
 }
 
+/** Навигацията — за [screen] (дали екранът е текущият). */
+private val LocalNavController = staticCompositionLocalOf<NavController?> { null }
+
 /** Индексът на раздела от долната лента (−1 — не е раздел). */
 private fun tabIndex(route: String?): Int = TopTab.entries.indexOfFirst { it.route == route }
 
@@ -651,7 +656,11 @@ private fun AppNavHost(
 
     SharedTransitionLayout {
     // На Android 8 (API 26–27) преходите със споделени елементи понякога хвърлят „layouts are not part of the same hierarchy“ — без тях там.
-    CompositionLocalProvider(LocalSharedScope provides this, LocalSharedTransitionsEnabled provides (!tabSwitch && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P)) {
+    CompositionLocalProvider(
+        LocalSharedScope provides this,
+        LocalSharedTransitionsEnabled provides (!tabSwitch && android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P),
+        LocalNavController provides nav,
+    ) {
     NavHost(
         navController = nav,
         startDestination = Routes.HOME,
@@ -910,6 +919,14 @@ private fun NavGraphBuilder.screen(
     ) {
         // Една стойност за „разгръщането“ на корицата на дестинация — не по една на корица.
         val fold = rememberBookFold(this@composable, active = !reduced && LocalSharedTransitionsEnabled.current)
-        CompositionLocalProvider(LocalNavAnimatedScope provides this@composable, LocalBookFold provides fold) { content(entry) }
+        // Влиза с анимиран преход (виж LocalEnteringUnseen): в началото му е невидим. При жеста „назад“
+        // екранът отгоре още е текущият в навигацията (изваждането е след пускането) и този се вижда веднага.
+        val nav = LocalNavController.current
+        val unseen = remember { !reduced && transition.currentState != EnterExitState.Visible && nav?.currentBackStackEntry?.id == entry.id }
+        CompositionLocalProvider(
+            LocalNavAnimatedScope provides this@composable,
+            LocalBookFold provides fold,
+            LocalEnteringUnseen provides unseen,
+        ) { content(entry) }
     }
 }
