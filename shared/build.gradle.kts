@@ -49,3 +49,6 @@ tasks.test {
         environment("LC_ALL", "C.UTF-8")
     }
 }
+
+// Тест, който виси: името му и thread dump след 5 мин, вместо да чака края на задачата в CI.
+apply(from = file("../gradle/test-timeout.gradle.kts"))

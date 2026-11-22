@@ -23,6 +23,8 @@ concurrency:
 # „checks“ ги събира в една (задължителната проверка за main). Успоредно с тях — подписаният
 # release build (R8 за prodPlay и prodRelease); след „checks“ — публикуването на снимките на
 # екраните (единствената задача с право за запис). Gradle daemon-ът остава жив между стъпките.
+# Всяка Gradle стъпка минава през .github/scripts/gradle-retry.sh: още един опит само при
+# грешка в свалянето на зависимости (мрежа / Maven Central), никога при компилация или тест.
 # Условието на задачите: PR от клон, който вече се проверява при push, се пропуска (виж по-горе).
 jobs:
   # Тестовете на приложението (Robolectric, вкл. снимките на екраните) и схемите на Room.
@@ -50,11 +52,29 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@8da46b539cd8fe6ab27ca75128919a18d757604c # v6.4.1
 
+      # Robolectric тегли android-all-instrumented (по ~150 MB за всяко SDK от тестовете) от Maven
+      # Central по време на тестовете, в ~/.m2 — извън кеша на setup-gradle и извън повторните опити
+      # на Gradle (429 → „Failed to fetch maven artifact“ и падащи тестове). Кешът е за версията на
+      # Robolectric и SDK-тата от @Config и robolectric.properties.
+      - name: Robolectric SDK jars (cache key)
+        id: robolectric
+        run: |
+          V=$(sed -n 's/^robolectric = "\(.*\)"/\1/p' gradle/libs.versions.toml)
+          SDKS=$( (grep -rhoE 'sdk *= *\[?[0-9][0-9, ]*' app/src/test | grep -oE '[0-9]+'; sed -n 's/^sdk=//p' app/src/test/resources/robolectric.properties) | sort -un | paste -sd-)
+          echo "key=robolectric-$V-sdk-$SDKS" >> "$GITHUB_OUTPUT"
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.m2/repository/org/robolectric/android-all-instrumented
+          key: ${{ steps.robolectric.outputs.key }}
+
       # Тестовете не зависят от flavor-а — веднъж за prod (снимките на екраните са от него).
       # Демо входът съществува само в dev, затова MainFlowsUiTest върви и за dev
       # (опцията --tests важи само за задачата точно преди нея).
+      # Тест, който виси, спира след 5 мин (gradle/test-timeout.gradle.kts); стъпката — след 25.
       - name: Unit, ViewModel, repository and UI (Robolectric) tests
-        run: ./gradlew testProdDebugUnitTest testDevDebugUnitTest --tests 'org.chyavorec.app.ui.MainFlowsUiTest'
+        timeout-minutes: 25
+        run: bash .github/scripts/gradle-retry.sh ./gradlew testProdDebugUnitTest testDevDebugUnitTest --tests 'org.chyavorec.app.ui.MainFlowsUiTest'
 
       # Схемите на Room (app/schemas) се пазят в Git: компилацията по-горе изнася схемата на
       # текущия код; ако тя се различава от записаната (или липсва), проверката спира с diff-а —
@@ -114,7 +134,7 @@ jobs:
           "$RUNNER_TEMP/fonttools/bin/python" tools/subset_fonts.py --check
 
       - name: Lint
-        run: ./gradlew lintDevDebug lintProdRelease
+        run: bash .github/scripts/gradle-retry.sh ./gradlew lintDevDebug lintProdRelease
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: always()
@@ -147,10 +167,11 @@ jobs:
 
       - name: Shared core tests (JVM)
         working-directory: shared
-        run: ../gradlew test
+        timeout-minutes: 10
+        run: bash ../.github/scripts/gradle-retry.sh ../gradlew test
 
       - name: Debug APKs
-        run: ./gradlew assembleDevDebug assembleProdDebug
+        run: bash .github/scripts/gradle-retry.sh ./gradlew assembleDevDebug assembleProdDebug
 
       # Сливането на манифестите: EmojiCompat остава (новите емоджи на Android 8–10), а изтеглянето
       # на нова версия има вида на услугата (dataSync) и разрешението за него.
@@ -166,7 +187,7 @@ jobs:
       # Генераторът на Baseline профила се компилира при всяка промяна; самото
       # генериране (на емулатор) е в baseline-profile.yml.
       - name: Baseline profile generator (compile)
-        run: ./gradlew :baselineprofile:assembleProdNonMinifiedRelease
+        run: bash .github/scripts/gradle-retry.sh ./gradlew :baselineprofile:assembleProdNonMinifiedRelease
 
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
@@ -314,7 +335,7 @@ jobs:
           unset UPLOAD_KEYSTORE_BASE64 UPLOAD_STORE_PASSWORD UPLOAD_KEY_ALIAS UPLOAD_KEY_PASSWORD
           echo "SIGNING_KIND=$KIND" >> "$GITHUB_ENV"
           # Без daemon: паролите не остават в процес, който живее след стъпката.
-          ./gradlew --no-daemon bundleProdPlay assembleProdRelease
+          bash .github/scripts/gradle-retry.sh ./gradlew --no-daemon bundleProdPlay assembleProdRelease
 
       - name: Verify release signature and Play manifest
         run: |
@@ -424,7 +445,7 @@ jobs:
       - name: Compose compiler reports (prodRelease)
         continue-on-error: true
         run: |
-          ./gradlew :app:compileProdReleaseKotlin --rerun -PcomposeReports=true
+          bash .github/scripts/gradle-retry.sh ./gradlew :app:compileProdReleaseKotlin --rerun -PcomposeReports=true
           python3 - <<'PY'
           import glob, json, os, re
           d = "app/build/compose_compiler"

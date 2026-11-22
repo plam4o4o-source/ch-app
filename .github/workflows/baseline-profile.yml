@@ -73,7 +73,7 @@ jobs:
       # се създава от Baseline Profile плъгина; без ограничението до ARM (виж app/build.gradle.kts),
       # така че APK-ът съдържа и x86_64 native библиотеките за емулатора.
       - name: Build app and profile generator
-        run: ./gradlew --no-daemon :app:assembleProdNonMinifiedRelease :baselineprofile:assembleProdNonMinifiedRelease
+        run: bash .github/scripts/gradle-retry.sh ./gradlew --no-daemon :app:assembleProdNonMinifiedRelease :baselineprofile:assembleProdNonMinifiedRelease
 
       - name: Enable KVM
         run: |
@@ -108,7 +108,7 @@ jobs:
           disk-size: 6000M
           disable-animations: false
           emulator-options: -no-window -no-snapshot -gpu swangle_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
-          script: ./gradlew --no-daemon :app:generateBaselineProfile
+          script: bash .github/scripts/gradle-retry.sh ./gradlew --no-daemon :app:generateBaselineProfile
 
       # При неуспех — причината направо в лога (виж скрипта).
       - name: Show test failures (first attempt)
@@ -128,7 +128,7 @@ jobs:
           disk-size: 6000M
           disable-animations: false
           emulator-options: -no-window -no-snapshot -gpu swangle_indirect -noaudio -no-boot-anim -camera-back none -camera-front none
-          script: ./gradlew --no-daemon :app:generateBaselineProfile
+          script: bash .github/scripts/gradle-retry.sh ./gradlew --no-daemon :app:generateBaselineProfile
 
       - name: Show test failures
         if: failure()

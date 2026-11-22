@@ -308,6 +308,9 @@ tasks.withType<Test>().configureEach {
     }
 }
 
+// Тест, който виси: името му и thread dump след 5 мин, вместо да чака края на задачата в CI.
+apply(from = rootProject.file("gradle/test-timeout.gradle.kts"))
+
 dependencies {
     implementation("org.chyavorec:shared")
 
