@@ -549,6 +549,8 @@
     <string name="newspaper_zoom_out">Zoom out</string>
     <string name="notif_action_renew">Renew</string>
     <string name="notif_action_route">Directions</string>
+    <string name="notif_due_closed_day">%1$s the library is closed</string>
+    <string name="notif_due_closed_return_by">%1$s the library is closed — return the book by %2$s %3$s</string>
     <string name="notif_due_on">%1$s — due %2$s</string>
     <string name="notif_due_soon">Due date approaching</string>
     <string name="notif_due_today">Due back today</string>
@@ -701,6 +703,12 @@
     <string name="onb_skip">Skip</string>
     <string name="onb_welcome_text">The centre’s official app — always up to date from chyavorec.org.</string>
     <string name="onb_welcome_title">Chitalishte Yavorets</string>
+    <string name="open_days_on">on Monday,on Tuesday,on Wednesday,on Thursday,on Friday,on Saturday,on Sunday</string>
+    <string name="open_now_closing_soon">Closing soon — until %1$s</string>
+    <string name="open_now_opens_on">Closed · opens %1$s at %2$s</string>
+    <string name="open_now_opens_today">Closed · opens today at %1$s</string>
+    <string name="open_now_opens_tomorrow">Closed · opens tomorrow at %1$s</string>
+    <string name="open_now_until">Open until %1$s</string>
     <string name="org_library_name">Library of the “Vasil Levski – 1922” Community Centre, Yavorets</string>
     <string name="org_place">Yavorets village</string>
     <string name="org_short">“Vasil Levski – 1922”</string>

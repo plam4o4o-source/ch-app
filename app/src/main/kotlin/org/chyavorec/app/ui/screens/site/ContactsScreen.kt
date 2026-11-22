@@ -38,6 +38,7 @@ import androidx.compose.material3.Text
 import org.chyavorec.app.ui.components.LeafRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
@@ -55,6 +56,8 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BackTopBar
 import org.chyavorec.app.ui.components.InfoBanner
+import org.chyavorec.app.ui.components.OpenNowBadge
+import org.chyavorec.domain.model.OpeningHours
 import org.chyavorec.app.ui.components.SkeletonCards
 import org.chyavorec.app.ui.components.StateContent
 import org.chyavorec.app.ui.components.SyncBanner
@@ -99,8 +102,15 @@ fun ContactsScreen(onBack: () -> Unit) {
                         if (c.phones.isNotEmpty()) ContactCard(Icons.Outlined.Call, stringResource(R.string.contacts_phone), c.phones) { Intents.dial(context, it) }
                         if (c.emails.isNotEmpty()) ContactCard(Icons.Outlined.Email, stringResource(R.string.contacts_email_label), c.emails) { Intents.email(context, it) }
                         // Вградените данни — работното време от ресурсите (на езика на интерфейса).
-                        val hours = if (c.fromSite) c.workingHours else stringResource(R.string.contacts_fallback_hours).lines()
-                        ContactCard(Icons.Outlined.Schedule, stringResource(R.string.contacts_hours), hours.ifEmpty { listOf(stringResource(R.string.contacts_hours_unknown)) })
+                        val fallbackHours = stringResource(R.string.contacts_fallback_hours).lines()
+                        val hours = if (c.fromSite) c.workingHours else fallbackHours
+                        // „Отворено сега“ — по часовете от сайта; ако не се разчетат — по вградените.
+                        val openingHours = remember(hours, fallbackHours) { OpeningHours.resolve(hours, fallbackHours) }
+                        ContactCard(
+                            Icons.Outlined.Schedule, stringResource(R.string.contacts_hours),
+                            hours.ifEmpty { listOf(stringResource(R.string.contacts_hours_unknown)) },
+                            header = { OpenNowBadge(openingHours, Modifier.padding(top = 4.dp, bottom = 2.dp)) },
+                        )
                         ContactCard(Icons.Outlined.Public, stringResource(R.string.contacts_web), listOfNotNull(c.website, c.facebook)) { Intents.openUrl(context, it) }
                         if (c.fromSite) {
                             c.sourceUrl?.let { AssistChip(onClick = { Intents.openUrl(context, it) }, label = { Text(stringResource(R.string.contacts_source)) }) }
@@ -158,13 +168,19 @@ private fun ActionButtons(modifier: Modifier = Modifier, content: @Composable ()
 }
 
 @Composable
-private fun ContactCard(icon: ImageVector, title: String, lines: List<String>, onClick: ((String) -> Unit)? = null) {
+private fun ContactCard(
+    icon: ImageVector, title: String, lines: List<String>,
+    onClick: ((String) -> Unit)? = null,
+    /** Под заглавието, над редовете (напр. „Отворено сега“). */
+    header: (@Composable () -> Unit)? = null,
+) {
     AppCard(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
             Icon(icon, null, tint = LocalExtendedColors.current.gold)
             Spacer(Modifier.width(14.dp))
             Column {
                 Text(title, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                header?.invoke()
                 lines.forEach { line ->
                     if (onClick != null) {
                         // Обикновен текст, а не TextButton: заобленият клип на бутона рязал
