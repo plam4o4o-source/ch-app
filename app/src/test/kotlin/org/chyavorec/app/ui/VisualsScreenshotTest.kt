@@ -47,6 +47,7 @@ import org.chyavorec.app.R
 import org.chyavorec.app.ui.components.ChLoadingIndicator
 import org.chyavorec.app.ui.components.EmptyAnimation
 import org.chyavorec.app.ui.components.EmptyMotion
+import org.chyavorec.app.ui.components.EmbroideredMedallion
 import org.chyavorec.app.ui.components.EmptyView
 import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.LocalReducedMotion
@@ -164,6 +165,38 @@ class VisualsScreenshotTest {
     @Test fun emptyStatesLight() = emptyStates("42-empty-states-light", dark = false)
 
     @Test fun emptyStatesDark() = emptyStates("43-empty-states-dark", dark = true)
+
+    /**
+     * Бродираният медальон (значката на празните състояния) в 56 и 64 dp, светла и тъмна тема, и
+     * празните състояния на нисък прозорец (компактно — само медальонът, без илюстрацията и лентата).
+     */
+    @Test fun embroideredMedallionAndCompactEmptyStates() {
+        compose.setContent {
+            CompositionLocalProvider(LocalReducedMotion provides true) {
+                Column {
+                    listOf(false, true).forEach { dark ->
+                        ChitalishteTheme(mode = if (dark) ThemeMode.DARK else ThemeMode.LIGHT) {
+                            Surface(color = MaterialTheme.colorScheme.background) {
+                                Column(Modifier.fillMaxWidth()) {
+                                    Row(Modifier.padding(12.dp), horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                                        EmbroideredMedallion(Icons.Outlined.SearchOff)
+                                        EmbroideredMedallion(Icons.Outlined.Campaign, size = 64.dp)
+                                        EmbroideredMedallion(Icons.Outlined.BookmarkBorder, size = 96.dp)
+                                        Label(if (dark) "тъмна" else "светла", dark)
+                                    }
+                                    Row {
+                                        EmptyView("Няма резултати", "Опитай с друга дума.", icon = Icons.Outlined.SearchOff, modifier = Modifier.width(205.dp), compact = true)
+                                        EmptyView("Няма съобщения", icon = Icons.Outlined.Campaign, modifier = Modifier.width(205.dp), compact = true)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        shot("45-empty-medallion-compact")
+    }
 
     /** Истинската адаптивна икона ([res] — mipmap), нарисувана от системата в [dp] (видимата част, с маската). */
     private fun adaptiveIcon(res: Int, dp: Int): ImageBitmap {
