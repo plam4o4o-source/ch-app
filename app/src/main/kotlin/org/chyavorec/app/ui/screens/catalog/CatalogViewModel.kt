@@ -114,6 +114,8 @@ class CatalogViewModel(
     private val _state = MutableStateFlow(CatalogUiState(query = restored))
     val state: StateFlow<CatalogUiState> = _state.asStateFlow()
     private val queryFlow = MutableStateFlow(restored)
+    /** Височините на видимите редове при отваряне на книга — за първия кадър при връщане (само за екрана). */
+    internal val returnRows = ListReturnRows()
     /** Последното изпълнено търсене: същата търсачка със същата заявка не се търси повторно. */
     @Volatile private var lastSearch: Pair<CatalogSearcher, CatalogQuery>? = null
 

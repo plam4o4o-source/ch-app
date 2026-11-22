@@ -42,6 +42,7 @@ import org.chyavorec.app.ui.components.PinSectionsSheet
 import org.chyavorec.app.ui.navigation.PinnedShortcuts
 import org.chyavorec.app.ui.components.SectionLabel
 import org.chyavorec.app.ui.components.TabReselectEffect
+import org.chyavorec.app.ui.components.rememberTabContentReady
 import org.chyavorec.app.ui.components.ScreenGutter
 import org.chyavorec.app.ui.components.FolkIcons
 import org.chyavorec.app.ui.components.TileGrid
@@ -67,6 +68,11 @@ fun MoreScreen(navigate: (String) -> Unit) {
     var digitalClub by remember { mutableStateOf<SiteLink?>(null) }
     val scrollState = rememberScrollState()
     TabReselectEffect(Routes.MORE) { scrollState.animateScrollTo(0) }
+    // Смяна на раздел, екранът е в началото: в първия кадър — плочките на читалището, заниманията и
+    // настройките (под края на екрана) — в следващия (виж rememberTabContentReady). Превъртян — целият
+    // веднага (по-краткото съдържание би изместило мястото).
+    val tabReady = rememberTabContentReady()
+    val split = remember { !tabReady && scrollState.value == 0 }
     LaunchedEffect(Unit) {
         // „Дигитален клуб“ се показва само ако страницата съществува на сайта.
         digitalClub = (c.siteRepository.links(false) as? Outcome.Success)?.value?.data?.firstOrNull { it.kind == SiteSection.DIGITAL_CLUB }
@@ -98,6 +104,7 @@ fun MoreScreen(navigate: (String) -> Unit) {
                 add(TileItem(FolkIcons.Pin, stringResource(R.string.contacts_title), stringResource(R.string.more_contacts_desc)) { navigate(Routes.CONTACTS) })
             }
             TileGrid(centre)
+            if (split && !tabReady) return@Column
             SectionLabel(stringResource(R.string.more_group_pastimes), Modifier.padding(start = ScreenGutter, top = 28.dp, bottom = 12.dp))
             val pastimes = listOf(
                 TileItem(FolkIcons.Embroider, stringResource(R.string.embroidery_title), stringResource(R.string.more_embroidery_desc)) { navigate(Routes.EMBROIDERY) },

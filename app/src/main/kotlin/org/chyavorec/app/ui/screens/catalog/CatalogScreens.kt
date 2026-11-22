@@ -166,8 +166,10 @@ import org.chyavorec.app.ui.share.ShareImageHost
 import org.chyavorec.app.ui.share.rememberShareImageState
 import org.chyavorec.app.ui.components.openLibraryCoverUrl
 import org.chyavorec.app.ui.components.LocalOnlineCovers
-import org.chyavorec.app.ui.components.LocalSharedScope
-import org.chyavorec.app.ui.components.LocalSharedTransitionsEnabled
+import org.chyavorec.app.ui.components.LocalEnteringUnseen
+import org.chyavorec.app.ui.components.rememberTabContentReady
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 
 @Composable
 fun fieldLabel(f: SearchField): String = stringResource(
@@ -227,13 +229,21 @@ fun CatalogScreen(navigate: (String) -> Unit) {
     // Смяна на раздел: в първия кадър — лентата, търсенето и полетата, редовете — в следващия.
     // Иначе целият екран (с ~8 реда и корици, мерени двукратно заради споделените преходи) се
     // строи в един кадър от 40–60 ms. Входящият раздел е невидим в началото на прехода (fadeIn със
-    // закъснение), затова отлагането не се вижда. Назад от книга — без отлагане: корицата в реда
-    // трябва да е там за „прелитането“.
-    val deferRows = LocalSharedScope.current != null && !LocalSharedTransitionsEnabled.current
-    var rowsReady by remember { mutableStateOf(!deferRows) }
-    if (!rowsReady) LaunchedEffect(Unit) {
-        withFrameNanos { }
-        rowsReady = true
+    // закъснение), затова отлагането не се вижда (виж rememberTabContentReady).
+    val rowsReady = rememberTabContentReady()
+    // Назад от книга (с бутон): в първия кадър — само редът на книгата, към който „прелита“ корицата ѝ;
+    // другите видими редове са празни места със същата височина (виж ListReturnRows), истинските — в
+    // следващите два кадъра (през ред). Иначе и тук целият екран се строи в един кадър от 35–45 ms.
+    // Екранът почти не се вижда в началото на прехода (fadeIn от 0: под 3 % в третия кадър), затова не
+    // се забелязва; при жеста „назад“ (вижда се веднага) — без отлагане.
+    val density = LocalDensity.current
+    val layoutKey = ListLayoutKey(LocalWindowInfo.current.containerSize.width, density.density, density.fontScale)
+    val entering = LocalEnteringUnseen.current
+    var returnStage by remember { mutableIntStateOf(if (entering && rowsReady && vm.returnRows.opened != null) RETURN_FIRST else RETURN_ALL) }
+    if (returnStage != RETURN_ALL) LaunchedEffect(Unit) {
+        // Смяната е в самия кадър (преди композицията му) — редовете са в него, не в следващия.
+        withFrameNanos { returnStage = RETURN_HALF }
+        withFrameNanos { returnStage = RETURN_ALL }
     }
     // Заявка от друг екран (скенера): „Търси в каталога“ с предварително попълнен ISBN/заглавие.
     LaunchedEffect(Unit) {
@@ -444,7 +454,28 @@ fun CatalogScreen(navigate: (String) -> Unit) {
                             LazyColumn(state = listState, contentPadding = PaddingValues(bottom = 24.dp)) {
                                 item(contentType = "header") { header() }
                                 itemsIndexed(state.page, key = { _, b -> b.inv }, contentType = { _, _ -> "book" }) { i, b ->
-                                    BookListItem(b, onClick = { navigate(Routes.book(b.inv)) }, modifier = Modifier.animateItem().animateEntrance(i, maxStaggered = staggered))
+                                    // Махнатите редове (ново търсене при писане, подредба) изчезват веднага, без избледняване:
+                                    // иначе остават в композицията, докато избледнеят, и новите редове не могат да заемат
+                                    // местата им наново (строят се изцяло) — кадърът със сменените резултати е по-дълъг.
+                                    val animation = Modifier.animateItem(fadeOutSpec = null)
+                                    val standIn = if (returnStage == RETURN_FIRST || (returnStage == RETURN_HALF && i % 2 == 1)) vm.returnRows.standIn(b, layoutKey) else null
+                                    if (standIn != null) {
+                                        Spacer(animation.fillMaxWidth().height(with(density) { standIn.toDp() }))
+                                    } else {
+                                        BookListItem(
+                                            b,
+                                            onClick = {
+                                                // Видимите редове сега — за първия кадър при връщане от книгата.
+                                                val page = state.page
+                                                val visible = listState.layoutInfo.visibleItemsInfo.mapNotNull { item ->
+                                                    (item.key as? Long)?.let { inv -> page.firstOrNull { it.inv == inv } }?.let { it to item.size }
+                                                }
+                                                vm.returnRows.onOpen(b.inv, layoutKey, visible)
+                                                navigate(Routes.book(b.inv))
+                                            },
+                                            modifier = animation.animateEntrance(i, maxStaggered = staggered),
+                                        )
+                                    }
                                 }
                                 if (state.canLoadMore) {
                                     item(contentType = "more") {
@@ -480,6 +511,11 @@ fun CatalogScreen(navigate: (String) -> Unit) {
         FiltersSheet(state, onDismiss = { showFilters = false }, onChange = vm::update, onClear = vm::clearFilters)
     }
 }
+
+/** Назад от книга: в първия кадър само редът ѝ, после всеки втори от другите, после всички (виж [CatalogScreen]). */
+private const val RETURN_FIRST = 0
+private const val RETURN_HALF = 1
+private const val RETURN_ALL = 2
 
 /**
  * Ред в каталога (~80 dp). Наличността е тиха: при налична книга — точка и „налична“

@@ -158,6 +158,7 @@ import org.chyavorec.app.ui.appViewModel
 import org.chyavorec.app.ui.components.BookCover
 import org.chyavorec.app.ui.components.BrandedImageFallback
 import org.chyavorec.app.ui.components.TabReselectEffect
+import org.chyavorec.app.ui.components.rememberTabContentReady
 import org.chyavorec.app.ui.components.Emblem
 import org.chyavorec.app.ui.components.ErrorView
 import org.chyavorec.app.ui.components.SiteImage
@@ -216,6 +217,12 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
     // Покоят на снимката във въртележката — над списъка (редът ѝ излиза от композицията при превъртане).
     val heroAnchor = rememberHeroAnchor(listState)
     TabReselectEffect(Routes.HOME) { listState.animateScrollToItem(0) }
+    // Смяна на раздел, списъкът е в началото: в първия кадър — заглавката, търсенето и въртележката,
+    // бързите действия и останалото — в следващия (виж rememberTabContentReady). Превъртян списък —
+    // целият веднага.
+    val tabReady = rememberTabContentReady()
+    val split = remember { !tabReady && listState.firstVisibleItemIndex == 0 && listState.firstVisibleItemScrollOffset == 0 }
+    val restReady = tabReady || !split
     // Дали броячите „отброяват“ днес — прочита се отрано и извън главната нишка.
     val appContext = LocalContext.current.applicationContext
     LaunchedEffect(Unit) { prepareCountUpToday(appContext) }
@@ -325,6 +332,7 @@ fun HomeScreen(navigate: (String) -> Unit, openExternal: (String) -> Unit = {}, 
                     state.news.error != null -> ErrorView(state.news.error!!, onRetry = { vm.refresh() }, subject = stringResource(R.string.subject_news))
                 }
             }
+            if (!restReady) return@LazyColumn
             item("actions") { QuickActionsGrid(rememberQuickActions(), navigate) }
             // Докато събитията се зареждат — заглавката и skeleton с височината на картите: щом
             // дойдат, заемат същото място, вместо да избутат надолу новите книги и „За теб“.
