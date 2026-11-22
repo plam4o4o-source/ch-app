@@ -170,9 +170,9 @@ private fun ActionButtons(modifier: Modifier = Modifier, content: @Composable ()
 @Composable
 private fun ContactCard(
     icon: ImageVector, title: String, lines: List<String>,
-    onClick: ((String) -> Unit)? = null,
     /** Под заглавието, над редовете (напр. „Отворено сега“). */
     header: (@Composable () -> Unit)? = null,
+    onClick: ((String) -> Unit)? = null,
 ) {
     AppCard(Modifier.fillMaxWidth()) {
         Row(Modifier.padding(16.dp), verticalAlignment = Alignment.Top) {
