@@ -1,0 +1,188 @@
+app pids seen: ['5450', '8159', '8813', '9495', '10992', '11600', '13009', '13764']
+== FATAL: 0
+== ANR: 0
+== StrictMode: 0
+== Skipped: 41
+   skipped-frames events=41 max=104 total=2290
+   11-22 19:11:57.486  5450  5450 I Choreographer: Skipped 66 frames!  The application may be doing too much work on its main thread.
+   11-22 19:11:58.547  5450  5450 I Choreographer: Skipped 62 frames!  The application may be doing too much work on its main thread.
+   11-22 19:11:59.394  5450  5450 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-22 19:12:00.682  5450  5450 I Choreographer: Skipped 70 frames!  The application may be doing too much work on its main thread.
+   11-22 19:12:01.330  5450  5450 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-22 19:12:02.845  5450  5450 I Choreographer: Skipped 51 frames!  The application may be doing too much work on its main thread.
+   11-22 19:12:04.139  5450  5450 I Choreographer: Skipped 77 frames!  The application may be doing too much work on its main thread.
+   11-22 19:12:04.935  5450  5450 I Choreographer: Skipped 40 frames!  The application may be doing too much work on its main thread.
+   11-22 19:12:05.680  5450  5450 I Choreographer: Skipped 43 frames!  The application may be doing too much work on its main thread.
+   11-22 19:12:15.186  5450  5450 I Choreographer: Skipped 81 frames!  The application may be doing too much work on its main thread.
+   11-22 19:12:15.863  5450  5450 I Choreographer: Skipped 37 frames!  The application may be doing too much work on its main thread.
+   11-22 19:12:17.229  5450  5450 I Choreographer: Skipped 64 frames!  The application may be doing too much work on its main thread.
+== Davey: 68
+   davey events=68 max=2728ms median=1252ms
+   11-22 19:12:00.676  5450  5472 I OpenGLRenderer: Davey! duration=2206ms; Flags=1, FrameTimelineVsyncId=6882, IntendedVsync=107762178031, Vsync=108795511323, InputEventId=0, HandleInputStart=108806631663, AnimationStart=108806632425, Perform
+   11-22 19:12:01.305  5450  5472 I OpenGLRenderer: Davey! duration=1558ms; Flags=0, FrameTimelineVsyncId=7092, IntendedVsync=109728844619, Vsync=109728844619, InputEventId=0, HandleInputStart=109729280779, AnimationStart=109729281190, Perform
+   11-22 19:12:01.955  5450  5472 I OpenGLRenderer: Davey! duration=1588ms; Flags=0, FrameTimelineVsyncId=7113, IntendedVsync=109762177951, Vsync=110928844571, InputEventId=0, HandleInputStart=110944642233, AnimationStart=110944642684, Perform
+   11-22 19:12:02.806  5450  5472 I OpenGLRenderer: Davey! duration=1566ms; Flags=0, FrameTimelineVsyncId=7336, IntendedVsync=110962177903, Vsync=111578844545, InputEventId=0, HandleInputStart=111590371065, AnimationStart=111590371656, Perform
+   11-22 19:12:04.136  5450  5550 I OpenGLRenderer: Davey! duration=1894ms; Flags=0, FrameTimelineVsyncId=7366, IntendedVsync=111595511211, Vsync=111962177863, InputEventId=0, HandleInputStart=111969270195, AnimationStart=111969270676, Perform
+   11-22 19:12:04.232  5450  5468 I OpenGLRenderer: Davey! duration=1511ms; Flags=0, FrameTimelineVsyncId=7397, IntendedVsync=112028844527, Vsync=112228844519, InputEventId=0, HandleInputStart=112242812091, AnimationStart=112242812442, Perform
+   11-22 19:12:04.929  5450  5468 I OpenGLRenderer: Davey! duration=1528ms; Flags=0, FrameTimelineVsyncId=7406, IntendedVsync=112245511185, Vsync=113095511151, InputEventId=0, HandleInputStart=113104465651, AnimationStart=113104466112, Perform
+   11-22 19:12:05.678  5450  5468 I OpenGLRenderer: Davey! duration=2491ms; Flags=0, FrameTimelineVsyncId=7422, IntendedVsync=113112177817, Vsync=114395511099, InputEventId=0, HandleInputStart=114398501494, AnimationStart=114398501914, Perform
+   11-22 19:12:05.984  5450  5468 I OpenGLRenderer: Davey! duration=836ms; Flags=0, FrameTimelineVsyncId=7468, IntendedVsync=114412177765, Vsync=114478844429, InputEventId=0, HandleInputStart=114494854670, AnimationStart=114494855021, PerformT
+   11-22 19:12:06.147  5450  5468 I OpenGLRenderer: Davey! duration=939ms; Flags=0, FrameTimelineVsyncId=7477, IntendedVsync=114512177761, Vsync=115178844401, InputEventId=0, HandleInputStart=115194816388, AnimationStart=115194816718, PerformT
+   11-22 19:12:15.756  5450  5550 I OpenGLRenderer: Davey! duration=1653ms; Flags=0, FrameTimelineVsyncId=8296, IntendedVsync=124045510713, Vsync=124062177379, InputEventId=0, HandleInputStart=124072720272, AnimationStart=124072720533, Perform
+   11-22 19:12:16.124  5450  5627 I OpenGLRenderer: Davey! duration=1643ms; Flags=0, FrameTimelineVsyncId=8312, IntendedVsync=124095510711, Vsync=125445510657, InputEventId=0, HandleInputStart=125448104401, AnimationStart=125448104752, Perform
+== NativeLink: 0
+== timeline (PERFCHECK markers, process deaths/kills not caused by force-stop)
+   11-22 19:11:52.134  5299  5299 I PERFCHECK: section: S0. NEW org.chyavorec.app and BASE org.chyavorec.app.b side by side; first launch to the catalogue, speed-profile
+   11-22 19:15:19.266  8268  8268 I PERFCHECK: section: E1. Round 1: per variant a new process on Home; News, Моето, Още, Каталог, Home first entries, then warm entries
+   11-22 19:15:46.422  8420  8420 I PERFCHECK: w28 tab-news-cold@base@r1
+   11-22 19:15:54.418  8447  8447 I PERFCHECK: w28 tab-my-cold@base@r1
+   11-22 19:16:03.115  8493  8493 I PERFCHECK: w28 tab-more-cold@base@r1
+   11-22 19:16:11.038  8518  8518 I PERFCHECK: w28 tab-catalog-cold@base@r1
+   11-22 19:16:19.956  8543  8543 I PERFCHECK: w28 tab-home@base@r1-1
+   11-22 19:16:28.212  8571  8571 I PERFCHECK: w28 tab-more@base@r1-1
+   11-22 19:16:36.012  8603  8603 I PERFCHECK: w28 tab-my@base@r1-1
+   11-22 19:16:43.721  8628  8628 I PERFCHECK: w28 tab-news@base@r1-1
+   11-22 19:16:51.518  8654  8654 I PERFCHECK: w28 tab-home@base@r1-2
+   11-22 19:16:59.358  8678  8678 I PERFCHECK: w28 tab-news@base@r1-2
+   11-22 19:17:07.240  8702  8702 I PERFCHECK: w28 tab-my@base@r1-2
+   11-22 19:17:15.052  8727  8727 I PERFCHECK: w28 tab-more@base@r1-2
+   11-22 19:17:22.872  8751  8751 I PERFCHECK: w28 tab-catalog@base@r1
+   11-22 19:17:31.596  8775  8775 I PERFCHECK: w28 tab-home@base@r1-3
+   11-22 19:18:00.254  8932  8932 I PERFCHECK: w28 tab-news-cold@x@r1
+   11-22 19:18:08.187  8961  8961 I PERFCHECK: w28 tab-my-cold@x@r1
+   11-22 19:18:17.330  8989  8989 I PERFCHECK: w28 tab-more-cold@x@r1
+   11-22 19:18:25.292  9014  9014 I PERFCHECK: w28 tab-catalog-cold@x@r1
+   11-22 19:18:34.030  9042  9042 I PERFCHECK: w28 tab-home@x@r1-1
+   11-22 19:18:43.083  9104  9104 I PERFCHECK: w28 tab-more@x@r1-1
+   11-22 19:18:51.232  9275  9275 I PERFCHECK: w28 tab-my@x@r1-1
+   11-22 19:18:58.965  9300  9300 I PERFCHECK: w28 tab-news@x@r1-1
+   11-22 19:19:06.699  9327  9327 I PERFCHECK: w28 tab-home@x@r1-2
+   11-22 19:19:15.178  9352  9352 I PERFCHECK: w28 tab-news@x@r1-2
+   11-22 19:19:23.018  9376  9376 I PERFCHECK: w28 tab-my@x@r1-2
+   11-22 19:19:30.749  9401  9401 I PERFCHECK: w28 tab-more@x@r1-2
+   11-22 19:19:38.482  9426  9426 I PERFCHECK: w28 tab-catalog@x@r1
+   11-22 19:19:47.388  9451  9451 I PERFCHECK: w28 tab-home@x@r1-3
+   11-22 19:19:52.806  9469  9469 I PERFCHECK: section: E2. Round 2: per variant a new process on Home; News, Моето, Още, Каталог, Home first entries, then warm entries
+   11-22 19:20:18.067  9606  9606 I PERFCHECK: w28 tab-news-cold@x@r2
+   11-22 19:20:26.278  9633  9633 I PERFCHECK: w28 tab-my-cold@x@r2
+   11-22 19:20:34.906  9661  9661 I PERFCHECK: w28 tab-more-cold@x@r2
+   11-22 19:20:42.812  9685  9685 I PERFCHECK: w28 tab-catalog-cold@x@r2
+   11-22 19:20:51.708  9710  9710 I PERFCHECK: w28 tab-home@x@r2-1
+   11-22 19:21:00.079  9736  9736 I PERFCHECK: w28 tab-more@x@r2-1
+   11-22 19:21:08.130  9760  9760 I PERFCHECK: w28 tab-my@x@r2-1
+   11-22 19:21:15.863  9787  9787 I PERFCHECK: w28 tab-news@x@r2-1
+   11-22 19:21:23.715  9811  9811 I PERFCHECK: w28 tab-home@x@r2-2
+   11-22 19:21:31.511  9835  9835 I PERFCHECK: w28 tab-news@x@r2-2
+   11-22 19:21:39.460  9859  9859 I PERFCHECK: w28 tab-my@x@r2-2
+   11-22 19:21:47.180  9897  9897 I PERFCHECK: w28 tab-more@x@r2-2
+   11-22 19:21:55.030  9921  9921 I PERFCHECK: w28 tab-catalog@x@r2
+   11-22 19:22:03.756  9945  9945 I PERFCHECK: w28 tab-home@x@r2-3
+   11-22 19:22:33.189 10091 10091 I PERFCHECK: w28 tab-news-cold@base@r2
+   11-22 19:22:41.371 10118 10118 I PERFCHECK: w28 tab-my-cold@base@r2
+   11-22 19:22:50.230 10146 10146 I PERFCHECK: w28 tab-more-cold@base@r2
+   11-22 19:22:58.070 10170 10170 I PERFCHECK: w28 tab-catalog-cold@base@r2
+   11-22 19:23:06.961 10194 10194 I PERFCHECK: w28 tab-home@base@r2-1
+   11-22 19:23:15.323 10221 10221 I PERFCHECK: w28 tab-more@base@r2-1
+   11-22 19:23:23.358 10245 10245 I PERFCHECK: w28 tab-my@base@r2-1
+   11-22 19:23:31.062 10270 10270 I PERFCHECK: w28 tab-news@base@r2-1
+   11-22 19:23:38.861 10366 10366 I PERFCHECK: w28 tab-home@base@r2-2
+   11-22 19:23:46.731 10390 10390 I PERFCHECK: w28 tab-news@base@r2-2
+   11-22 19:23:54.806 10414 10414 I PERFCHECK: w28 tab-my@base@r2-2
+   11-22 19:24:02.510 10438 10438 I PERFCHECK: w28 tab-more@base@r2-2
+   11-22 19:24:10.324 10462 10462 I PERFCHECK: w28 tab-catalog@base@r2
+   11-22 19:24:19.045 10487 10487 I PERFCHECK: w28 tab-home@base@r2-3
+   11-22 19:24:23.741 10505 10505 I PERFCHECK: section: E3. Round 3: per variant a new process on Home; News, Моето, Още, Каталог, Home first entries, then warm entries
+   11-22 19:24:49.434 10632 10632 I PERFCHECK: w28 tab-news-cold@base@r3
+   11-22 19:24:57.761 10659 10659 I PERFCHECK: w28 tab-my-cold@base@r3
+   11-22 19:25:06.068 10686 10686 I PERFCHECK: w28 tab-more-cold@base@r3
+   11-22 19:25:14.024 10710 10710 I PERFCHECK: w28 tab-catalog-cold@base@r3
+   11-22 19:25:22.926 10735 10735 I PERFCHECK: w28 tab-home@base@r3-1
+   11-22 19:25:30.953 10761 10761 I PERFCHECK: w28 tab-more@base@r3-1
+   11-22 19:25:39.056 10786 10786 I PERFCHECK: w28 tab-my@base@r3-1
+   11-22 19:25:46.779 10811 10811 I PERFCHECK: w28 tab-news@base@r3-1
+   11-22 19:25:54.582 10835 10835 I PERFCHECK: w28 tab-home@base@r3-2
+   11-22 19:26:02.459 10859 10859 I PERFCHECK: w28 tab-news@base@r3-2
+   11-22 19:26:10.369 10883 10883 I PERFCHECK: w28 tab-my@base@r3-2
+   11-22 19:26:18.083 10907 10907 I PERFCHECK: w28 tab-more@base@r3-2
+   11-22 19:26:25.906 10931 10931 I PERFCHECK: w28 tab-catalog@base@r3
+   11-22 19:26:34.632 10956 10956 I PERFCHECK: w28 tab-home@base@r3-3
+   11-22 19:27:02.349 11099 11099 I PERFCHECK: w28 tab-news-cold@x@r3
+   11-22 19:27:10.183 11128 11128 I PERFCHECK: w28 tab-my-cold@x@r3
+   11-22 19:27:18.921 11156 11156 I PERFCHECK: w28 tab-more-cold@x@r3
+   11-22 19:27:26.936 11180 11180 I PERFCHECK: w28 tab-catalog-cold@x@r3
+   11-22 19:27:35.820 11205 11205 I PERFCHECK: w28 tab-home@x@r3-1
+   11-22 19:27:44.454 11230 11230 I PERFCHECK: w28 tab-more@x@r3-1
+   11-22 19:27:52.373 11254 11254 I PERFCHECK: w28 tab-my@x@r3-1
+   11-22 19:28:00.111 11278 11278 I PERFCHECK: w28 tab-news@x@r3-1
+   11-22 19:28:07.855 11426 11426 I PERFCHECK: w28 tab-home@x@r3-2
+   11-22 19:28:17.006 11459 11459 I PERFCHECK: w28 tab-news@x@r3-2
+   11-22 19:28:24.998 11484 11484 I PERFCHECK: w28 tab-my@x@r3-2
+   11-22 19:28:32.707 11509 11509 I PERFCHECK: w28 tab-more@x@r3-2
+   11-22 19:28:40.440 11534 11534 I PERFCHECK: w28 tab-catalog@x@r3
+   11-22 19:28:49.327 11559 11559 I PERFCHECK: w28 tab-home@x@r3-3
+   11-22 19:28:54.584 11578 11578 I PERFCHECK: section: E4. Round 4: per variant a new process on Home; News, Моето, Още, Каталог, Home first entries, then warm entries
+   11-22 19:29:18.566 11694 11694 I PERFCHECK: w28 tab-news-cold@x@r4
+   11-22 19:29:26.536 11721 11721 I PERFCHECK: w28 tab-my-cold@x@r4
+   11-22 19:29:35.079 11748 11748 I PERFCHECK: w28 tab-more-cold@x@r4
+   11-22 19:29:43.018 11772 11772 I PERFCHECK: w28 tab-catalog-cold@x@r4
+   11-22 19:29:51.904 11797 11797 I PERFCHECK: w28 tab-home@x@r4-1
+   11-22 19:30:00.746 11823 11823 I PERFCHECK: w28 tab-more@x@r4-1
+   11-22 19:30:08.679 11848 11848 I PERFCHECK: w28 tab-my@x@r4-1
+   11-22 19:30:16.413 11873 11873 I PERFCHECK: w28 tab-news@x@r4-1
+   11-22 19:30:24.173 11897 11897 I PERFCHECK: w28 tab-home@x@r4-2
+   11-22 19:30:32.944 11921 11921 I PERFCHECK: w28 tab-news@x@r4-2
+   11-22 19:30:40.764 11945 11945 I PERFCHECK: w28 tab-my@x@r4-2
+   11-22 19:30:48.529 11972 11972 I PERFCHECK: w28 tab-more@x@r4-2
+   11-22 19:30:56.252 11996 11996 I PERFCHECK: w28 tab-catalog@x@r4
+   11-22 19:31:05.001 12020 12020 I PERFCHECK: w28 tab-home@x@r4-3
+   11-22 19:31:33.017 12164 12164 I PERFCHECK: w28 tab-news-cold@base@r4
+   11-22 19:31:41.076 12191 12191 I PERFCHECK: w28 tab-my-cold@base@r4
+   11-22 19:31:49.877 12219 12219 I PERFCHECK: w28 tab-more-cold@base@r4
+   11-22 19:31:58.128 12244 12244 I PERFCHECK: w28 tab-catalog-cold@base@r4
+   11-22 19:32:07.022 12269 12269 I PERFCHECK: w28 tab-home@base@r4-1
+   11-22 19:32:15.395 12295 12295 I PERFCHECK: w28 tab-more@base@r4-1
+   11-22 19:32:23.300 12319 12319 I PERFCHECK: w28 tab-my@base@r4-1
+   11-22 19:32:31.028 12344 12344 I PERFCHECK: w28 tab-news@base@r4-1
+   11-22 19:32:38.751 12368 12368 I PERFCHECK: w28 tab-home@base@r4-2
+   11-22 19:32:47.401 12392 12392 I PERFCHECK: w28 tab-news@base@r4-2
+   11-22 19:32:55.293 12416 12416 I PERFCHECK: w28 tab-my@base@r4-2
+   11-22 19:33:03.026 12440 12440 I PERFCHECK: w28 tab-more@base@r4-2
+   11-22 19:33:10.868 12466 12466 I PERFCHECK: w28 tab-catalog@base@r4
+   11-22 19:33:19.611 12491 12491 I PERFCHECK: w28 tab-home@base@r4-3
+   11-22 19:33:25.303 12509 12509 I PERFCHECK: section: E5. Round 5: per variant a new process on Home; News, Моето, Още, Каталог, Home first entries, then warm entries
+   11-22 19:33:50.578 12627 12627 I PERFCHECK: w28 tab-news-cold@base@r5
+   11-22 19:33:58.725 12654 12654 I PERFCHECK: w28 tab-my-cold@base@r5
+   11-22 19:34:07.824 12682 12682 I PERFCHECK: w28 tab-more-cold@base@r5
+   11-22 19:34:15.817 12707 12707 I PERFCHECK: w28 tab-catalog-cold@base@r5
+   11-22 19:34:24.740 12731 12731 I PERFCHECK: w28 tab-home@base@r5-1
+   11-22 19:34:33.249 12756 12756 I PERFCHECK: w28 tab-more@base@r5-1
+   11-22 19:34:41.024 12781 12781 I PERFCHECK: w28 tab-my@base@r5-1
+   11-22 19:34:48.749 12806 12806 I PERFCHECK: w28 tab-news@base@r5-1
+   11-22 19:34:56.564 12830 12830 I PERFCHECK: w28 tab-home@base@r5-2
+   11-22 19:35:04.482 12854 12854 I PERFCHECK: w28 tab-news@base@r5-2
+   11-22 19:35:12.664 12878 12878 I PERFCHECK: w28 tab-my@base@r5-2
+   11-22 19:35:20.403 12902 12902 I PERFCHECK: w28 tab-more@base@r5-2
+   11-22 19:35:28.233 12925 12925 I PERFCHECK: w28 tab-catalog@base@r5
+   11-22 19:35:36.970 12949 12949 I PERFCHECK: w28 tab-home@base@r5-3
+   11-22 19:36:07.469 13224 13224 I PERFCHECK: w28 tab-news-cold@x@r5
+   11-22 19:36:16.160 13268 13268 I PERFCHECK: w28 tab-my-cold@x@r5
+   11-22 19:36:25.111 13305 13305 I PERFCHECK: w28 tab-more-cold@x@r5
+   11-22 19:36:33.442 13337 13337 I PERFCHECK: w28 tab-catalog-cold@x@r5
+   11-22 19:36:42.187 13361 13361 I PERFCHECK: w28 tab-home@x@r5-1
+   11-22 19:36:50.429 13387 13387 I PERFCHECK: w28 tab-more@x@r5-1
+   11-22 19:36:58.332 13410 13410 I PERFCHECK: w28 tab-my@x@r5-1
+   11-22 19:37:06.058 13434 13434 I PERFCHECK: w28 tab-news@x@r5-1
+   11-22 19:37:13.766 13457 13457 I PERFCHECK: w28 tab-home@x@r5-2
+   11-22 19:37:21.670 13481 13481 I PERFCHECK: w28 tab-news@x@r5-2
+   11-22 19:37:29.825 13504 13504 I PERFCHECK: w28 tab-my@x@r5-2
+   11-22 19:37:37.553 13528 13528 I PERFCHECK: w28 tab-more@x@r5-2
+   11-22 19:37:45.281 13551 13551 I PERFCHECK: w28 tab-catalog@x@r5
+   11-22 19:37:54.018 13575 13575 I PERFCHECK: w28 tab-home@x@r5-3
+   11-22 19:37:58.721 13595 13595 I PERFCHECK: section: EV. Visual: the tab entries recorded at 8 frames/s
+   11-22 19:38:19.769 13711 13711 I PERFCHECK: tab-news-base
+   11-22 19:38:31.234 13722 13722 I PERFCHECK: tab-more-base
+   11-22 19:38:41.702 13734 13734 I PERFCHECK: tab-home-base
+   11-22 19:39:13.396 13855 13855 I PERFCHECK: tab-news-x
+   11-22 19:39:24.235 13866 13866 I PERFCHECK: tab-more-x
+   11-22 19:39:34.686 13876 13876 I PERFCHECK: tab-home-x
+   11-22 19:39:44.868 13890 13890 I PERFCHECK: section: Z. The table: main-thread CPU Running per doFrame, by interaction and variant
